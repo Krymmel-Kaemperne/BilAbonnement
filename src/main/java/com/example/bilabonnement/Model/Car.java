@@ -2,7 +2,6 @@ package com.example.bilabonnement.model;
 
 import java.math.BigDecimal;
 
-// Dette er nu en simpel POJO (Plain Old Java Object)
 public class Car {
 
     private int carId;
@@ -12,18 +11,14 @@ public class Car {
     private String color;
     private double co2Emission;
     private String vehicleNumber;
-
-    // Gemmer ID'er for relaterede entiteter
     private int modelId;
     private int carStatusId;
     private int fuelTypeId;
     private int transmissionTypeId;
 
-    // Tom constructor (god praksis)
     public Car() {
     }
 
-    // Constructor til oprettelse (uden carId, da det er auto-genereret)
     public Car(String registrationNumber, String chassisNumber, BigDecimal steelPrice, String color,
                double co2Emission, String vehicleNumber, int modelId, int carStatusId,
                int fuelTypeId, int transmissionTypeId) {
