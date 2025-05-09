@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/stylesheet.css">
+
+  <title>Opret Bil</title>
+</head>
+<body>
+
+<div th:replace="~{fragments/header :: header('dataregistrering')}"></div>
+<div class="opret-bil-page-container">
+
+  <header class="opret-bil-form-header">
+    <h1>Opret bil</h1>
+    <p>Indtast info for at oprette ny bil</p>
+  </header>
+  <div class="opret-bil-form-content">
+
+  <form th:action="@{/dataRegistrering/opretbil}" th:object="${car}" method="post"> <!-- Rettelser her ift. min controller: dataRegistrering -->
+
+    <div class="opret-bil-form-row">
+      <label for="registrationNumber">Registreringsnummer:</label>
+      <input type="text" id="registrationNumber" th:field="*{registrationNumber}" required>
+    </div>
+
+    <div class="opret-bil-form-row">
+      <label for="chassisNumber">Stelnummer:</label>
+      <input type="text" id="chassisNumber" th:field="*{chassisNumber}" required>
+    </div>
+
+    <div class="opret-bil-form-row">
+      <label for="steelPrice">Stålpris:</label>
+      <input type="number" id="steelPrice" th:field="*{steelPrice}" step="0.01" required>
+    </div>
+
+    <div class="opret-bil-form-row">
+      <label for="color">Farve:</label>
+      <input type="text" id="color" th:field="*{color}" required>
+    </div>
+
+    <div class="opret-bil-form-row">
+      <label for="co2Emission">CO2-udledning:</label>
+      <input type="number" id="co2Emission" th:field="*{co2Emission}" step="0.01" required>
+    </div>
+
+    <div class="opret-bil-form-row">
+      <label for="vehicleNumber">Køretøjsnummer:</label>
+      <input type="text" id="vehicleNumber" th:field="*{vehicleNumber}" required>
+    </div>
+
+    <div class="opret-bil-form-row">
+      <label for="brandId">Mærke (Brand):</label>
+      <select id="brandId" th:field="*{brandId}" required>
+        <option value="">Vælg mærke</option>
+        <!-- Antager at din controller sender en liste kaldet 'allBrands' -->
+        <!-- Hver 'brand' i listen skal have en 'brandId' og 'brandName' property -->
+        <option th:each="brand : ${allBrands}"
+                th:value="${brand.brandId}"
+                th:text="${brand.brandName}">
+        </option>
+      </select>
+    </div>
+
+    <div class="opret-bil-form-row">
+      <label for="modelName">Model:</label>
+      <input type="text" id="modelName" th:field="*{modelName}" placeholder="Indtast modelnavn" required>
+    </div>
+
+
+    <div class="opret-bil-form-row">
+      <label for="carStatusId">Status:</label>
+      <select id="carStatusId" th:field="*{carStatusId}" required>
+        <option value="">Vælg status</option> <!-- For "ikke valgt" -->
+        <option value="1">Available</option>   <!-- Matcher ID for 'AVAILABLE' -->
+        <option value="2">Rented</option>      <!-- Matcher ID for 'RENTED' -->
+        <option value="3">Service</option>     <!-- Matcher ID for 'SERVICE' -->
+        <option value="4">Sold</option>        <!-- Matcher ID for 'SOLD' -->
+      </select>
+    </div>
+
+
+    <div class="opret-bil-form-row">
+      <label for="fuelTypeId">Brændstoftype:</label>
+      <select id="fuelTypeId" th:field="*{fuelTypeId}" required>
+        <option value="">Vælg brændstoftype</option>
+        <!-- Her skal du senere tilføje th:each for at populere dropdowns -->
+      </select> <!-- **TILFØJET DENNE** -->
+    </div>
+
+    <div class="opret-bil-form-row">
+      <label for="transmissionTypeId">Gearkassetype:</label>
+      <select id="transmissionTypeId" th:field="*{transmissionTypeId}" required>
+        <option value="">Vælg gearkassetype</option> <!-- Denne er for "ikke valgt" -->
+        <option value="1">Manuel</option>
+        <option value="2">Automatic</option>
+      </select>
+    </div>
+
+    <div class="opret-bil-submit-row">
+      <button class="opret-bil-knap" type="submit">Opret Bil</button>
+    </div>
+  </form>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,4 +1,4 @@
-package com.example.bilabonnement.model;
+package com.example.bilabonnement.Model; // Sørg for pakkenavnet er korrekt
 
 import java.math.BigDecimal;
 
@@ -9,19 +9,24 @@ public class Car {
     private String chassisNumber;
     private BigDecimal steelPrice;
     private String color;
-    private double co2Emission;
+    private Double co2Emission;
     private String vehicleNumber;
-    private int modelId;
-    private int carStatusId;
-    private int fuelTypeId;
-    private int transmissionTypeId;
+    private Integer brandId;       // Til at modtage valgt brand fra dropdown
+    private String modelName;      // Til at modtage indtastet modelnavn
+
+    private Integer modelId;       // Det faktiske model_id der gemmes i car tabellen
+
+    private Integer carStatusId;
+    private Integer fuelTypeId;
+    private Integer transmissionTypeId;
 
     public Car() {
     }
 
+    // Opdater konstruktøren hvis nødvendigt, eller fjern den hvis den ikke bruges aktivt
     public Car(String registrationNumber, String chassisNumber, BigDecimal steelPrice, String color,
-               double co2Emission, String vehicleNumber, int modelId, int carStatusId,
-               int fuelTypeId, int transmissionTypeId) {
+               Double co2Emission, String vehicleNumber, Integer modelId, Integer carStatusId,
+               Integer fuelTypeId, Integer transmissionTypeId) {
         this.registrationNumber = registrationNumber;
         this.chassisNumber = chassisNumber;
         this.steelPrice = steelPrice;
@@ -34,48 +39,58 @@ public class Car {
         this.transmissionTypeId = transmissionTypeId;
     }
 
+    public int getCarId() { return carId; }
+    public void setCarId(int carId) { this.carId = carId; }
 
-    public int getCarId() {
-        return carId;
-    }
+    public String getRegistrationNumber() { return registrationNumber; }
+    public void setRegistrationNumber(String registrationNumber) { this.registrationNumber = registrationNumber; }
 
-    public String getRegistrationNumber() {
-        return registrationNumber;
-    }
+    public String getChassisNumber() { return chassisNumber; }
+    public void setChassisNumber(String chassisNumber) { this.chassisNumber = chassisNumber; }
 
-    public String getChassisNumber() {
-        return chassisNumber;
-    }
+    public BigDecimal getSteelPrice() { return steelPrice; }
+    public void setSteelPrice(BigDecimal steelPrice) { this.steelPrice = steelPrice; }
 
-    public BigDecimal getSteelPrice() {
-        return steelPrice;
-    }
+    public String getColor() { return color; }
+    public void setColor(String color) { this.color = color; }
 
-    public String getColor() {
-        return color;
-    }
+    public Double getCo2Emission() { return co2Emission; }
+    public void setCo2Emission(Double co2Emission) { this.co2Emission = co2Emission; }
 
-    public double getCo2Emission() {
-        return co2Emission;
-    }
+    public String getVehicleNumber() { return vehicleNumber; }
+    public void setVehicleNumber(String vehicleNumber) { this.vehicleNumber = vehicleNumber; }
 
-    public String getVehicleNumber() {
-        return vehicleNumber;
-    }
+    public Integer getBrandId() { return brandId; }
+    public void setBrandId(Integer brandId) { this.brandId = brandId; }
 
-    public int getModelId() {
-        return modelId;
-    }
+    public String getModelName() { return modelName; }
+    public void setModelName(String modelName) { this.modelName = modelName; }
 
-    public int getCarStatusId() {
-        return carStatusId;
-    }
+    public Integer getModelId() { return modelId; }
+    public void setModelId(Integer modelId) { this.modelId = modelId; } // Vigtig for server-side logik
 
-    public int getFuelTypeId() {
-        return fuelTypeId;
-    }
+    public Integer getCarStatusId() { return carStatusId; }
+    public void setCarStatusId(Integer carStatusId) { this.carStatusId = carStatusId; }
 
-    public int getTransmissionTypeId() {
-        return transmissionTypeId;
+    public Integer getFuelTypeId() { return fuelTypeId; }
+    public void setFuelTypeId(Integer fuelTypeId) { this.fuelTypeId = fuelTypeId; }
+
+    public Integer getTransmissionTypeId() { return transmissionTypeId; }
+    public void setTransmissionTypeId(Integer transmissionTypeId) { this.transmissionTypeId = transmissionTypeId; }
+    @Override
+    public String toString() {
+        return "Car{" +
+                "carId=" + carId +
+                ", registrationNumber='" + registrationNumber + '\'' +
+                ", chassisNumber='" + chassisNumber + '\'' +
+                ", steelPrice=" + steelPrice +
+                ", color='" + color + '\'' +
+                ", co2Emission=" + co2Emission +
+                ", vehicleNumber='" + vehicleNumber + '\'' +
+                ", modelId=" + modelId +
+                ", carStatusId=" + carStatusId +
+                ", fuelTypeId=" + fuelTypeId +
+                ", transmissionTypeId=" + transmissionTypeId +
+                '}';
     }
 }
