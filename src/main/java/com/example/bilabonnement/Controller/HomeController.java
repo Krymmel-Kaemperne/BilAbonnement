@@ -11,7 +11,6 @@ public class HomeController {
         return "index";
     }
 
-
     //NAVIGATION Data-Registration
 
     @GetMapping("/dataRegistration")
@@ -76,39 +75,5 @@ public class HomeController {
     @GetMapping("/businessData/revenue")
     public String revenue() {
         return "businessData/revenue";
-
-    //Data-registering Navigation
-    @GetMapping("/dataRegistrering")
-    public String dataRegistrering() {
-        return "dataRegistrering/dataRegistrering";
-    }
-
-    @GetMapping("/dataRegistrering/fleet")
-    public String fleet() {
-        return "dataRegistrering/fleet";
-    }
-
-    @GetMapping("/dataRegistrering/kunder")
-    public String kunder() {
-        return "dataRegistrering/kunder";
-    }
-
-    @GetMapping("/dataRegistrering/lejeaftaler")
-    public String lejeaftaler() {
-        return "dataRegistrering/lejeaftaler";
-    }
-
-    //Skade-registering Navigation
-
-
-    @GetMapping("/skadeRegistrering")
-    public String skadeRegistrering() {
-        return "skadeRegistrering";
-    }
-
-    @GetMapping("/forretningsData")
-    public String forretningsData() {
-        return "forretningsData";
-
     }
 }
