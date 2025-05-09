@@ -1,5 +1,6 @@
-import java.math.BigDecimal;
 package com.example.bilabonnement.Model;
+
+import java.math.BigDecimal;
 
 public class Car {
 
