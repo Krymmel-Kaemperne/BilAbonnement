@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/stylesheet.css">
+    <title>Opret Privatkunde</title>
+</head>
+<body>
+<div th:replace="fragments/header :: header('dataRegistrering')"></div>
+<div class="page-container">
+  <div class="form-container">
+    <h1>Opret Privatkunde</h1>
+    <div style="margin-bottom: 15px;">
+      <a th:href="@{/customers/create/business}" class="button-link">Opret Erhvervskunde i stedet</a>
+
+      <div class="opret-bil-form-content">
+
+    <div th:if="${successMessage}" class="message success-message" th:text="${successMessage}"></div>
+    <div th:if="${errorMessage}" class="message error-message" th:text="${errorMessage}"></div>
+
+    <form th:action="@{/customers/create/private}" method="post">
+      <!-- Fælles felter -->
+
+      <div class="opret-bil-form-row">
+        <label for="fName">First Name:</label>
+        <input type="text" id="fName" name="fName" th:value="${fName}" required>
+      </div>
+      <div class="opret-bil-form-row">
+        <label for="lName">Last Name:</label>
+        <input type="text" id="lName" name="lName" th:value="${lName}" required>
+      </div>
+      <div class="opret-bil-form-row">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" th:value="${email}" required>
+      </div>
+      <div class="opret-bil-form-row">
+        <label for="phone">Phone:</label>
+        <input type="tel" id="phone" name="phone" th:value="${phone}" required>
+      </div>
+      <div class="opret-bil-form-row">
+        <label for="address">Address:</label>
+        <input type="text" id="address" name="address" th:value="${address}" required>
+      </div>
+      <div class="opret-bil-form-row">
+        <label for="zipcodeId">Zipcode:</label>
+        <select id="zipcodeId" name="zipcodeId" required>
+          <option value="">Select Zipcode</option>
+          <option th:each="zc : ${zipcodes}"
+                  th:value="${zc.zipcodeId}"
+                  th:text="${zc.zipcode + ' ' + zc.cityName}"
+                  th:selected="${zc.zipcodeId == zipcodeId}"></option>
+        </select>
+      </div>
+
+      <!-- Privat-specifikt felt -->
+      <div class="opret-bil-form-row">
+        <label for="cprNumber">CPR Number:</label>
+        <input type="text" id="cprNumber" name="cprNumber" th:value="${cprNumber}" required>
+      </div>
+
+      <div class="opret-bil-submit-row">
+      <button class="opret-bil-knap" type="submit">Opret Privatkunde</button>
+      </div>
+    </form>
+  </div>
+</div>
+</body>
+</html>
