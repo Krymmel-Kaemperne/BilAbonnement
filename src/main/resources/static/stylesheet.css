@@ -1,3 +1,5 @@
+
+
 :root {
     --main-color: #c13616;
     --hover-color: #811e0a;
@@ -105,4 +107,130 @@ body {
 
 .nav-link.aktive {
     color: var(--main-color);
+}
+
+
+/* ========== SIMPEL CSS FOR 'OPRET BIL' FORMULAR ========== */
+
+/* Container for selve formularen */
+.opret-bil-formular { /* Tilføj denne klasse til din <form> eller en omkransende div */
+    background-color: #ffffff;
+    padding: 25px;
+    border-radius: 5px;
+    max-width: 650px; /* Juster efter behov */
+    margin: 30px auto; /* Centrerer formularen og giver lidt plads */
+    border: 1px solid #e0e0e0; /* En let kant */
+}
+
+.opret-bil-form-content{
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.opret-bil-form-header {
+    padding: 20px 0 0 20px;
+}
+
+
+/* Overskrift inde i formularen (hvis du har en der) */
+.opret-bil-formular h1,
+.opret-bil-formular h2 { /* Eller hvilken overskriftstype du bruger */
+    text-align: left; /* Eller center, hvis du foretrækker */
+    color: #333;
+    margin-bottom: 25px;
+    font-weight: 600; /* Bruger din Plus Jakarta Sans font-weight */
+}
+.opret-bil-formular p.form-description { /* En klasse for underteksten */
+    color: #555;
+    margin-bottom: 25px;
+    font-size: 0.95em;
+}
+
+
+/* Hver række i formularen (label + input/select) */
+.opret-bil-form-row { /* Tilføj denne klasse til hver div, der indeholder et label og et input */
+    display: flex; /* Arrangerer label og input ved siden af hinanden */
+    align-items: center; /* Vertikal centrering */
+    margin-bottom: 15px;
+}
+
+.opret-bil-form-row label {
+    flex-basis: 160px; /* Fast bredde for labels, juster efter behov */
+    flex-shrink: 0;
+    margin-right: 15px;
+    font-weight: 500;
+    color: #444;
+    font-size: 0.9em;
+}
+
+.opret-bil-form-row input[type="text"],
+.opret-bil-form-row input[type="number"],
+.opret-bil-form-row select,
+.opret-bil-form-row textarea {
+    flex-grow: 1; /* Input-feltet tager resten af pladsen */
+    padding: 9px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 0.9em;
+    font-family: "Plus Jakarta Sans", sans-serif; /* Sikrer din font bruges */
+    box-sizing: border-box;
+}
+
+.opret-bil-form-row input[type="text"]::placeholder,
+.opret-bil-form-row input[type="number"]::placeholder,
+.opret-bil-form-row textarea::placeholder {
+    color: #aaa; /* Lysere placeholder */
+}
+
+/* For at få "Vælg..." teksten i select til at have placeholder-farve */
+.opret-bil-form-row select:required:invalid {
+    color: #aaa;
+}
+.opret-bil-form-row select option {
+    color: #333;
+}
+.opret-bil-form-row select option[value=""][disabled] {
+    color: #aaa;
+}
+
+.opret-bil-form-row textarea {
+    min-height: 90px;
+    resize: vertical;
+}
+
+/* Submit knap */
+.opret-bil-submit-row { /* En div til at omkranse knappen */
+    text-align: right; /* Placerer knappen til højre */
+    margin-top: 25px;
+}
+
+.opret-bil-knap {
+    background-color: var(--main-color); /* Bruger din CSS variabel */
+    color: white;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.95em;
+    font-weight: 400;
+    cursor: pointer;
+}
+
+.opret-bil-submit-btn:hover {
+    background-color: var(--hover-color); /* Bruger din CSS variabel */
+}
+
+/* Meget simpel responsivitet: Stak elementer på små skærme */
+@media (max-width: 600px) {
+    .opret-bil-form-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .opret-bil-form-row label {
+        flex-basis: auto;
+        margin-bottom: 5px;
+        margin-right: 0;
+    }
+    .opret-bil-submit-row {
+        text-align: center; /* Centrer knappen */
+    }
 }
