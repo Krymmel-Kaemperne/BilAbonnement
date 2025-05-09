@@ -16,7 +16,7 @@ public class Car {
     private Integer brandId;    // ID for valgt mærke fra dropdown
     private String modelName;   // Navn på model indtastet af bruger
     private String brandName;
-    
+
     // Dette felt sættes typisk server-side efter at have fundet/oprettet modellen
     private Integer modelId;    // Det faktiske model_id der gemmes i car tabellen
 
