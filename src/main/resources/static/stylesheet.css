@@ -11,11 +11,20 @@
 }
 
 body {
+
     font-family: "Plus Jakarta Sans", sans-serif;
 }
 
 /*NAVIGATION */
 .header {
+
+    font-family:"Plus Jakarta Sans", sans-serif;
+}
+
+/*NAVIGATION */
+.header
+{
+
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -30,8 +39,12 @@ body {
 
 .logo {
     height: 80px;
+
     margin-right: 5px;
     margin-top: -5px;
+=======
+    margin-right:5px;
+
 }
 
 .header-nav {
@@ -39,7 +52,10 @@ body {
     z-index: 1;
     display: flex;
     gap: 70px;
+
     margin-top: -12px;
+=======
+
 }
 
 .nav-link {
@@ -52,12 +68,21 @@ body {
     position: relative;
 }
 
+
 .header-log-in {
     line-height: 1;
     margin-top: -11px;
 }
 
 .arrow {
+
+.header-log-in {
+    line-height: 1;
+}
+
+.arrow
+{
+
     margin-left: 10px;
     margin-top: 2px;
     color: var(--main-color);
@@ -71,18 +96,29 @@ body {
 
 }
 
+
+=======
+
 .dropdown-content {
 
     display: none;
     position: absolute;
     top: 100%;
+
     min-width: 180px;
+
+    min-width:180px;
+
     background-color: white;
     border: 1px solid #000;
     border-radius: 8px;
     padding: 10px 0;
     z-index: 999;
+
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+=======
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+
 }
 
 .dropdown:hover .dropdown-content {
@@ -106,7 +142,10 @@ body {
     color: var(--main-color);
     margin-left: 6px;
 }
+
 .nav-link.aktive {
     color: var(--main-color);
 }
+=======
+
 
