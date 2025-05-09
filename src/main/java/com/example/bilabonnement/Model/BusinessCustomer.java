@@ -1,51 +1,46 @@
 package com.example.bilabonnement.Model;
 
-public class BusinessCustomer {
 
-    private int businessCustomerId;
-    private int customerId;
-    private String cvrNumber;
-    private String companyName;
+public class BusinessCustomer extends Customer {
 
-    public BusinessCustomer() {
-    }
+        private String cvrNumber;
+        private String companyName;
+        // private int businessCustomerId; // Ikke nødvendig hvis customerId fra superklassen bruges som PK/FK
 
-    public BusinessCustomer(int businessCustomerId, int customerId, String cvrNumber, String companyName) {
-        this.businessCustomerId = businessCustomerId;
-        this.customerId = customerId;
+        public BusinessCustomer() {
+            super();
+        }
+
+        public BusinessCustomer(String fName, String lName, String email, String phone,
+                                String address, int zipcodeId, Zipcode zipcode,
+                                String cvrNumber, String companyName) {
+            super(fName, lName, email, phone, address, zipcodeId, CustomerType.BUSINESS, zipcode);
+            this.cvrNumber = cvrNumber;
+            this.companyName = companyName;
+        }
+
+    public BusinessCustomer(int customerId, String fName, String lName, String email, String phone,
+                            String address, int zipcodeId, Zipcode zipcode,
+                            String cvrNumber, String companyName) {
+        // Kald superklassens constructor for genopbygning
+        super(customerId, fName, lName, email, phone, address, zipcodeId, CustomerType.BUSINESS, zipcode);
         this.cvrNumber = cvrNumber;
         this.companyName = companyName;
     }
 
-    public int getBusinessCustomerId() {
-        return businessCustomerId;
-    }
+        public String getCvrNumber() {
+            return cvrNumber;
+        }
 
-    public void setBusinessCustomerId(int businessCustomerId) {
-        this.businessCustomerId = businessCustomerId;
-    }
+        public void setCvrNumber(String cvrNumber) {
+            this.cvrNumber = cvrNumber;
+        }
 
-    public int getCustomerId() {
-        return customerId;
-    }
+        public String getCompanyName() {
+            return companyName;
+        }
 
-    public void setCustomerId(int customerId) {
-        this.customerId = customerId;
-    }
-
-    public String getCvrNumber() {
-        return cvrNumber;
-    }
-
-    public void setCvrNumber(String cvrNumber) {
-        this.cvrNumber = cvrNumber;
-    }
-
-    public String getCompanyName() {
-        return companyName;
-    }
-
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
-    }
+        public void setCompanyName(String companyName) {
+            this.companyName = companyName;
+        }
 }

@@ -1,34 +1,26 @@
 package com.example.bilabonnement.Model;
 
-public class PrivateCustomer {
+public class PrivateCustomer extends Customer {
 
-    private int privateCustomerId;
-    private int customerId;
     private String cprNumber;
 
     public PrivateCustomer() {
+        super();
     }
 
-    public PrivateCustomer(int privateCustomerId, int customerId, String cprNumber) {
-        this.privateCustomerId = privateCustomerId;
-        this.customerId = customerId;
+    // Constructor for NYE PrivateCustomer instanser
+    public PrivateCustomer(String fName, String lName, String email, String phone,
+                           String address, int zipcodeId, Zipcode zipcode, String cprNumber) {
+        super(fName, lName, email, phone, address, zipcodeId, CustomerType.PRIVATE, zipcode);
         this.cprNumber = cprNumber;
     }
 
-    public int getPrivateCustomerId() {
-        return privateCustomerId;
-    }
+    // Constructor for at genopbygge PrivateCustomer FRA DATABASEN
+    public PrivateCustomer(int customerId, String fName, String lName, String email, String phone,
+                           String address, int zipcodeId, Zipcode zipcode, String cprNumber) {
 
-    public void setPrivateCustomerId(int privateCustomerId) {
-        this.privateCustomerId = privateCustomerId;
-    }
-
-    public int getCustomerId() {
-        return customerId;
-    }
-
-    public void setCustomerId(int customerId) {
-        this.customerId = customerId;
+        super(customerId, fName, lName, email, phone, address, zipcodeId, CustomerType.PRIVATE, zipcode);
+        this.cprNumber = cprNumber;
     }
 
     public String getCprNumber() {

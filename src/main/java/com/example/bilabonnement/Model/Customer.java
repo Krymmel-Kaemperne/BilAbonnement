@@ -1,6 +1,6 @@
 package com.example.bilabonnement.Model;
 
-public class Customer {
+public abstract class Customer {
 
     private int customerId;
     private String fName;
@@ -9,18 +9,28 @@ public class Customer {
     private String phone;
     private String address;
     private int zipcodeId;
-    private CustomerType customerType;
     private Zipcode zipcode;
-    private PrivateCustomer privateCustomerDetails;
-    private BusinessCustomer businessCustomerDetails;
+    private CustomerType customerType;
 
     public Customer() {
     }
 
+    public Customer(String fName, String lName, String email, String phone,
+                    String address, int zipcodeId, CustomerType customerType,
+                    Zipcode zipcode) {
+        this.fName = fName;
+        this.lName = lName;
+        this.email = email;
+        this.phone = phone;
+        this.address = address;
+        this.zipcodeId = zipcodeId;
+        this.zipcode = zipcode;
+        this.customerType = customerType;
+    }
+
     public Customer(int customerId, String fName, String lName, String email, String phone,
                     String address, int zipcodeId, CustomerType customerType,
-                    Zipcode zipcode, PrivateCustomer privateCustomerDetails,
-                    BusinessCustomer businessCustomerDetails) {
+                    Zipcode zipcode) {
         this.customerId = customerId;
         this.fName = fName;
         this.lName = lName;
@@ -28,10 +38,8 @@ public class Customer {
         this.phone = phone;
         this.address = address;
         this.zipcodeId = zipcodeId;
-        this.customerType = customerType;
         this.zipcode = zipcode;
-        this.privateCustomerDetails = privateCustomerDetails;
-        this.businessCustomerDetails = businessCustomerDetails;
+        this.customerType = customerType;
     }
 
     public int getCustomerId() {
@@ -90,13 +98,6 @@ public class Customer {
         this.zipcodeId = zipcodeId;
     }
 
-    public CustomerType getCustomerType() {
-        return customerType;
-    }
-
-    public void setCustomerType(CustomerType customerType) {
-        this.customerType = customerType;
-    }
 
     public Zipcode getZipcode() {
         return zipcode;
@@ -106,19 +107,11 @@ public class Customer {
         this.zipcode = zipcode;
     }
 
-    public PrivateCustomer getPrivateCustomerDetails() {
-        return privateCustomerDetails;
+    public CustomerType getCustomerType() {
+        return customerType;
     }
 
-    public void setPrivateCustomerDetails(PrivateCustomer privateCustomerDetails) {
-        this.privateCustomerDetails = privateCustomerDetails;
-    }
-
-    public BusinessCustomer getBusinessCustomerDetails() {
-        return businessCustomerDetails;
-    }
-
-    public void setBusinessCustomerDetails(BusinessCustomer businessCustomerDetails) {
-        this.businessCustomerDetails = businessCustomerDetails;
+    public void setCustomerType(CustomerType customerType) {
+        this.customerType = customerType;
     }
 }
