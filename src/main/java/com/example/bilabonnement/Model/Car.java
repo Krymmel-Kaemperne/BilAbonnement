@@ -1,4 +1,4 @@
-package com.example.bilabonnement.model;
+package com.example.bilabonnement.Model;
 
 import java.math.BigDecimal;
 
