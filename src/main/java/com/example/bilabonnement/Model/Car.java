@@ -1,13 +1,12 @@
-package com.example.bilabonnement.Model; // Sørg for pakkenavnet er korrekt
-
 import java.math.BigDecimal;
+package com.example.bilabonnement.Model;
 
 public class Car {
 
     private int carId;
     private String registrationNumber;
     private String chassisNumber;
-    private BigDecimal steelPrice;
+    private double steelPrice;
     private String color;
     private Double co2Emission;
     private String vehicleNumber;
@@ -19,6 +18,7 @@ public class Car {
     private Integer carStatusId;
     private Integer fuelTypeId;
     private Integer transmissionTypeId;
+
 
     public Car() {
     }
@@ -92,5 +92,71 @@ public class Car {
                 ", fuelTypeId=" + fuelTypeId +
                 ", transmissionTypeId=" + transmissionTypeId +
                 '}';
+    }
+
+    public void setCarId(int carId) {
+        this.carId = carId;
+    }
+
+    public void setRegistrationNumber(String registrationNumber) {
+        this.registrationNumber = registrationNumber;
+    }
+
+    public void setChassisNumber(String chassisNumber) {
+        this.chassisNumber = chassisNumber;
+    }
+
+    public void setSteelPrice(double steelPrice) {
+        this.steelPrice = steelPrice;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public void setCo2Emission(double co2Emission) {
+        this.co2Emission = co2Emission;
+    }
+
+    public void setVehicleNumber(String vehicleNumber) {
+        this.vehicleNumber = vehicleNumber;
+    }
+
+    public void setCarStatusId(int carStatusId) {
+        this.carStatusId = carStatusId;
+    }
+
+    public void setFuelTypeId(int fuelTypeId) {
+        this.fuelTypeId = fuelTypeId;
+    }
+
+    public void setTransmissionTypeId(int transmissionTypeId) {
+        this.transmissionTypeId = transmissionTypeId;
+    }
+
+    public int getModelId() {
+        return modelId; }
+    public void setModelId(int modelId) {
+        this.modelId = modelId;
+    }
+
+    public String getModelName() {
+        return modelName;
+    }
+    public void setModelName(String modelName) {
+        this.modelName = modelName;
+    }
+
+    public int getBrandId() {
+        return brandId;
+    }
+    public void setBrandId(int brandId) {
+        this.brandId = brandId;
+    }
+
+    public String getBrandName() {
+        return brandName; }
+    public void setBrandName(String brandName) {
+        this.brandName = brandName;
     }
 }
