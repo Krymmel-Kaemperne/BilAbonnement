@@ -12,10 +12,13 @@
 <div th:replace="fragments/header :: header('dataRegistrering')"></div>
 <div class="page-container">
   <div class="form-container">
-    <h1>Opret Privatkunde</h1>
-    <div style="margin-bottom: 15px;">
-      <a th:href="@{/customers/create/business}" class="button-link">Opret Erhvervskunde i stedet</a>
+    <header class="opret-bil-form-header"> <!-- Bruger samme header klasse -->
+      <h1>Opret Privatkunde</h1>
+    </header>
 
+    <div class="button-container">
+      <a th:href="@{/customers/create/business}" class="button-secondary">Opret Erhvervskunde i stedet</a>
+      </div>
       <div class="opret-bil-form-content">
 
     <div th:if="${successMessage}" class="message success-message" th:text="${successMessage}"></div>
@@ -25,11 +28,11 @@
       <!-- Fælles felter -->
 
       <div class="opret-bil-form-row">
-        <label for="fName">First Name:</label>
+        <label for="fName">Fornavn:</label>
         <input type="text" id="fName" name="fName" th:value="${fName}" required>
       </div>
       <div class="opret-bil-form-row">
-        <label for="lName">Last Name:</label>
+        <label for="lName">Efternavn:</label>
         <input type="text" id="lName" name="lName" th:value="${lName}" required>
       </div>
       <div class="opret-bil-form-row">
@@ -37,17 +40,17 @@
         <input type="email" id="email" name="email" th:value="${email}" required>
       </div>
       <div class="opret-bil-form-row">
-        <label for="phone">Phone:</label>
+        <label for="phone">Telefon:</label>
         <input type="tel" id="phone" name="phone" th:value="${phone}" required>
       </div>
       <div class="opret-bil-form-row">
-        <label for="address">Address:</label>
+        <label for="address">Adresse:</label>
         <input type="text" id="address" name="address" th:value="${address}" required>
       </div>
       <div class="opret-bil-form-row">
-        <label for="zipcodeId">Zipcode:</label>
+        <label for="zipcodeId">Postnummer:</label>
         <select id="zipcodeId" name="zipcodeId" required>
-          <option value="">Select Zipcode</option>
+          <option value="">Vælg postnummer</option>
           <option th:each="zc : ${zipcodes}"
                   th:value="${zc.zipcodeId}"
                   th:text="${zc.zipcode + ' ' + zc.cityName}"
@@ -61,10 +64,11 @@
         <input type="text" id="cprNumber" name="cprNumber" th:value="${cprNumber}" required>
       </div>
 
-      <div class="opret-bil-submit-row">
+      <div class="opret-bil-center-row">
       <button class="opret-bil-knap" type="submit">Opret Privatkunde</button>
       </div>
     </form>
+  </div>
   </div>
 </div>
 </body>

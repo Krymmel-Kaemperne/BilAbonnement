@@ -206,6 +206,13 @@ body {
     margin-top: 25px;
 }
 
+/*center*/
+.opret-bil-center-row {
+    text-align: center;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
 .opret-bil-knap {
     background-color: var(--main-color); /* Bruger din CSS variabel */
     color: white;
@@ -219,6 +226,31 @@ body {
 
 .opret-bil-submit-btn:hover {
     background-color: var(--hover-color); /* Bruger din CSS variabel */
+}
+
+/* Ny stil til sekundær (grå) knap */
+.button-secondary {
+    display: inline-block; /* Gør linket til et blok-element for at give det padding osv. */
+    background-color: #cccccc; /* Grå baggrundsfarve */
+    color: #333; /* Mørkere tekstfarve */
+    padding: 10px 18px; /* Samme padding som primære knap */
+    border: none; /* Ingen kant */
+    border-radius: 4px;
+    font-size: 0.95em;
+    font-weight: 400;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Jævn overgang ved hover */
+}
+
+.button-container {
+    text-align: center;
+    margin-bottom: 25px;
+    margin-top: 15px;
+}
+
+.button-secondary:hover {
+    background-color: #b3b3b3; /* Lidt mørkere grå ved hover */
 }
 
 /* Meget simpel responsivitet: Stak elementer på små skærme */

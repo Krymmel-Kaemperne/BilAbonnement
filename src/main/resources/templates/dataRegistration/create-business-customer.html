@@ -15,8 +15,11 @@
 
     <header class="opret-bil-form-header"> <!-- Bruger samme header klasse -->
         <h1>Opret Erhvervskunde</h1>
-        <p>Indtast info for at oprette ny erhvervskunde. <a th:href="@{/customers/create/private}" class="button-link-inline">Opret Privatkunde i stedet?</a></p>
     </header>
+
+    <div class="button-container">
+        <a th:href="@{/customers/create/private}" class="button-secondary">Opret Privatkunde i stedet</a>
+    </div>
 
     <div class="opret-bil-form-content"> <!-- Bruger samme content wrapper klasse -->
 
@@ -72,7 +75,7 @@
                 </select>
             </div>
 
-            <div class="opret-bil-submit-row"> <!-- Bruger samme submit række klasse -->
+            <div class="opret-bil-center-row"> <!-- Bruger samme submit række klasse -->
                 <button class="opret-bil-knap" type="submit">Opret Erhvervskunde</button> <!-- Bruger samme knap klasse -->
             </div>
         </form>
