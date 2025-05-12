@@ -65,7 +65,7 @@ public class CustomerController {
         try {
             customerService.save(privateCustomer);
             redirectAttributes.addFlashAttribute("successMessage", "Private customer '" + fName + " " + lName + "' created successfully!");
-            return "redirect:/kunder"; // Eller en anden relevant side
+            return "redirect:/dataRegistration/customers"; // Eller en anden relevant side
         } catch (Exception e) {
             model.addAttribute("errorMessage", "Error creating private customer: " + e.getMessage());
             e.printStackTrace();
@@ -126,7 +126,7 @@ public class CustomerController {
         try {
             customerService.save(businessCustomer);
             redirectAttributes.addFlashAttribute("successMessage", "Business customer '" + companyName + "' created successfully!");
-            return "redirect:/kunder";
+            return "redirect:/dataRegistration/customers";
         } catch (Exception e) {
             model.addAttribute("errorMessage", "Error creating business customer: " + e.getMessage());
             e.printStackTrace();
@@ -161,7 +161,7 @@ public class CustomerController {
         }
     }
 
-    @PostMapping("/cutomers/edit/private/{id}")
+    @PostMapping("/customers/edit/private/{id}")
     public String updatePrivateCustomer(@PathVariable("id") int customerId,
                                         @RequestParam String fName,
                                         @RequestParam String lName,
@@ -190,7 +190,7 @@ public class CustomerController {
         try {
             customerService.update(updatedCustomer);
             redirectAttributes.addFlashAttribute("successMessage", "Privatkunde" + fName + lName + " Opdateret succesfuldt!");
-            return "redirect:/customers";
+            return "redirect:/dataRegistration/customers";
         } catch (Exception e) {
             model.addAttribute("errorMessage", "Fejl ved opdatering af privatkunde: " + e.getMessage());
             e.printStackTrace(); // Log fejlen for debugging
@@ -218,6 +218,11 @@ public class CustomerController {
             repopulateEditBusinessFormForError(model, customerId, fName, lName, email, phone, address, zipcodeId, cvrNumber, companyName);
             return "dataRegistration/edit-business-customer";
         }
+        if (!cvrNumber.matches("\\d{8}")) {
+            model.addAttribute("errorMessage", "CVR-nummer skal være præcis 8 cifre og kun indeholde tal.");
+            repopulateEditBusinessFormForError(model, customerId, fName, lName, email, phone, address, zipcodeId, cvrNumber, companyName);
+            return "dataRegistration/edit-business-customer";
+        }
 
         Zipcode zipcode = zipcodeService.findById(zipcodeId);
         if (zipcode == null) {
@@ -232,7 +237,7 @@ public class CustomerController {
         try {
             customerService.update(updatedCustomer); // Kald din update metode i Service
             redirectAttributes.addFlashAttribute("successMessage", "Erhvervskunde '" + companyName + "' opdateret succesfuldt!");
-            return "redirect:/customers"; // Send tilbage til kundelisten
+            return "redirect:/dataRegistration/customers"; // Send tilbage til kundelisten
         } catch (Exception e) {
             model.addAttribute("errorMessage", "Fejl ved opdatering af erhvervskunde: " + e.getMessage());
             e.printStackTrace(); // Log fejlen for debugging
