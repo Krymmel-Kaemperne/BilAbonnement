@@ -55,7 +55,7 @@ public class ZipcodeRepository {
 
     // Find et postnummer baseret på dets Id
     public Zipcode findById(int id) {
-        String sql = "SELECT zipcode_id, zip_code, city_name FROM zipcode WHERE zipcode_id = ?";
+        String sql = "SELECT zipcode_id, zip_code AS zipcode, city_name FROM zipcode WHERE zipcode_id = ?";
         try {
             return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(Zipcode.class), id);
         } catch(EmptyResultDataAccessException e ) {
@@ -65,7 +65,7 @@ public class ZipcodeRepository {
 
     // Finder postnummer baseret på postnummer streng
     public Zipcode findByZipcodeString(String zipcode) {
-        String sql = "SELECT zipcode_id, zipcode, city_name FROM zipcode WHERE zip_code = ?";
+        String sql = "SELECT zipcode_id, zipcode AS zipcode, city_name FROM zipcode WHERE zip_code = ?";
         try {
             return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(Zipcode.class), zipcode);
         } catch (EmptyResultDataAccessException e) {
@@ -75,7 +75,7 @@ public class ZipcodeRepository {
 
     // Hent alle zipcodes
     public List<Zipcode> findAll() {
-        String sql = "SELECT zipcode_id, zip_code, city_name FROM zipcode ORDER BY zip_code";
+        String sql = "SELECT zipcode_id, zip_code AS zipcode, city_name FROM zipcode ORDER BY zip_code";
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Zipcode.class));
     }
 }
