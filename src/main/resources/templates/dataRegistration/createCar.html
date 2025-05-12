@@ -21,7 +21,7 @@
   </header>
   <div class="opret-bil-form-content">
 
-  <form th:action="@{/dataRegistrering/opretbil}" th:object="${car}" method="post"> <!-- Rettelser her ift. min controller: dataRegistrering -->
+  <form th:action="@{/dataRegistration/createCar}" th:object="${car}" method="post"> <!-- Rettelser her ift. min controller: dataRegistrering -->
 
     <div class="opret-bil-form-row">
       <label for="registrationNumber">Registreringsnummer:</label>
@@ -57,13 +57,12 @@
       <label for="brandId">Mærke (Brand):</label>
       <select id="brandId" th:field="*{brandId}" required>
         <option value="">Vælg mærke</option>
-        <!-- Antager at din controller sender en liste kaldet 'allBrands' -->
-        <!-- Hver 'brand' i listen skal have en 'brandId' og 'brandName' property -->
         <option th:each="brand : ${allBrands}"
                 th:value="${brand.brandId}"
-                th:text="${brand.brandName}">
+        th:text="${brand.brandName}">
         </option>
       </select>
+
     </div>
 
     <div class="opret-bil-form-row">
@@ -88,9 +87,13 @@
       <label for="fuelTypeId">Brændstoftype:</label>
       <select id="fuelTypeId" th:field="*{fuelTypeId}" required>
         <option value="">Vælg brændstoftype</option>
-        <!-- Her skal du senere tilføje th:each for at populere dropdowns -->
-      </select> <!-- **TILFØJET DENNE** -->
+        <option th:each="fuelType : ${allFuelTypes}"
+                th:value="${fuelType.fuelTypeId}"
+                th:text="${fuelType.fuelTypeName}">
+        </option>
+      </select>
     </div>
+
 
     <div class="opret-bil-form-row">
       <label for="transmissionTypeId">Gearkassetype:</label>
