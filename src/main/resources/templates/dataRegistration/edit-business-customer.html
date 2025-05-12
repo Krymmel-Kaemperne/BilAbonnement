@@ -10,6 +10,71 @@
 </head>
 <body>
 <div th:replace="fragments/header :: header('rentalAgreements')"></div>
+<div class="page-container">
+    <div class="form-container">
+        <h1>Rediger Privatkunde: <span th:text="${customer.fname + ' ' + customer.lname}"></span></h1>
 
+        <div class="button-container">
+            <a th:href="@{/dataRegistration/customers}" class="button-secondary">Tilbage til kundeliste</a>
+        </div>
+
+        <div class="opret-bil-form-content">
+
+            <div th:if="${successMessage}" class="message success-message" th:text="${successMessage}"></div>
+            <div th:if="${errorMessage}" class="message error-message" th:text="${errorMessage}"></div>
+            <!-- Form action skal pege på din POST edit metode og inkludere ID -->
+            <form th:action="@{/customers/edit/business/{id}(id=${customer.customerId})}" method="post">
+
+                <!-- SKJUL ID-felt - VIGTIGT! -->
+                <input type="hidden" name="customerId" th:value="${customer.customerId}">
+
+                <!-- Fælles felter - Forudfyld med th:value -->
+                <div class="opret-bil-form-row">
+                    <label for="companyName">Firmanavn:</label>
+                    <input type="text" id="companyName" name="companyName" th:value="${customer.companyName}" required>
+                </div>
+                <div class="opret-bil-form-row">
+                    <label for="cvrNumber">CVR-nummer:</label>
+                    <input type="text" id="cvrNumber" name="cvrNumber" th:value="${customer.cvrNumber}" required>
+                </div>
+                <div class="opret-bil-form-row">
+                    <label for="fName">Kontaktperson Fornavn:</label>
+                    <input type="text" id="fName" name="fName" th:value="${customer.fname}" required>
+                </div>
+                <div class="opret-bil-form-row">
+                <label for="lName">Kontaktperson Efternavn:</label>
+                <input type="text" id="lName" name="lName" th:value="${customer.lname}" required>
+            </div>
+
+                <div class="opret-bil-form-row">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" th:value="${customer.email}" required>
+                </div>
+                <div class="opret-bil-form-row">
+                    <label for="phone">Telefon:</label>
+                    <input type="tel" id="phone" name="phone" th:value="${customer.phone}" required>
+                </div>
+                <div class="opret-bil-form-row">
+                    <label for="address">Firmaadresse:</label>
+                    <input type="text" id="address" name="address" th:value="${customer.address}" required>
+                </div>
+                <div class="opret-bil-form-row">
+                    <label for="zipcodeId">Zipcode:</label>
+                    <select id="zipcodeId" name="zipcodeId" required>
+                        <option value="">Select Zipcode</option>
+                        <option th:each="zc : ${zipcodes}"
+                                th:value="${zc.zipcodeId}"
+                                th:text="${zc.zipcode + ' ' + zc.cityName}"
+                                th:selected="${zc.zipcodeId == customer.zipcodeId}"></option> <!-- Marker det valgte postnummer -->
+                    </select>
+                </div>
+
+                <div class="opret-bil-center-row">
+                    <button class="opret-bil-knap" type="submit">Gem ændringer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 </body>
 </html>
