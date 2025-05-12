@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -134,6 +135,112 @@ public class CustomerController {
         }
     }
 
+    // --- Rediger Kunde ---
+    @GetMapping("/customers/edit/{id}")
+    public String showEditCustomerForm(@PathVariable("id") int customerId, Model model, RedirectAttributes redirectAttributes) {
+        Customer customer = customerService.findById(customerId);
+
+        if (customer == null) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Kunde med ID " + customerId + " blev ikke fundet.");
+            return "redirect:/kunder"; // Send tilbage til kundelisten (eller en fejlside)
+        }
+
+        model.addAttribute("customer", customer);
+        model.addAttribute("zipcodes", zipcodeService.findAllZipcodes()); // Tilføj postnumre til dropdown
+
+        if (customer.getCustomerType() == CustomerType.PRIVATE) {
+            // Hvis det er en privatkunde, skal vi vise den private redigeringsformular
+            return "dataRegistration/edit-private-customer";
+        } else if (customer.getCustomerType() == CustomerType.BUSINESS) {
+            // Hvis det er en erhvervskunde, skal vi vise den erhvervsmæssige redigeringsformular
+            return "dataRegistration/edit-business-customer";
+        } else {
+            // Håndter uventede kundetyper
+            redirectAttributes.addFlashAttribute("errorMessage", "Ukendt kundetype for kunde med ID " + customerId);
+            return "redirect:/customers";
+        }
+    }
+
+    @PostMapping("/cutomers/edit/private/{id}")
+    public String updatePrivateCustomer(@PathVariable("id") int customerId,
+                                        @RequestParam String fName,
+                                        @RequestParam String lName,
+                                        @RequestParam String email,
+                                        @RequestParam String phone,
+                                        @RequestParam String address,
+                                        @RequestParam int zipcodeId,
+                                        @RequestParam String cprNumber,
+                                        RedirectAttributes redirectAttributes,
+                                        Model model) {
+        if (cprNumber == null || cprNumber.trim().isEmpty()) {
+            model.addAttribute("errorMessage", "CPR nummer skal angives.");
+            repopulateEditPrivateFormForError(model, customerId, fName, lName, email, phone, address, zipcodeId, cprNumber);
+            return "dataRegistration/edit-private-customer";
+        }
+
+        Zipcode zipcode = zipcodeService.findById(zipcodeId);
+        if (zipcode == null) {
+            model.addAttribute("errorMessage", "Ugyldigt postnummer valgt.");
+            repopulateEditPrivateFormForError(model, customerId, fName, lName, email, phone, address, zipcodeId, cprNumber);
+            return "dataRegistration/edit-private-customer";
+        }
+
+        PrivateCustomer updatedCustomer = new PrivateCustomer(customerId, fName, lName, email,
+                phone, address, zipcodeId, zipcode, cprNumber);
+        try {
+            customerService.update(updatedCustomer);
+            redirectAttributes.addFlashAttribute("successMessage", "Privatkunde" + fName + lName + " Opdateret succesfuldt!");
+            return "redirect:/customers";
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "Fejl ved opdatering af privatkunde: " + e.getMessage());
+            e.printStackTrace(); // Log fejlen for debugging
+            repopulateEditPrivateFormForError(model, customerId, fName, lName, email, phone, address, zipcodeId, cprNumber);
+            return "dataRegistration/edit-private-customer";
+        }
+    }
+
+    @PostMapping("/customers/edit/business/{id}")
+    public String updateBusinessCustomer(@PathVariable("id") int customerId,
+                                         @RequestParam String fName,
+                                         @RequestParam String lName,
+                                         @RequestParam String email,
+                                         @RequestParam String phone,
+                                         @RequestParam String address,
+                                         @RequestParam int zipcodeId,
+                                         @RequestParam String cvrNumber,
+                                         @RequestParam String companyName,
+                                         RedirectAttributes redirectAttributes,
+                                         Model model) {
+
+        // Validering
+        if (cvrNumber == null || cvrNumber.trim().isEmpty() || companyName == null || companyName.trim().isEmpty()) {
+            model.addAttribute("errorMessage", "CVR nummer og Firmanavn skal angives.");
+            repopulateEditBusinessFormForError(model, customerId, fName, lName, email, phone, address, zipcodeId, cvrNumber, companyName);
+            return "dataRegistration/edit-business-customer";
+        }
+
+        Zipcode zipcode = zipcodeService.findById(zipcodeId);
+        if (zipcode == null) {
+            model.addAttribute("errorMessage", "Ugyldigt postnummer valgt.");
+            repopulateEditBusinessFormForError(model, customerId, fName, lName, email, phone, address, zipcodeId, cvrNumber, companyName);
+            return "dataRegistration/edit-business-customer";
+        }
+
+        // Opret et BusinessCustomer objekt med de opdaterede data
+        BusinessCustomer updatedCustomer = new BusinessCustomer(customerId, fName, lName, email, phone, address, zipcodeId, zipcode, cvrNumber, companyName);
+
+        try {
+            customerService.update(updatedCustomer); // Kald din update metode i Service
+            redirectAttributes.addFlashAttribute("successMessage", "Erhvervskunde '" + companyName + "' opdateret succesfuldt!");
+            return "redirect:/customers"; // Send tilbage til kundelisten
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "Fejl ved opdatering af erhvervskunde: " + e.getMessage());
+            e.printStackTrace(); // Log fejlen for debugging
+            repopulateEditBusinessFormForError(model, customerId, fName, lName, email, phone, address, zipcodeId, cvrNumber, companyName);
+            return "dataRegistration/edit-business-customer";
+        }
+    }
+
     private void repopulateBusinessFormForError(Model model, String fName, String lName, String email, String phone, String address, int zipcodeId, String cvrNumber, String companyName) {
         model.addAttribute("fName", fName);
         model.addAttribute("lName", lName);
@@ -144,6 +251,20 @@ public class CustomerController {
         model.addAttribute("cvrNumber", cvrNumber);
         model.addAttribute("companyName", companyName);
         model.addAttribute("zipcodes", zipcodeService.findAllZipcodes()); // Skal stadig med
+    }
+
+    private void repopulateEditPrivateFormForError(Model model, int customerId, String fName, String lName, String email, String phone, String address, int zipcodeId, String cprNumber) {
+        // Opret et PrivateCustomer objekt med de indtastede data for at populere formularen
+        PrivateCustomer customer = new PrivateCustomer(customerId, fName, lName, email, phone, address, zipcodeId, zipcodeService.findById(zipcodeId), cprNumber);
+        model.addAttribute("customer", customer);
+        model.addAttribute("zipcodes", zipcodeService.findAllZipcodes());
+    }
+
+    private void repopulateEditBusinessFormForError(Model model, int customerId, String fName, String lName, String email, String phone, String address, int zipcodeId, String cvrNumber, String companyName) {
+        // Opret et BusinessCustomer objekt med de indtastede data for at populere formularen
+        BusinessCustomer customer = new BusinessCustomer(customerId, fName, lName, email, phone, address, zipcodeId, zipcodeService.findById(zipcodeId), cvrNumber, companyName);
+        model.addAttribute("customer", customer);
+        model.addAttribute("zipcodes", zipcodeService.findAllZipcodes());
     }
 
 }

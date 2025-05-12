@@ -21,13 +21,13 @@
         <!-- Data-registrering Dropdown -->
         <div class="dropdown">
             <a th:href="@{/dataRegistration}"
-               th:classappend="${currentPage == 'dataRegistration' or currentPage == 'fleet' or currentPage == 'clients' or currentPage == 'rentalAgreements'} ? 'aktive' : ''"
+               th:classappend="${currentPage == 'dataRegistration' or currentPage == 'fleet' or currentPage == 'customers' or currentPage == 'rentalAgreements'} ? 'aktive' : ''"
                class="nav-link">
                 Data Registrering <span class="arrow">&#x25BE;</span>
             </a>
             <div class="dropdown-content">
                 <a th:href="@{/dataRegistration/fleet}">Fleet</a>
-                <a th:href="@{/dataRegistration/clients}">Kunder</a>
+                <a th:href="@{/dataRegistration/customers}">Kunder</a>
                 <a th:href="@{/dataRegistration/rentalAgreements}">Lejeaftaler</a>
             </div>
         </div>

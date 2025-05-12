@@ -23,9 +23,9 @@ public class HomeController {
         return "dataRegistration/fleet";
     }
 
-    @GetMapping("/dataRegistration/clients")
+    @GetMapping("/dataRegistration/customers")
     public String clients() {
-        return "dataRegistration/clients";
+        return "dataRegistration/customers";
     }
 
     @GetMapping("/dataRegistration/rentalAgreements")
