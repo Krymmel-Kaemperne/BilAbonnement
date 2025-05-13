@@ -3,7 +3,6 @@ import com.example.bilabonnement.Model.Car;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -21,8 +20,14 @@ public class CarRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    /**
+     * Opretter en ny bil i databasen.
+     * @param car Car objektet der skal oprettes.
+     * @return Car objektet med det tildelte car_id.
+     */
+
     public Car create(Car car) {
-        String sqlInsert = "INSERT INTO car (registration_number, chassis_number, steel_price, colour, " +
+        String sqlInsert = "INSERT INTO car (registration_number, chassis_number, steel_price, color, " +
                 "co2_emission, vehicle_number, model_id, car_status_id, fuel_type_id, " +
                 "transmission_type_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
@@ -52,12 +57,17 @@ public class CarRepository {
         return car;
     }
 
+    /**
+     * Opdaterer en eksisterende bil i databasen.
+     * @param car Car objektet med de opdaterede informationer.
+     * @return Det opdaterede Car objekt, eller null hvis ingen rækker blev påvirket.
+     */
     public Car update(Car car) {
         if (car.getCarId() <= 0) {
             throw new IllegalArgumentException("Car ID skal være positivt for at kunne opdatere.");
         }
         String sqlUpdate = "UPDATE car SET registration_number = ?, chassis_number = ?, steel_price = ?, " +
-                "colour = ?, co2_emission = ?, vehicle_number = ?, model_id = ?, " +
+                "color = ?, co2_emission = ?, vehicle_number = ?, model_id = ?, " +
                 "car_status_id = ?, fuel_type_id = ?, transmission_type_id = ? " +
                 "WHERE car_id = ?";
         int rowsAffected = jdbcTemplate.update(sqlUpdate,
@@ -79,21 +89,26 @@ public class CarRepository {
             return null; // Ingen bil blev opdateret (f.eks. ID fandtes ikke)
         }
     }
-
+    // SQL-sætning til at hente alle biler med JOINs til model og brand tabellerne.
     public List<Car> findAll() {
-        String sql = "SELECT c.*, m.model_name, b.brand_id, b.brand_name " +
+        String sql = "SELECT c.*, m.model_name, b.brand_id, b.brand_name, " +
+                "cs.status_name AS car_status_name, " +
+                "ft.fuel_type_name, " +
+                "tt.transmission_type_name " +
                 "FROM car c " +
                 "JOIN model m ON c.model_id = m.model_id " +
-                "JOIN brand b ON m.brand_id = b.brand_id";
+                "JOIN brand b ON m.brand_id = b.brand_id " +
+                "JOIN carstatus cs ON c.car_status_id = cs.car_status_id " +
+                "JOIN fueltype ft ON c.fuel_type_id = ft.fuel_type_id " +
+                "JOIN transmissiontype tt ON c.transmission_type_id = tt.transmission_type_id";
 
-        List<Car> cars = jdbcTemplate.query(sql, (rs, rowNum) -> {
+        return jdbcTemplate.query(sql, (rs, rowNum) -> {
             Car car = new Car();
-
             car.setCarId(rs.getInt("car_id"));
             car.setRegistrationNumber(rs.getString("registration_number"));
             car.setChassisNumber(rs.getString("chassis_number"));
             car.setSteelPrice(rs.getDouble("steel_price"));
-            car.setColor(rs.getString("colour"));
+            car.setColor(rs.getString("color"));
             car.setCo2Emission(rs.getDouble("co2_emission"));
             car.setVehicleNumber(rs.getString("vehicle_number"));
             car.setModelId(rs.getInt("model_id"));
@@ -102,9 +117,13 @@ public class CarRepository {
             car.setCarStatusId(rs.getInt("car_status_id"));
             car.setFuelTypeId(rs.getInt("fuel_type_id"));
             car.setTransmissionTypeId(rs.getInt("transmission_type_id"));
+            // Set the display names:
+            car.setModelName(rs.getString("model_name"));
+            car.setCarStatusName(rs.getString("car_status_name"));
+            car.setFuelTypeName(rs.getString("fuel_type_name"));
+            car.setTransmissionTypeName(rs.getString("transmission_type_name"));
             return car;
         });
-        return cars;
     }
 
     public Car findById(int carId) {
@@ -121,7 +140,7 @@ public class CarRepository {
                 car.setRegistrationNumber(rs.getString("registration_number"));
                 car.setChassisNumber(rs.getString("chassis_number"));
                 car.setSteelPrice(rs.getInt("steel_price"));
-                car.setColor(rs.getString("colour"));
+                car.setColor(rs.getString("color"));
                 car.setCo2Emission(rs.getDouble("co2_emission"));
                 car.setVehicleNumber(rs.getString("vehicle_number"));
                 car.setModelId(rs.getInt("model_id"));
@@ -137,4 +156,7 @@ public class CarRepository {
             return null;
         }
     }
+
+
+
 }
