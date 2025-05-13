@@ -37,8 +37,10 @@
     </div>
     <div class="search-id-container">
       <div class="search-id-section">
-        <input type="text" id="searchCarId" name="searchCarId" placeholder="Indtast bilens ID nummer" />
-        <button type="button" class="btn-soeg">Søg</button> <!-- Søgefunktionalitet skal implementeres -->
+        <form class="search-id-section" th:action="@{/fleet/overview}" method="get">
+          <input type="text" id="searchCarId" name="searchCarId" placeholder="Indtast bilens ID nummer" th:value="${param.searchCarId}" />
+          <button type="submit" class="btn-soeg">Søg</button>
+        </form>
       </div>
       <p>Find en bil med dens ID nummer</p>
     </div>
@@ -48,61 +50,60 @@
   <form class="filter-section" th:action="@{/fleet/overview}" method="get">
     <!-- Brand Filter -->
     <div class="filter-group">
-      <select id="brandFilter" name="brand"> <!-- 'name' bruges til @RequestParam i controlleren -->
+      <select id="brandFilter" name="brand">
         <option value="">Brand</option>
-        <!-- Antager 'availableBrands' er en liste af Brand DTO/Model objekter -->
         <option th:each="brandObj : ${availableBrands}"
                 th:value="${brandObj.brandId}"
-                th:text="${brandObj.brandName}">
+                th:text="${brandObj.brandName}"
+                th:selected="${brandObj.brandId} == ${param.brand}">
         </option>
       </select>
     </div>
 
-    <!-- Status Filter (bruger CarStatus enum direkte) -->
+    <!-- Status Filter (bruger CarStatus DTO direkte) -->
     <div class="filter-group">
-      <select id="statusFilter" name="status"> <!-- 'name' for @RequestParam -->
+      <select id="statusFilter" name="status">
         <option value="">Status</option>
-        <!-- Antager 'availableStatuses' er et array af CarStatus enum konstanter -->
         <option th:each="stat : ${availableStatuses}"
-                th:value="${stat.name()}"   <!-- Sender enum navnet (f.eks. "AVAILABLE") -->
-        th:text="${stat.name()}">   <!-- Viser enum navnet -->
+                th:value="${stat.carStatusId}"
+                th:text="${stat.statusName}"
+                th:selected="${stat.carStatusId} == ${param.status}">
         </option>
       </select>
     </div>
 
     <!-- Model Filter -->
     <div class="filter-group">
-      <select id="modelFilter" name="model"> <!-- 'name' for @RequestParam -->
+      <select id="modelFilter" name="model">
         <option value="">Model</option>
-        <!-- Antager 'availableModels' er en liste af Model DTO/Model objekter -->
-        <!-- Hvert 'modelObj' bør have modelId, modelName, og evt. brandName -->
         <option th:each="modelObj : ${availableModels}"
                 th:value="${modelObj.modelId}"
-                th:text="${modelObj.brandName != null ? modelObj.brandName + ' ' + modelObj.modelName : modelObj.modelName}">
+                th:text="${modelObj.modelName}"
+                th:selected="${modelObj.modelId} == ${param.model}">
         </option>
       </select>
     </div>
 
     <!-- Fuel Type Filter -->
     <div class="filter-group">
-      <select id="fuelTypeFilter" name="fuelType"> <!-- 'name' for @RequestParam -->
+      <select id="fuelTypeFilter" name="fuelType">
         <option value="">Fuel Type</option>
-        <!-- Antager 'availableFuelTypes' er en liste af FuelType DTO/Model objekter -->
         <option th:each="fuel : ${availableFuelTypes}"
                 th:value="${fuel.fuelTypeId}"
-                th:text="${fuel.fuelTypeName}">
+                th:text="${fuel.fuelTypeName}"
+                th:selected="${fuel.fuelTypeId} == ${param.fuelType}">
         </option>
       </select>
     </div>
 
     <!-- Transmission Type Filter -->
     <div class="filter-group">
-      <select id="transmissionTypeFilter" name="transmissionType"> <!-- 'name' for @RequestParam -->
+      <select id="transmissionTypeFilter" name="transmissionType">
         <option value="">Transmission Type</option>
-        <!-- Antager 'availableTransmissionTypes' er en liste af TransmissionType DTO/Model objekter -->
         <option th:each="trans : ${availableTransmissionTypes}"
                 th:value="${trans.transmissionTypeId}"
-                th:text="${trans.transmissionTypeName}">
+                th:text="${trans.transmissionTypeName}"
+                th:selected="${trans.transmissionTypeId} == ${param.transmissionType}">
         </option>
       </select>
     </div>

@@ -512,7 +512,6 @@ body {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
     gap: 15px;
-    margin-bottom: 30px;
     align-items: end;
 }
 
@@ -522,7 +521,6 @@ body {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
     gap: 15px;
-    margin-bottom: 30px;
     align-items: end; /* Sørger for at elementer justeres til bunden */
 }
 
@@ -813,7 +811,6 @@ body {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
     gap: 15px;
-    margin-bottom: 30px;
     align-items: end;
 }
 

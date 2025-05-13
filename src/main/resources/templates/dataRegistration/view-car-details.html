@@ -20,34 +20,31 @@
 
 
     <div class="car-details-container">
-        <!-- Left side with info -->
-        <div class="car-info">
-            <p><strong>ID nummer:</strong> <span th:text="${car.carId}"></span></p>
-            <p><strong>Brand:</strong> <span th:text="${car.brandName}"></span></p>
-            <p><strong>Model:</strong> <span th:text="${car.modelName}"></span></p>
-            <p><strong>Status:</strong>
-                <span th:switch="${car.carStatusId}">
-                    <span th:case="1">Tilgængelig</span>
-                    <span th:case="2">Lejet ud</span>
-                    <span th:case="3">Service</span>
-                    <span th:case="4">Solgt</span>
-                    <span th:case="*">Ukendt</span>
-                </span>
-            </p>
-
-            <p><strong>Brændstoftype: </strong> <span
-                    th:text="${car.fuelTypeId == 1 ? 'Benzin' : car.fuelTypeId == 2 ? 'Diesel' : 'Ukendt'}">Benzin</span>
-            </p>
-
-            <p><strong>Transmission:</strong>
-                <span th:switch="${car.transmissionTypeId}">
-                    <span th:case="1">Manuel</span>
-                    <span th:case="2">Automatisk</span>
-                    <span th:case="*">Ukendt</span>
-                </span>
-            </p>
+        <!-- Remove the old car-info <p> fields, keep only the new list -->
+        <div class="car-extra-info" style="margin-top: 0;">
+            <ul style="list-style: none; padding: 0;">
+                <li><strong>ID nummer:</strong> <span th:text="${car.carId}"></span></li>
+                <li><strong>Registreringsnummer:</strong> <span th:text="${car.registrationNumber}"></span></li>
+                <li><strong>Stelnummer:</strong> <span th:text="${car.chassisNumber}"></span></li>
+                <li><strong>Stålpris:</strong> <span th:text="${car.steelPrice}"></span> kr.</li>
+                <li><strong>Farve:</strong> <span th:text="${car.color}"></span></li>
+                <li><strong>CO2-udledning:</strong> <span th:text="${car.co2Emission}"></span> g/km</li>
+                <li><strong>Køretøjsnummer:</strong> <span th:text="${car.vehicleNumber}"></span></li>
+                <li><strong>Kommentar:</strong> <span th:text="${car.comment}"></span></li>
+                <li><strong>Model:</strong> <span th:text="${car.modelName}"></span></li>
+                <li><strong>Mærke:</strong> <span th:text="${car.brandName}"></span></li>
+                <li><strong>Status:</strong> <span th:text="${car.carStatusName}"></span></li>
+                <li><strong>Brændstoftype:</strong> <span th:text="${car.fuelTypeName}"></span></li>
+                <li><strong>Transmission:</strong> <span th:text="${car.transmissionTypeName}"></span></li>
+            </ul>
+            <div style="margin-top: 20px;">
+                <button type="button"
+                        class="btn-detaljer"
+                        th:onclick="|location.href='@{/dataRegistration/car/edit/{id}(id=${car.carId})}'|">
+                    Rediger
+                </button>
+            </div>
         </div>
-
     </div>
 
 </div>
