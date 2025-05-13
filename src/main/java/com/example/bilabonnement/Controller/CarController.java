@@ -3,22 +3,15 @@ package com.example.bilabonnement.Controller;
 import com.example.bilabonnement.Model.Car;
 import com.example.bilabonnement.Model.Brand;
 import com.example.bilabonnement.Model.FuelType;
-import com.example.bilabonnement.Model.Model;
-
-import com.example.bilabonnement.Repository.BrandRepository;
-import com.example.bilabonnement.Repository.FuelTypeRepository;
-import com.example.bilabonnement.Repository.ModelRepository;
-import com.example.bilabonnement.Repository.CarRepository;
+import org.springframework.ui.Model;
 import com.example.bilabonnement.Service.BrandService;
 import com.example.bilabonnement.Service.CarService;
 import com.example.bilabonnement.Service.FuelTypeService;
 import com.example.bilabonnement.Service.ModelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -37,11 +30,9 @@ public class CarController {
 
     @Autowired
     private CarService carService;
-
-
-
+    
     @GetMapping("/createCar")
-    public String showCreateCarForm(org.springframework.ui.Model model) {
+    public String showCreateCarForm(Model model) {
         model.addAttribute("car", new Car());
         List<Brand> allBrands = brandService.findAllBrands();
         model.addAttribute("allBrands", allBrands);
@@ -53,14 +44,54 @@ public class CarController {
     @PostMapping("/createCar")
     public String createCar(@ModelAttribute Car car) {
         // Find or create the model
-        Model model = modelService.findByBrandIdAndModelName(car.getBrandId(), car.getModelName());
-        if (model == null) {
-            model = modelService.create(new Model(car.getModelName(), car.getBrandId()));
+        com.example.bilabonnement.Model.Model carModel = modelService.findByBrandIdAndModelName(car.getBrandId(), car.getModelName());
+        if (carModel == null) {
+            carModel = modelService.create(new com.example.bilabonnement.Model.Model(car.getModelName(), car.getBrandId()));
         }
-        car.setModelId(model.getModelId());
+        car.setModelId(carModel.getModelId());
         // Save the car to the database
         carService.create(car);
         System.out.println("Car saved: " + car);
+        return "redirect:/dataRegistration/fleet";
+    }
+
+    // Metode til at hente data ind i en redigerings formular
+    @GetMapping("/car/edit/{id}")
+    public String showEditCarForm(@PathVariable("id") int carId, Model model, RedirectAttributes redirectAttributes) {
+        Car car = carService.findById(carId);
+
+        if (car == null) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Bil med ID " + carId + " blev ikke fundet.");
+            return "redirect:/dataRegistration/fleet";
+        }
+
+        model.addAttribute("car", car);
+        List<Brand> allBrands = brandService.findAllBrands();
+        model.addAttribute("allBrands", allBrands);
+        List<FuelType> allFuelTypes = fuelTypeService.findAllFuelTypes();
+        model.addAttribute("allFuelTypes", allFuelTypes);
+
+        return "dataRegistration/editCar";
+    }
+
+    // Metode til at opdatere bil med inputs
+    @PostMapping("/car/update")
+    public String updateCar(@ModelAttribute Car car, RedirectAttributes redirectAttributes) {
+        com.example.bilabonnement.Model.Model carModel = modelService.findByBrandIdAndModelName(car.getBrandId(), car.getModelName());
+        if (carModel == null) {
+            carModel = modelService.create(new com.example.bilabonnement.Model.Model(car.getModelName(), car.getBrandId()));
+        }
+        if (carModel != null) {
+            car.setModelId(carModel.getModelId());
+            Car updatedCar = carService.update(car);
+            if (updatedCar != null) {
+                redirectAttributes.addFlashAttribute("successMessage", "Bil '" + car.getRegistrationNumber() + "' opdateret succesfuldt!");
+            } else {
+                redirectAttributes.addFlashAttribute("errorMessage", "Fejl ved opdatering af bil med ID " + car.getCarId() + ".");
+            }
+        } else {
+            redirectAttributes.addFlashAttribute("errorMessage", "Fejl: Kunne ikke oprette eller finde bilmodel under opdatering.");
+        }
         return "redirect:/dataRegistration/fleet";
     }
 }
