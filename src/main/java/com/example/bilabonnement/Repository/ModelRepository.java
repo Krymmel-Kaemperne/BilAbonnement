@@ -42,4 +42,19 @@ public class ModelRepository {
         }
         return model;
     }
+
+    // *** NY METODE TIL AT HENTE ALLE MODELLER ***
+    public List<Model> findAllModels() {
+        String sql = "SELECT m.model_id, m.model_name, m.brand_id, b.brand_name " +
+                "FROM model m " +
+                "JOIN brand b ON m.brand_id = b.brand_id";
+        return jdbcTemplate.query(sql, (rs, rowNum) -> {
+            Model model = new Model();
+            model.setModelId(rs.getInt("model_id"));
+            model.setModelName(rs.getString("model_name"));
+            model.setBrandId(rs.getInt("brand_id"));
+            model.setBrandName(rs.getString("brand_name")); // <-- Set this
+            return model;
+        });
+    }
 } 

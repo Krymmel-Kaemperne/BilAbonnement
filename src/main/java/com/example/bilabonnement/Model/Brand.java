@@ -2,15 +2,16 @@ package com.example.bilabonnement.Model;
 
 public class Brand {
     private int brandId;
-    private String name;
+    private String brandName;
 
     public Brand() {}
-    public Brand(int brandId, String name) {
+    public Brand(int brandId, String brandName) {
         this.brandId = brandId;
-        this.name = name;
+        this.brandName = brandName;
     }
     public int getBrandId() { return brandId; }
     public void setBrandId(int brandId) { this.brandId = brandId; }
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+
+    public String getBrandName() { return brandName; }
+    public void setBrandName(String brandName) { this.brandName = brandName; }
 }

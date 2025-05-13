@@ -2,19 +2,19 @@
 <html lang="da" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8" />
+  <title>Flåde Oversigt</title>
+  <link rel="stylesheet" href="/stylesheet.css" /> <!-- Sørg for stien er korrekt -->
+  <!-- Font links -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
           href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap"
           rel="stylesheet"
   />
-  <!-- Link til dit separate stylesheet -->
-  <link rel="stylesheet" href="/stylesheet.css" />
-  <title>Flåde Oversigt</title>
 </head>
 <body>
-<!-- Inkluderer header fragment (antager det findes i fragments/header.html) -->
-<div th:replace="fragments/header :: header('dataRegistration')"></div>
+<!-- Opdateret 'activeMenu' parameter til at matche en mulig 'fleet' menu item -->
+<div th:replace="~{fragments/header :: header('fleet')}"></div>
 
 <div class="container">
   <div class="header-flex">
@@ -25,113 +25,94 @@
     redigere deres info & status eller helt slette dem.
   </p>
 
-  <!-- Sektion for Opret bil og Søg på ID -->
   <div class="action-section">
     <div class="create-car-section">
-      <!-- Knappen skal nok linke til en 'opret bil' side -->
-      <button
-              type="button"
-              class="btn-opret"
-              onclick="location.href='/create-car'"
-      >
+      <!-- Peger på CarController's createCar mapping -->
+      <button type="button" class="btn-opret"
+              th:onclick="|location.href='@{/dataRegistration/createCar}'|">
         Opret bil
       </button>
       <p>Klik her for at oprette ny bil</p>
     </div>
     <div class="search-id-container">
-      <!-- Simpel ID søgning - kræver JS eller separat form håndtering -->
       <div class="search-id-section">
-        <input
-                type="text"
-                id="searchCarId"
-                name="searchCarId"
-                placeholder="Indtast bilens ID nummer"
-        />
-        <button type="button" class="btn-soeg">Søg</button>
+        <input type="text" id="searchCarId" name="searchCarId" placeholder="Indtast bilens ID nummer" />
+        <button type="button" class="btn-soeg">Søg</button> <!-- Søgefunktionalitet skal implementeres -->
       </div>
       <p>Find en bil med dens ID nummer</p>
     </div>
   </div>
 
-  <!-- Filter Formular -->
-  <form
-          class="filter-section"
-          th:action="@{/fleet-overview}"
-          method="get"
-  >
+  <!-- Filter Formular peger nu på FleetController -->
+  <form class="filter-section" th:action="@{/fleet/overview}" method="get">
     <!-- Brand Filter -->
     <div class="filter-group">
-      <select id="brandFilter" name="brand">
+      <select id="brandFilter" name="brand"> <!-- 'name' bruges til @RequestParam i controlleren -->
         <option value="">Brand</option>
-        <!-- Eksempel - Fyldes dynamisk fra backend -->
-        <option
-                th:each="brand : ${availableBrands}"
-                th:value="${brand.id}"
-                th:text="${brand.name}"
-        >
-          Ford
+        <!-- Antager 'availableBrands' er en liste af Brand DTO/Model objekter -->
+        <option th:each="brandObj : ${availableBrands}"
+                th:value="${brandObj.brandId}"
+                th:text="${brandObj.brandName}">
         </option>
       </select>
     </div>
 
-    <!-- Status Filter -->
+    <!-- Status Filter (bruger CarStatus enum direkte) -->
     <div class="filter-group">
-      <select id="statusFilter" name="status">
+      <select id="statusFilter" name="status"> <!-- 'name' for @RequestParam -->
         <option value="">Status</option>
-        <!-- Eksempel - Fyldes dynamisk eller er statisk -->
-        <option value="Udlejet">Udlejet</option>
-        <option value="Ledig">Ledig</option>
-        <option value="Service">Service</option>
-        <option value="Skadet">Skadet</option>
+        <!-- Antager 'availableStatuses' er et array af CarStatus enum konstanter -->
+        <option th:each="stat : ${availableStatuses}"
+                th:value="${stat.name()}"   <!-- Sender enum navnet (f.eks. "AVAILABLE") -->
+        th:text="${stat.name()}">   <!-- Viser enum navnet -->
+        </option>
       </select>
     </div>
 
     <!-- Model Filter -->
     <div class="filter-group">
-      <select id="modelFilter" name="model">
+      <select id="modelFilter" name="model"> <!-- 'name' for @RequestParam -->
         <option value="">Model</option>
-        <!-- Eksempel - Fyldes dynamisk fra backend -->
-        <option
-                th:each="model : ${availableModels}"
-                th:value="${model.id}"
-                th:text="${model.name}"
-        >
-          Cypress
+        <!-- Antager 'availableModels' er en liste af Model DTO/Model objekter -->
+        <!-- Hvert 'modelObj' bør have modelId, modelName, og evt. brandName -->
+        <option th:each="modelObj : ${availableModels}"
+                th:value="${modelObj.modelId}"
+                th:text="${modelObj.brandName != null ? modelObj.brandName + ' ' + modelObj.modelName : modelObj.modelName}">
         </option>
       </select>
     </div>
 
     <!-- Fuel Type Filter -->
     <div class="filter-group">
-      <select id="fuelTypeFilter" name="fuelType">
+      <select id="fuelTypeFilter" name="fuelType"> <!-- 'name' for @RequestParam -->
         <option value="">Fuel Type</option>
-        <!-- Eksempel - Fyldes dynamisk eller er statisk -->
-        <option value="Benzin">Benzin</option>
-        <option value="Diesel">Diesel</option>
-        <option value="El">El</option>
-        <option value="Hybrid">Hybrid</option>
+        <!-- Antager 'availableFuelTypes' er en liste af FuelType DTO/Model objekter -->
+        <option th:each="fuel : ${availableFuelTypes}"
+                th:value="${fuel.fuelTypeId}"
+                th:text="${fuel.fuelTypeName}">
+        </option>
       </select>
     </div>
 
     <!-- Transmission Type Filter -->
     <div class="filter-group">
-      <select id="transmissionTypeFilter" name="transmissionType">
+      <select id="transmissionTypeFilter" name="transmissionType"> <!-- 'name' for @RequestParam -->
         <option value="">Transmission Type</option>
-        <!-- Eksempel - Fyldes dynamisk eller er statisk -->
-        <option value="Manuel">Manuel</option>
-        <option value="Automatisk">Automatisk</option>
+        <!-- Antager 'availableTransmissionTypes' er en liste af TransmissionType DTO/Model objekter -->
+        <option th:each="trans : ${availableTransmissionTypes}"
+                th:value="${trans.transmissionTypeId}"
+                th:text="${trans.transmissionTypeName}">
+        </option>
       </select>
     </div>
 
-    <!-- Knap Gruppe for Søg og Vis Alle -->
     <div class="filter-button-group">
       <button type="submit" class="btn-soeg-filter">Søg</button>
-      <!-- Link der nulstiller filtre ved at gå til basis URL -->
-      <a th:href="@{/fleet-overview}" class="btn btn-vis-alle">Vis Alle</a>
+      <!-- Vis Alle peger nu på FleetController -->
+      <a th:href="@{/fleet/overview}" class="btn btn-vis-alle">Vis Alle</a>
     </div>
   </form>
 
-  <!-- Tabel med Bil Oversigt -->
   <table class="car-table">
     <thead>
     <tr>
@@ -145,26 +126,20 @@
     </tr>
     </thead>
     <tbody>
-    <!-- Rækker genereres dynamisk via Thymeleaf -->
-    <!-- Tjek om listen 'cars' er tom -->
     <tr th:if="${#lists.isEmpty(cars)}">
-      <td colspan="8" style="text-align: center;">Ingen biler fundet.</td>
+      <td colspan="7" style="text-align: center;">Ingen biler fundet.</td> <!-- Opdateret colspan -->
     </tr>
-    <!-- Iterer over biler hvis listen ikke er tom -->
     <tr th:unless="${#lists.isEmpty(cars)}" th:each="car : ${cars}">
-      <!-- Antager 'car' objekt har disse felter/getters -->
       <td th:text="${car.carId}">0</td>
       <td th:text="${car.brandName}">N/A</td>
       <td th:text="${car.modelName}">N/A</td>
-      <td th:text="${car.carStatusName}">N/A</td> <!-- Antager du har status navn -->
-      <td th:text="${car.fuelTypeName}">N/A</td> <!-- Antager du har fuel type navn -->
-      <td th:text="${car.transmissionTypeName}">N/A</td> <!-- Antager du har transmission navn -->
+      <td th:text="${car.carStatusName}">N/A</td>
+      <td th:text="${car.fuelTypeName}">N/A</td>
+      <td th:text="${car.transmissionTypeName}">N/A</td>
       <td>
-        <button
-                type="button"
-                class="btn-detaljer"
-                th:attr="onclick=|location.href='@{/car-details/{id}(id=${car.carId})}'|"
-        >
+        <!-- Detaljer knap peger nu på FleetController -->
+        <button type="button" class="btn-detaljer"
+                th:attr="onclick=|location.href='@{/fleet/details/{id}(id=${car.carId})}'|">
           Detaljer
         </button>
       </td>
@@ -172,6 +147,5 @@
     </tbody>
   </table>
 </div>
-<!-- Evt. footer fragment her -->
 </body>
 </html>

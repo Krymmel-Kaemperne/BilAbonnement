@@ -5,6 +5,8 @@ import com.example.bilabonnement.Repository.ModelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ModelService {
 
@@ -17,5 +19,9 @@ public class ModelService {
 
     public Model create(Model model) {
         return modelRepository.create(model);
+    }
+
+    public List<Model> findAllModels() {
+        return modelRepository.findAllModels();
     }
 }
