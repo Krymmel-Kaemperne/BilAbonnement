@@ -23,11 +23,6 @@ public class HomeController {
         return "dataRegistration/fleet";
     }
 
-    @GetMapping("/dataRegistration/customers")
-    public String clients() {
-        return "dataRegistration/customers";
-    }
-
     @GetMapping("/dataRegistration/rentalAgreements")
     public String rentalAgreements() {
         return "dataRegistration/rentalAgreements";

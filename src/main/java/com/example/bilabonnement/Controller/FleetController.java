@@ -102,6 +102,6 @@ public class FleetController {
         // Hvis din car-details.html ligger i templates/dataRegistration/
         // return "dataRegistration/car-details";
         // Hvis den ligger direkte i templates/
-        return "car-details"; // Antager den ligger i templates/car-details.html
+        return "dataRegistration/view-car-details"; // Antager den ligger i templates/car-details.html
     }
 }

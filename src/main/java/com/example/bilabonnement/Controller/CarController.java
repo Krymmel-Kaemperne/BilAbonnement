@@ -38,8 +38,6 @@ public class CarController {
     @Autowired
     private CarService carService;
 
-    // TODO: Injicer CarStatusService og TransmissionTypeService
-
 
     @GetMapping("/createCar")
     public String showCreateCarForm(Model model) {
@@ -82,7 +80,6 @@ public class CarController {
         model.addAttribute("allBrands", allBrands);
         List<FuelType> allFuelTypes = fuelTypeService.findAllFuelTypes();
         model.addAttribute("allFuelTypes", allFuelTypes);
-        // TODO: Hent og tilføj data for CarStatus og TransmissionType
         return "dataRegistration/editCar";
     }
 
@@ -114,7 +111,7 @@ public class CarController {
             return "redirect:/dataRegistration/fleet";
         }
         model.addAttribute("car", car);
-        return "dataRegistration/viewCar";
+        return "dataRegistration/view-car-details";
     }
 
 }
