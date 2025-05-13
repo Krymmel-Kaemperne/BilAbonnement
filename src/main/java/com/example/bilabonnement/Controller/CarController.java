@@ -3,9 +3,12 @@ package com.example.bilabonnement.Controller;
 import com.example.bilabonnement.Model.Car;
 import com.example.bilabonnement.Model.Brand;
 import com.example.bilabonnement.Model.FuelType;
+
+
 // Importer CarStatus, TransmissionType modeller/DTO'er
 
 import org.springframework.ui.Model;
+
 import com.example.bilabonnement.Service.BrandService;
 import com.example.bilabonnement.Service.CarService;
 import com.example.bilabonnement.Service.FuelTypeService;
@@ -15,7 +18,9 @@ import com.example.bilabonnement.Service.ModelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 
 import java.util.Collections;
 import java.util.List;
@@ -32,7 +37,9 @@ public class CarController {
     private ModelService modelService;
     @Autowired
     private CarService carService;
+
     // TODO: Injicer CarStatusService og TransmissionTypeService
+
 
     @GetMapping("/createCar")
     public String showCreateCarForm(Model model) {
@@ -98,4 +105,16 @@ public class CarController {
         }
         return "redirect:/fleet/overview"; // OPDATERET REDIRECT
     }
+
+    @GetMapping ("/car/{id}")
+    public String viewCar(@PathVariable("id") int carId, org.springframework.ui.Model model){
+        Car car = carService.findById(carId);
+        if (car == null)
+        {
+            return "redirect:/dataRegistration/fleet";
+        }
+        model.addAttribute("car", car);
+        return "dataRegistration/viewCar";
+    }
+
 }

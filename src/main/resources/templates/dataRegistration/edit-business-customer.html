@@ -9,7 +9,7 @@
     <title>Rediger erhvervskunde</title>
 </head>
 <body>
-<div th:replace="fragments/header :: header('rentalAgreements')"></div>
+<div th:replace="~{fragments/header :: header('dataRegistration')}"></div>
 <div class="page-container">
     <div class="form-container">
         <h1>Rediger Privatkunde: <span th:text="${customer.fname + ' ' + customer.lname}"></span></h1>

@@ -12,23 +12,36 @@
 <body>
 
 <!-- This loads the header fragment -->
-<div th:replace="fragments/header :: header('dataRegistration')"></div>
+<div th:replace="~{fragments/header :: header('dataRegistration')}"></div>
+
+<div class="page-container">
+
+    <h1>Velkomme til Data Registrering</h1>
+
+    <div class="page-container">
+        <div class="section-columns">
+
+            <div class="section-group">
+                <h3>Biler</h3>
+                <a href="/dataRegistration/fleet" class="section-card">Se fleet oversigt</a>
+                <a href="/dataRegistration/createCar" class="section-card">Opret bil</a>
+            </div>
+
+            <div class="section-group">
+                <h3>Kunder</h3>
+                <a href="/dataRegistration/customers" class="section-card">Se kunde oversigt</a>
+                <a href="/customers/create/private" class="section-card">Opret kunde</a>
+            </div>
+
+            <div class="section-group">
+                <h3>Lejeaftaler</h3>
+                <a href="/dataRegistration/" class="section-card">Se lejeaftaler</a>
+                <a href="#" class="section-card">Opret lejeaftale</a>
+            </div>
 
 
-<h1>Velkomme til Data Registrering</h1>
-
-<div class="container">
-  <div class="section-grid">
-    <a href="/dataRegistration/fleet" class="section-card">Fleet Oversigt</a>
-    <a href="/dataRegistration/clients" class="section-card">Kunder</a>
-
-    <a href="/dataRegistration/createClients" class="section-card">Kunder</a>
-
-    <a href="/dataRegistration/rentalAgreements" class="section-card">Lejeaftaler</a>
-    <a href="/dataRegistration/createRentalAgreements" class="section-card">Kunder</a>
-
-
-  </div>
+        </div>
+    </div>
 </div>
 
 </body>
