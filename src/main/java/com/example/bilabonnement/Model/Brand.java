@@ -1,41 +1,16 @@
 package com.example.bilabonnement.Model;
 
 public class Brand {
-    private Integer brandId; // Matcher 'brand_id' fra din database
-    private String brandName; // Matcher 'brand_name' fra din database
+    private int brandId;
+    private String name;
 
-    public Brand() {
-    }
-
-    // Konstruktør med felter (valgfri, men kan være nyttig)
-    public Brand(Integer brandId, String brandName) {
+    public Brand() {}
+    public Brand(int brandId, String name) {
         this.brandId = brandId;
-        this.brandName = brandName;
+        this.name = name;
     }
-
-    // Getters
-    public Integer getBrandId() {
-        return brandId;
-    }
-
-    public String getBrandName() {
-        return brandName;
-    }
-
-    // Setters
-    public void setBrandId(Integer brandId) {
-        this.brandId = brandId;
-    }
-
-    public void setBrandName(String brandName) {
-        this.brandName = brandName;
-    }
-
-    @Override
-    public String toString() {
-        return "BrandDTO{" +
-                "brandId=" + brandId +
-                ", brandName='" + brandName + '\'' +
-                '}';
-    }
+    public int getBrandId() { return brandId; }
+    public void setBrandId(int brandId) { this.brandId = brandId; }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
 }

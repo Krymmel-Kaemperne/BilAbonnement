@@ -1,17 +1,177 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="da" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/stylesheet.css">
-  <title>Opret lejeaftale</title>
+  <meta charset="UTF-8" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+          href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap"
+          rel="stylesheet"
+  />
+  <!-- Link til dit separate stylesheet -->
+  <link rel="stylesheet" href="/stylesheet.css" />
+  <title>Flåde Oversigt</title>
 </head>
 <body>
-<div th:replace="fragments/header :: header('createRentalAgreement')"></div>
+<!-- Inkluderer header fragment (antager det findes i fragments/header.html) -->
+<div th:replace="fragments/header :: header('dataRegistration')"></div>
 
-<h1>createRentalAgreement</h1>
+<div class="container">
+  <div class="header-flex">
+    <h1>Fleet Oversigt</h1>
+  </div>
+  <p class="description-text">
+    På denne side kan du se oversigten over vores fleet, tilføje biler,
+    redigere deres info & status eller helt slette dem.
+  </p>
+
+  <!-- Sektion for Opret bil og Søg på ID -->
+  <div class="action-section">
+    <div class="create-car-section">
+      <!-- Knappen skal nok linke til en 'opret bil' side -->
+      <button
+              type="button"
+              class="btn-opret"
+              onclick="location.href='/create-car'"
+      >
+        Opret bil
+      </button>
+      <p>Klik her for at oprette ny bil</p>
+    </div>
+    <div class="search-id-container">
+      <!-- Simpel ID søgning - kræver JS eller separat form håndtering -->
+      <div class="search-id-section">
+        <input
+                type="text"
+                id="searchCarId"
+                name="searchCarId"
+                placeholder="Indtast bilens ID nummer"
+        />
+        <button type="button" class="btn-soeg">Søg</button>
+      </div>
+      <p>Find en bil med dens ID nummer</p>
+    </div>
+  </div>
+
+  <!-- Filter Formular -->
+  <form
+          class="filter-section"
+          th:action="@{/fleet-overview}"
+          method="get"
+  >
+    <!-- Brand Filter -->
+    <div class="filter-group">
+      <select id="brandFilter" name="brand">
+        <option value="">Brand</option>
+        <!-- Eksempel - Fyldes dynamisk fra backend -->
+        <option
+                th:each="brand : ${availableBrands}"
+                th:value="${brand.id}"
+                th:text="${brand.name}"
+        >
+          Ford
+        </option>
+      </select>
+    </div>
+
+    <!-- Status Filter -->
+    <div class="filter-group">
+      <select id="statusFilter" name="status">
+        <option value="">Status</option>
+        <!-- Eksempel - Fyldes dynamisk eller er statisk -->
+        <option value="Udlejet">Udlejet</option>
+        <option value="Ledig">Ledig</option>
+        <option value="Service">Service</option>
+        <option value="Skadet">Skadet</option>
+      </select>
+    </div>
+
+    <!-- Model Filter -->
+    <div class="filter-group">
+      <select id="modelFilter" name="model">
+        <option value="">Model</option>
+        <!-- Eksempel - Fyldes dynamisk fra backend -->
+        <option
+                th:each="model : ${availableModels}"
+                th:value="${model.id}"
+                th:text="${model.name}"
+        >
+          Cypress
+        </option>
+      </select>
+    </div>
+
+    <!-- Fuel Type Filter -->
+    <div class="filter-group">
+      <select id="fuelTypeFilter" name="fuelType">
+        <option value="">Fuel Type</option>
+        <!-- Eksempel - Fyldes dynamisk eller er statisk -->
+        <option value="Benzin">Benzin</option>
+        <option value="Diesel">Diesel</option>
+        <option value="El">El</option>
+        <option value="Hybrid">Hybrid</option>
+      </select>
+    </div>
+
+    <!-- Transmission Type Filter -->
+    <div class="filter-group">
+      <select id="transmissionTypeFilter" name="transmissionType">
+        <option value="">Transmission Type</option>
+        <!-- Eksempel - Fyldes dynamisk eller er statisk -->
+        <option value="Manuel">Manuel</option>
+        <option value="Automatisk">Automatisk</option>
+      </select>
+    </div>
+
+    <!-- Knap Gruppe for Søg og Vis Alle -->
+    <div class="filter-button-group">
+      <button type="submit" class="btn-soeg-filter">Søg</button>
+      <!-- Link der nulstiller filtre ved at gå til basis URL -->
+      <a th:href="@{/fleet-overview}" class="btn btn-vis-alle">Vis Alle</a>
+    </div>
+  </form>
+
+  <!-- Tabel med Bil Oversigt -->
+  <table class="car-table">
+    <thead>
+    <tr>
+      <th>ID nummer</th>
+      <th>Brand</th>
+      <th>Model</th>
+      <th>Status</th>
+      <th>Fuel Type</th>
+      <th>Transmission</th>
+      <th>Detaljer</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- Rækker genereres dynamisk via Thymeleaf -->
+    <!-- Tjek om listen 'cars' er tom -->
+    <tr th:if="${#lists.isEmpty(cars)}">
+      <td colspan="8" style="text-align: center;">Ingen biler fundet.</td>
+    </tr>
+    <!-- Iterer over biler hvis listen ikke er tom -->
+    <tr th:unless="${#lists.isEmpty(cars)}" th:each="car : ${cars}">
+      <!-- Antager 'car' objekt har disse felter/getters -->
+      <td th:text="${car.carId}">0</td>
+      <td th:text="${car.brandName}">N/A</td>
+      <td th:text="${car.modelName}">N/A</td>
+      <td th:text="${car.carStatusName}">N/A</td> <!-- Antager du har status navn -->
+      <td th:text="${car.fuelTypeName}">N/A</td> <!-- Antager du har fuel type navn -->
+      <td th:text="${car.transmissionTypeName}">N/A</td> <!-- Antager du har transmission navn -->
+      <td>
+        <button
+                type="button"
+                class="btn-detaljer"
+                th:attr="onclick=|location.href='@{/car-details/{id}(id=${car.carId})}'|"
+        >
+          Detaljer
+        </button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+<!-- Evt. footer fragment her -->
 </body>
 </html>

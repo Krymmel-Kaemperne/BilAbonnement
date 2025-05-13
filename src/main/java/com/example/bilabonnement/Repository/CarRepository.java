@@ -3,7 +3,6 @@ import com.example.bilabonnement.Model.Car;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -22,7 +21,7 @@ public class CarRepository {
     }
 
     public Car create(Car car) {
-        String sqlInsert = "INSERT INTO car (registration_number, chassis_number, steel_price, colour, " +
+        String sqlInsert = "INSERT INTO car (registration_number, chassis_number, steel_price, color, " +
                 "co2_emission, vehicle_number, model_id, car_status_id, fuel_type_id, " +
                 "transmission_type_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
@@ -57,7 +56,7 @@ public class CarRepository {
             throw new IllegalArgumentException("Car ID skal være positivt for at kunne opdatere.");
         }
         String sqlUpdate = "UPDATE car SET registration_number = ?, chassis_number = ?, steel_price = ?, " +
-                "colour = ?, co2_emission = ?, vehicle_number = ?, model_id = ?, " +
+                "color = ?, co2_emission = ?, vehicle_number = ?, model_id = ?, " +
                 "car_status_id = ?, fuel_type_id = ?, transmission_type_id = ? " +
                 "WHERE car_id = ?";
         int rowsAffected = jdbcTemplate.update(sqlUpdate,
@@ -93,7 +92,7 @@ public class CarRepository {
             car.setRegistrationNumber(rs.getString("registration_number"));
             car.setChassisNumber(rs.getString("chassis_number"));
             car.setSteelPrice(rs.getDouble("steel_price"));
-            car.setColor(rs.getString("colour"));
+            car.setColor(rs.getString("color"));
             car.setCo2Emission(rs.getDouble("co2_emission"));
             car.setVehicleNumber(rs.getString("vehicle_number"));
             car.setModelId(rs.getInt("model_id"));
@@ -121,7 +120,7 @@ public class CarRepository {
                 car.setRegistrationNumber(rs.getString("registration_number"));
                 car.setChassisNumber(rs.getString("chassis_number"));
                 car.setSteelPrice(rs.getInt("steel_price"));
-                car.setColor(rs.getString("colour"));
+                car.setColor(rs.getString("color"));
                 car.setCo2Emission(rs.getDouble("co2_emission"));
                 car.setVehicleNumber(rs.getString("vehicle_number"));
                 car.setModelId(rs.getInt("model_id"));
@@ -137,4 +136,7 @@ public class CarRepository {
             return null;
         }
     }
+
+
+
 }
