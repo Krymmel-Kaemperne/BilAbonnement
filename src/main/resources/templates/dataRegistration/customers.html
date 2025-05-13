@@ -1,20 +1,82 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="da" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/stylesheet.css">
-    <title>Kunder</title>
+    <meta charset="UTF-8" />
+    <title>Kunde Oversigt</title>
+    <link rel="stylesheet" href="/stylesheet.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap"
+          rel="stylesheet" />
 </head>
 <body>
 <div th:replace="~{fragments/header :: header('dataRegistration')}"></div>
 
-<div class="page-container">
+<div class="container">
+    <div class="header-flex">
+        <h1>Kunde Oversigt</h1>
+    </div>
+    <p class="description-text">
+        På denne side kan du se en oversigt over alle kunder, oprette nye kunder,
+        og redigere eksisterende kunders information.
+    </p>
 
-<h1>Kunde Liste</h1>
+    <!-- Viser succes- eller fejlmeddelelser fra RedirectAttributes -->
+    <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}" style="color: green; margin-bottom: 15px;"></div>
+    <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}" style="color: red; margin-bottom: 15px;"></div>
 
+    <div class="action-section">
+        <div class="create-customer-section" style="margin-bottom: 10px;">
+            <a th:href="@{/customers/create/private}" class="btn-opret">Opret Privatkunde</a>
+            <p>Klik her for at oprette en ny privatkunde.</p>
+        </div>
+        <div class="create-customer-section">
+            <a th:href="@{/customers/create/business}" class="btn-opret">Opret Erhvervskunde</a>
+            <p>Klik her for at oprette en ny erhvervskunde.</p>
+        </div>
+        <!-- TODO: Tilføj evt. søgefunktion for kunder her, ligesom på fleet-siden -->
+    </div>
+
+    <!-- TODO: Tilføj evt. filterformular her (f.eks. efter kundetype), ligesom på fleet-siden -->
+
+    <table class="car-table"> <!-- Genbrug evt. din .car-table styling eller lav en .customer-table -->
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Navn / Firmanavn</th>
+            <th>Email</th>
+            <th>Telefon</th>
+            <th>Type</th>
+            <th>Adresse</th>
+            <th>Postnr.</th>
+            <th>By</th>
+            <th>Handlinger</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:if="${#lists.isEmpty(customers)}">
+            <td colspan="9" style="text-align: center;">Ingen kunder fundet.</td>
+        </tr>
+        <tr th:unless="${#lists.isEmpty(customers)}" th:each="customer : ${customers}">
+            <td th:text="${customer.customerId}">0</td>
+            <!-- Viser firmanavn for erhverv, ellers fulde navn for privat -->
+            <td th:text="${customer.customerType == T(com.example.bilabonnement.Model.CustomerType).BUSINESS ? customer.companyName : customer.fname + ' ' + customer.lname}">N/A</td>
+            <td th:text="${customer.email}">N/A</td>
+            <td th:text="${customer.phone}">N/A</td>
+            <!-- For at vise en pænere tekst for kundetype, kan du tilføje en metode til din Enum -->
+            <td th:text="${customer.customerType.displayName}">N/A</td>
+            <td th:text="${customer.address}">N/A</td>
+            <td th:text="${customer.zipcode != null ? customer.zipcode.zipcode : 'N/A'}">N/A</td>
+            <td th:text="${customer.zipcode != null ? customer.zipcode.cityName : 'N/A'}">N/A</td>
+            <td>
+                <button type="button" class="btn-detaljer"
+                        th:onclick="|location.href='@{/customers/edit/{id}(id=${customer.customerId})}'|">
+                    Rediger
+                </button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
 </div>
 
 </body>

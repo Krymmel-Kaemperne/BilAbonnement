@@ -442,7 +442,7 @@ body {
     text-align: left;
 }
 
-.create-car-section .btn-opret {
+.btn-opret {
     background-color: #e74c3c;
     color: white;
     padding: 12px 22px; /* Lidt større knap */
@@ -452,6 +452,7 @@ body {
     font-weight: 500;
     cursor: pointer;
     margin-bottom: 5px;
+    text-decoration: none;
     transition: background-color 0.3s ease;
 }
 

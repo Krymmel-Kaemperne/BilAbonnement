@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
+
 @Controller
 public class CustomerController {
 
@@ -24,6 +26,16 @@ public class CustomerController {
 
     @Autowired
     private ZipcodeService zipcodeService;
+
+    @GetMapping("/dataRegistration/customers")
+        public String showCustomerOverview(Model model) {
+            List<Customer> customers = customerService.findAllCustomers();
+            model.addAttribute("customers", customers);
+
+            return "dataRegistration/customers";
+
+    }
+
 
     // --- Privatkunde Oprettelse ---
     @GetMapping("/customers/create/private")
