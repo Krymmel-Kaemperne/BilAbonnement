@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/stylesheet.css">
+    <title>Rediger Bil</title>
+</head>
+<body>
+<div th:replace="fragments/header :: header('rentalAgreements')"></div>
+<div class="opret-bil-page-container">
+
+  <header class="opret-bil-form-header">
+    <h1>Rediger Bil</h1>
+    <p th:if="${car != null}">Opdater information for bil med registreringsnummer: <strong th:text="${car.registrationNumber}"></strong></p>
+    <p th:if="${car == null}">Fejl: Kunne ikke indlæse bilinformation.</p>
+  </header>
+
+  <div class="opret-bil-form-content">
+
+    <!-- Viser succes- og fejlbeskeder -->
+    <div th:if="${successMessage}" class="message success-message" th:text="${successMessage}" style="margin-bottom: 20px;"></div>
+    <div th:if="${errorMessage}" class="message error-message" th:text="${errorMessage}" style="margin-bottom: 20px;"></div>
+
+    <form th:if="${car != null}" th:action="@{/dataRegistration/car/update}" th:object="${car}" method="post">
+      <!-- Skjult felt til at sende carId med -->
+      <input type="hidden" th:field="*{carId}" />
+      <!-- Skjult felt til at sende modelId med, hvis det er sat og ikke skal ændres via brand/modelnavn her -->
+      <!-- <input type="hidden" th:field="*{modelId}" /> -->
+
+
+      <div class="opret-bil-form-row">
+        <label for="registrationNumber">Registreringsnummer:</label>
+        <input type="text" id="registrationNumber" th:field="*{registrationNumber}" required>
+      </div>
+
+      <div class="opret-bil-form-row">
+        <label for="chassisNumber">Stelnummer:</label>
+        <input type="text" id="chassisNumber" th:field="*{chassisNumber}" required>
+      </div>
+
+      <div class="opret-bil-form-row">
+        <label for="steelPrice">Stålpris:</label>
+        <input type="number" id="steelPrice" th:field="*{steelPrice}" step="0.01" required>
+      </div>
+
+      <div class="opret-bil-form-row">
+        <label for="color">Farve:</label>
+        <input type="text" id="color" th:field="*{color}" required>
+      </div>
+
+      <div class="opret-bil-form-row">
+        <label for="co2Emission">CO2-udledning:</label>
+        <input type="number" id="co2Emission" th:field="*{co2Emission}" step="0.01" required>
+      </div>
+
+      <div class="opret-bil-form-row">
+        <label for="vehicleNumber">Køretøjsnummer:</label>
+        <input type="text" id="vehicleNumber" th:field="*{vehicleNumber}" required>
+      </div>
+
+      <div class="opret-bil-form-row">
+        <label for="brandId">Mærke (Brand):</label>
+        <select id="brandId" th:field="*{brandId}" required>
+          <option value="">Vælg mærke</option>
+          <option th:each="brandOpt : ${allBrands}"
+                  th:value="${brandOpt.brandId}"
+                  th:text="${brandOpt.brandName}">
+          </option>
+        </select>
+      </div>
+
+      <div class="opret-bil-form-row">
+        <label for="modelName">Model:</label>
+        <!-- modelName er ikke direkte en del af Car-objektet i din CarRepository.findById, men hentes via join.
+             Sørg for at Car-objektet, der sendes til denne form, har modelName sat.
+             Hvis din Car-klasse har et modelName felt, vil th:field="*{modelName}" virke.
+             Hvis ikke, skal du måske have et separat input og håndtere det i controlleren.
+             Baseret på din CarRepository.findById, ser det ud til at modelName sættes. -->
+        <input type="text" id="modelName" th:field="*{modelName}" placeholder="Indtast modelnavn" required>
+      </div>
+
+      <div class="opret-bil-form-row">
+        <label for="carStatusId">Status:</label>
+        <select id="carStatusId" th:field="*{carStatusId}" required>
+          <option value="">Vælg status</option>
+          <option value="1">Available</option>
+          <option value="2">Rented</option>
+          <option value="3">Service</option>
+          <option value="4">Sold</option>
+        </select>
+      </div>
+
+      <div class="opret-bil-form-row">
+        <label for="fuelTypeId">Brændstoftype:</label>
+        <select id="fuelTypeId" th:field="*{fuelTypeId}" required>
+          <option value="">Vælg brændstoftype</option>
+          <option th:each="fuelTypeOpt : ${allFuelTypes}"
+                  th:value="${fuelTypeOpt.fuelTypeId}"
+                  th:text="${fuelTypeOpt.fuelTypeName}">
+          </option>
+        </select>
+      </div>
+
+      <div class="opret-bil-form-row">
+        <label for="transmissionTypeId">Gearkassetype:</label>
+        <select id="transmissionTypeId" th:field="*{transmissionTypeId}" required>
+          <option value="">Vælg gearkassetype</option>
+          <option value="1">Manuel</option>
+          <option value="2">Automatic</option>
+        </select>
+      </div>
+
+      <div class="opret-bil-submit-row">
+        <button class="opret-bil-knap" type="submit">Gem Ændringer</button>
+      </div>
+    </form>
+  </div>
+</div>
+</body>
+</html>
