@@ -92,11 +92,8 @@ public class CarService {
         return carRepository.update(car);
     }
 
-/*
-    public List<Car> findCarsByFilters(String brandName, String statusName, String modelName, String fuelTypeName, String transmissionTypeName) {
-        return carRepository.findByFilters(brandName, statusName, modelName, fuelTypeName, transmissionTypeName);
+    public List<Car> findCarsByFilters(Integer brand, Integer status, Integer model, Integer fuelType, Integer transmissionType) {
+        return carRepository.findByFilters(brand, status, model, fuelType, transmissionType);
     }
-
- */
 }
 
