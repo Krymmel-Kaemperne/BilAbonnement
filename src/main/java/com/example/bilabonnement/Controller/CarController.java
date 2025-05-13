@@ -3,7 +3,10 @@ package com.example.bilabonnement.Controller;
 import com.example.bilabonnement.Model.Car;
 import com.example.bilabonnement.Model.Brand;
 import com.example.bilabonnement.Model.FuelType;
+
 import com.example.bilabonnement.Model.Model;
+
+
 
 import com.example.bilabonnement.Repository.BrandRepository;
 import com.example.bilabonnement.Repository.FuelTypeRepository;
@@ -15,10 +18,8 @@ import com.example.bilabonnement.Service.FuelTypeService;
 import com.example.bilabonnement.Service.ModelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
 
 import java.util.List;
 
@@ -37,7 +38,6 @@ public class CarController {
 
     @Autowired
     private CarService carService;
-
 
 
     @GetMapping("/createCar")
@@ -63,4 +63,16 @@ public class CarController {
         System.out.println("Car saved: " + car);
         return "redirect:/dataRegistration/fleet";
     }
+
+    @GetMapping ("/car/{id}")
+    public String viewCar(@PathVariable("id") int carId, org.springframework.ui.Model model){
+        Car car = carService.findById(carId);
+        if (car == null)
+        {
+            return "redirect:/dataRegistration/fleet";
+        }
+        model.addAttribute("car", car);
+        return "dataRegistration/viewCar";
+    }
+
 }

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet" href="/stylesheet.css">
+
+    <title>Se Bil</title>
+</head>
+<body>
+
+<div th:replace="~{fragments/header :: header('dataRegistration')}"></div>
+
+<div class="page-container">
+
+    <h1>Bilens detaljer</h1>
+
+
+    <div class="car-details-container">
+        <!-- Left side with info -->
+        <div class="car-info">
+            <p><strong>ID nummer:</strong> <span th:text="${car.carId}"></span></p>
+            <p><strong>Brand:</strong> <span th:text="${car.brandName}"></span></p>
+            <p><strong>Model:</strong> <span th:text="${car.modelName}"></span></p>
+            <p><strong>Status:</strong>
+                <span th:switch="${car.carStatusId}">
+                    <span th:case="1">Tilgængelig</span>
+                    <span th:case="2">Lejet ud</span>
+                    <span th:case="3">Service</span>
+                    <span th:case="4">Solgt</span>
+                    <span th:case="*">Ukendt</span>
+                </span>
+            </p>
+
+            <p><strong>Brændstoftype: </strong> <span
+                    th:text="${car.fuelTypeId == 1 ? 'Benzin' : car.fuelTypeId == 2 ? 'Diesel' : 'Ukendt'}">Benzin</span>
+            </p>
+
+            <p><strong>Transmission:</strong>
+                <span th:switch="${car.transmissionTypeId}">
+                    <span th:case="1">Manuel</span>
+                    <span th:case="2">Automatisk</span>
+                    <span th:case="*">Ukendt</span>
+                </span>
+            </p>
+        </div>
+
+    </div>
+
+</div>
+
+
+</body>
+</html>
