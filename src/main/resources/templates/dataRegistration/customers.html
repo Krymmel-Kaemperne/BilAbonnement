@@ -60,7 +60,7 @@
         <tr th:unless="${#lists.isEmpty(customers)}" th:each="customer : ${customers}">
             <td th:text="${customer.customerId}">0</td>
             <!-- Viser firmanavn for erhverv, ellers fulde navn for privat -->
-            <td th:text="${customer.customerType == T(com.example.bilabonnement.Model.CustomerType).BUSINESS ? customer.companyName : customer.fname + ' ' + customer.lname}">N/A</td>
+            <td th:text="${customer.customerType.name() == 'BUSINESS' ? customer.companyName : customer.fname + ' ' + customer.lname}">N/A</td>
             <td th:text="${customer.email}">N/A</td>
             <td th:text="${customer.phone}">N/A</td>
             <!-- For at vise en pænere tekst for kundetype, kan du tilføje en metode til din Enum -->
