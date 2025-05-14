@@ -71,18 +71,6 @@
       </select>
     </div>
 
-    <!-- Status Filter (bruger CarStatus DTO direkte) -->
-    <div class="filter-group">
-      <select id="statusFilter" name="status">
-        <option value="">Status</option>
-        <option th:each="stat : ${availableStatuses}"
-                th:value="${stat.carStatusId}"
-                th:text="${stat.statusName}"
-                th:selected="${stat.carStatusId} == ${param.status}">
-        </option>
-      </select>
-    </div>
-
     <!-- Model Filter -->
     <div class="filter-group">
       <select id="modelFilter" name="model">
@@ -119,6 +107,18 @@
       </select>
     </div>
 
+    <!-- Status Filter (bruger CarStatus DTO direkte) -->
+    <div class="filter-group">
+      <select id="statusFilter" name="status">
+        <option value="">Status</option>
+        <option th:each="stat : ${availableStatuses}"
+                th:value="${stat.carStatusId}"
+                th:text="${stat.statusName}"
+                th:selected="${stat.carStatusId} == ${param.status}">
+        </option>
+      </select>
+    </div>
+
     <div class="filter-button-group">
       <button type="submit" class="btn-soeg-filter">Søg</button>
       <!-- Vis Alle peger nu på FleetController -->
@@ -132,9 +132,9 @@
       <th>ID nummer</th>
       <th>Brand</th>
       <th>Model</th>
-      <th>Status</th>
       <th>Fuel Type</th>
       <th>Transmission</th>
+      <th>Status</th>
       <th>Handlinger</th>
     </tr>
     </thead>
@@ -146,6 +146,8 @@
       <td th:text="${car.carId}">0</td>
       <td th:text="${car.brandName}">N/A</td>
       <td th:text="${car.modelName}">N/A</td>
+      <td th:text="${car.fuelTypeName}">N/A</td>
+      <td th:text="${car.transmissionTypeName}">N/A</td>
       <td> <form
               th:action="@{/fleet/updateStatus}"
               method="post"
@@ -162,8 +164,6 @@
         </select>
         <button type="submit" class="btn-gem-status">Gem</button>
       </form></td>
-      <td th:text="${car.fuelTypeName}">N/A</td>
-      <td th:text="${car.transmissionTypeName}">N/A</td>
       <td>
         <!-- Detaljer knap peger nu på FleetController -->
         <button type="button" class="btn-detaljer"
