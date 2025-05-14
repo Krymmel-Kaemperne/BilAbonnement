@@ -100,7 +100,9 @@ public class FleetController {
             return "redirect:/fleet/overview"; // Omdiriger til flådeoversigten
         }
         model.addAttribute("car", car);
+
         // Returner den korrekte template for detaljer.
         return "dataRegistration/view-car-details";
+
     }
 }
