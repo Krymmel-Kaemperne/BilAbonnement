@@ -895,3 +895,39 @@ body {
 .btn-detaljer:hover {
     background-color: #5a6268;
 }
+.status-update-form {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Afstand mellem select og knap */
+    margin: 0;
+}
+.status-select {
+    padding: 5px 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    font-size: 0.9em;
+    flex-grow: 1; /* Giver select mere plads hvis nødvendigt */
+}
+.btn-gem-status {
+    padding: 6px 10px;
+    font-size: 0.85em;
+    background-color: #5cb85c; /* Grøn for gem */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    white-space: nowrap; /* Forhindrer knaptekst i at bryde */
+}
+.btn-gem-status:hover {
+    background-color: #4cae4c;
+}
+.car-table td .btn-detaljer,
+.car-table td .btn-rediger {
+    margin-bottom: 5px; /* Lidt plads hvis knapperne er over hinanden */
+    margin-right: 5px; /* Lidt plads mellem knapper på samme linje */
+    padding: 6px 10px;
+    font-size: 0.85em;
+}
+.action-buttons-cell {
+    min-width: 180px; /* Giver plads til knapperne */
+}

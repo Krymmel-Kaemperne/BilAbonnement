@@ -2,6 +2,8 @@ package com.example.bilabonnement.Repository;
 
 import com.example.bilabonnement.Model.CarStatus;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -20,5 +22,15 @@ public class CarStatusRepository {
             status.setStatusName(rs.getString("status_name"));
             return status;
         });
+    }
+
+    public CarStatus findCarStatusById(int carStatusId) {
+        String sql = "SELECT status_name FROM carstatus WHERE car_status_id = ?";
+        try {
+            return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(CarStatus.class), carStatusId);
+        } catch (EmptyResultDataAccessException e) {
+            System.err.println("Ingen carStatus fundet med ID: " + carStatusId);
+            return null;
+        }
     }
 } 
