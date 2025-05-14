@@ -1,4 +1,4 @@
-package com.example.bilabonnement.Controller;
+    package com.example.bilabonnement.Controller;
 
 import com.example.bilabonnement.Model.Car;
 import com.example.bilabonnement.Model.Brand;
@@ -13,6 +13,8 @@ import com.example.bilabonnement.Service.BrandService;
 import com.example.bilabonnement.Service.CarService;
 import com.example.bilabonnement.Service.FuelTypeService;
 import com.example.bilabonnement.Service.ModelService;
+import com.example.bilabonnement.Service.CarStatusService;
+import com.example.bilabonnement.Service.TransmissionTypeService;
 // Importer CarStatusService, TransmissionTypeService
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +39,12 @@ public class CarController {
     private ModelService modelService;
     @Autowired
     private CarService carService;
+    @Autowired
+    private CarStatusService carStatusService;
+    @Autowired
+    private TransmissionTypeService transmissionTypeService;
+
+    // TODO: Injicer CarStatusService og TransmissionTypeService
 
 
     @GetMapping("/createCar")
@@ -46,14 +54,10 @@ public class CarController {
         model.addAttribute("allBrands", allBrands);
         List<FuelType> allFuelTypes = fuelTypeService.findAllFuelTypes();
         model.addAttribute("allFuelTypes", allFuelTypes);
-
-        // TODO: Hent og tilføj data for CarStatus og TransmissionType dropdowns
-        if (!model.containsAttribute("allCarStatuses")) {
-            model.addAttribute("allCarStatuses", Collections.emptyList());
-        }
-        if (!model.containsAttribute("allTransmissionTypes")) {
-            model.addAttribute("allTransmissionTypes", Collections.emptyList());
-        }
+        List<com.example.bilabonnement.Model.CarStatus> allCarStatuses = carStatusService.findAllStatuses();
+        model.addAttribute("allCarStatuses", allCarStatuses);
+        List<com.example.bilabonnement.Model.TransmissionType> allTransmissionTypes = transmissionTypeService.findAllTransmissionTypes();
+        model.addAttribute("allTransmissionTypes", allTransmissionTypes);
         return "dataRegistration/createCar";
     }
 
@@ -80,6 +84,10 @@ public class CarController {
         model.addAttribute("allBrands", allBrands);
         List<FuelType> allFuelTypes = fuelTypeService.findAllFuelTypes();
         model.addAttribute("allFuelTypes", allFuelTypes);
+        List<com.example.bilabonnement.Model.CarStatus> allCarStatuses = carStatusService.findAllStatuses();
+        model.addAttribute("allCarStatuses", allCarStatuses);
+        List<com.example.bilabonnement.Model.TransmissionType> allTransmissionTypes = transmissionTypeService.findAllTransmissionTypes();
+        model.addAttribute("allTransmissionTypes", allTransmissionTypes);
         return "dataRegistration/editCar";
     }
 
@@ -111,7 +119,7 @@ public class CarController {
             return "redirect:/dataRegistration/fleet";
         }
         model.addAttribute("car", car);
-        return "dataRegistration/view-car-details";
+        return "dataRegistration/viewCar";
     }
 
 }

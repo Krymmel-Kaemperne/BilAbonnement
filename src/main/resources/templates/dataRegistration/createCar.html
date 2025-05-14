@@ -75,11 +75,11 @@
     <div class="opret-bil-form-row">
       <label for="carStatusId">Status:</label>
       <select id="carStatusId" th:field="*{carStatusId}" required>
-        <option value="">Vælg status</option> <!-- For "ikke valgt" -->
-        <option value="1">Available</option>   <!-- Matcher ID for 'AVAILABLE' -->
-        <option value="2">Rented</option>      <!-- Matcher ID for 'RENTED' -->
-        <option value="3">Service</option>     <!-- Matcher ID for 'SERVICE' -->
-        <option value="4">Sold</option>        <!-- Matcher ID for 'SOLD' -->
+        <option value="">Vælg status</option>
+        <option th:each="status : ${allCarStatuses}"
+                th:value="${status.carStatusId}"
+                th:text="${status.statusName}">
+        </option>
       </select>
     </div>
 
@@ -99,9 +99,11 @@
     <div class="opret-bil-form-row">
       <label for="transmissionTypeId">Gearkassetype:</label>
       <select id="transmissionTypeId" th:field="*{transmissionTypeId}" required>
-        <option value="">Vælg gearkassetype</option> <!-- Denne er for "ikke valgt" -->
-        <option value="1">Manuel</option>
-        <option value="2">Automatic</option>
+        <option value="">Vælg gearkassetype</option>
+        <option th:each="trans : ${allTransmissionTypes}"
+                th:value="${trans.transmissionTypeId}"
+                th:text="${trans.transmissionTypeName}">
+        </option>
       </select>
     </div>
 
