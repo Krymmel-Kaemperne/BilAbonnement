@@ -13,7 +13,7 @@
   />
 </head>
 <body>
-<!-- Opdateret 'activeMenu' parameter til at matche en mulig 'fleet' menu item -->
+
 <div th:replace="~{fragments/header :: header('fleet')}"></div>
 
 <div class="container">
@@ -24,7 +24,19 @@
     På denne side kan du se oversigten over vores fleet, tilføje biler,
     redigere deres info & status eller helt slette dem.
   </p>
-
+  <!-- Viser succes- og fejlbeskeder -->
+  <div
+          th:if="${successMessage}"
+          class="message success-message"
+          th:text="${successMessage}"
+          style="margin-bottom: 20px"
+  ></div>
+  <div
+          th:if="${errorMessage}"
+          class="message error-message"
+          th:text="${errorMessage}"
+          style="margin-bottom: 20px"
+  ></div>
   <div class="action-section">
     <div class="create-car-section">
       <!-- Peger på CarController's createCar mapping -->
@@ -134,7 +146,22 @@
       <td th:text="${car.carId}">0</td>
       <td th:text="${car.brandName}">N/A</td>
       <td th:text="${car.modelName}">N/A</td>
-      <td th:text="${car.carStatusName}">N/A</td>
+      <td> <form
+              th:action="@{/fleet/updateStatus}"
+              method="post"
+              class="status-update-form"
+      >
+        <input type="hidden" name="carId" th:value="${car.carId}" />
+        <select name="newStatusId" class="status-select">
+          <option
+                  th:each="stat : ${availableStatuses}"
+                  th:value="${stat.carStatusId}"
+                  th:text="${stat.statusName}"
+                  th:selected="${stat.carStatusId == car.carStatusId}"
+          ></option>
+        </select>
+        <button type="submit" class="btn-gem-status">Gem</button>
+      </form></td>
       <td th:text="${car.fuelTypeName}">N/A</td>
       <td th:text="${car.transmissionTypeName}">N/A</td>
       <td>

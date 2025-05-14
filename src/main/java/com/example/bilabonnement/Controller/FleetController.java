@@ -21,10 +21,8 @@ import com.example.bilabonnement.Service.TransmissionTypeService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Collections;
 import java.util.List;
@@ -33,27 +31,19 @@ import java.util.List;
 @RequestMapping("/fleet") // Ny base path for alt flåde-relateret
 public class FleetController {
 
-    private final CarService carService;
-    private final BrandService brandService;
-    private final ModelService modelService;
-    private final FuelTypeService fuelTypeService;
-    private final CarStatusService carStatusService;
-    private final TransmissionTypeService transmissionTypeService;
-
     @Autowired
-    public FleetController(CarService carService,
-                           BrandService brandService,
-                           ModelService modelService,
-                           FuelTypeService fuelTypeService,
-                           CarStatusService carStatusService,
-                           TransmissionTypeService transmissionTypeService) {
-        this.carService = carService;
-        this.brandService = brandService;
-        this.modelService = modelService;
-        this.fuelTypeService = fuelTypeService;
-        this.carStatusService = carStatusService;
-        this.transmissionTypeService = transmissionTypeService;
-    }
+    private CarService carService;
+    @Autowired
+    private BrandService brandService;
+    @Autowired
+    private ModelService modelService;
+    @Autowired
+    private FuelTypeService fuelTypeService;
+    @Autowired
+    private CarStatusService carStatusService;
+    @Autowired
+    private TransmissionTypeService transmissionTypeService;
+
 
     @GetMapping("/overview")
     public String showFleetOverview(
@@ -90,6 +80,41 @@ public class FleetController {
 
         System.out.println("Fleet overview called, cars: " + cars.size());
         return "dataRegistration/fleet";
+    }
+
+    @PostMapping("/updateStatus")
+    public String updateCarStatus(
+            @RequestParam("carId") int carId,
+            @RequestParam("newStatusId") int newStatusId, // Dette er ID'et fra <select>
+            RedirectAttributes redirectAttributes
+    ) {
+        Car car = carService.findById(carId);
+        if (car != null) {
+            car.setCarStatusId(newStatusId); // Opdaterer bilens status ID
+            Car updatedCar = carService.update(car); // Gemmer ændringen
+            if (updatedCar != null) {
+                // Forbedret succesmeddelelse med statusnavn
+                com.example.bilabonnement.Model.CarStatus newStatus =
+                        carStatusService.findCarStatusById(newStatusId); // Antager du har en sådan metode
+                String statusName = (newStatus != null)
+                        ? newStatus.getStatusName() : "Ukendt";
+
+                redirectAttributes.addFlashAttribute(
+                        "successMessage", "Status for bil ID " + carId + " (" + updatedCar.getRegistrationNumber() +
+                                ") opdateret til '" + statusName + "'.");
+            } else {
+                redirectAttributes.addFlashAttribute(
+                        "errorMessage",
+                        "Fejl: Kunne ikke opdatere status for bil ID " + carId + "."
+                );
+            }
+        } else {
+            redirectAttributes.addFlashAttribute(
+                    "errorMessage",
+                    "Fejl: Bil med ID " + carId + " blev ikke fundet."
+            );
+        }
+        return "redirect:/fleet/overview";
     }
 
     @GetMapping("/details/{id}") // URL bliver /fleet/details/{id}

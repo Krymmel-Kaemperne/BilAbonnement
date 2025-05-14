@@ -15,4 +15,8 @@ public class CarStatusService {
     public List<CarStatus> findAllStatuses() {
         return carStatusRepository.findAllStatuses();
     }
+
+    public CarStatus findCarStatusById(int statusId) {
+        return carStatusRepository.findCarStatusById(statusId);
+    }
 } 
