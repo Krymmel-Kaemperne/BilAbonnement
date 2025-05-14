@@ -182,7 +182,7 @@ body {
 }
 
 .opret-bil-form-header {
-    padding: 20px 0 0 20px;
+    padding: 0 0 0 0;
 }
 
 
@@ -256,7 +256,7 @@ body {
 
 /* Submit knap */
 .opret-bil-submit-row { /* En div til at omkranse knappen */
-    text-align: right; /* Placerer knappen til højre */
+    text-align: center; /* Placerer knappen til højre */
     margin-top: 25px;
 }
 

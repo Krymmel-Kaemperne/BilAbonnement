@@ -39,7 +39,7 @@
 
     <!-- TODO: Tilføj evt. filterformular her (f.eks. efter kundetype), ligesom på fleet-siden -->
 
-    <table class="car-table"> <!-- Genbrug evt. din .car-table styling eller lav en .customer-table -->
+    <table class="car-table">
         <thead>
         <tr>
             <th>ID</th>
@@ -63,7 +63,6 @@
             <td th:text="${customer.customerType == T(com.example.bilabonnement.Model.CustomerType).BUSINESS ? customer.companyName : customer.fname + ' ' + customer.lname}">N/A</td>
             <td th:text="${customer.email}">N/A</td>
             <td th:text="${customer.phone}">N/A</td>
-            <!-- For at vise en pænere tekst for kundetype, kan du tilføje en metode til din Enum -->
             <td th:text="${customer.customerType.displayName}">N/A</td>
             <td th:text="${customer.address}">N/A</td>
             <td th:text="${customer.zipcode != null ? customer.zipcode.zipcode : 'N/A'}">N/A</td>
@@ -78,6 +77,5 @@
         </tbody>
     </table>
 </div>
-
 </body>
 </html>

@@ -28,14 +28,12 @@ public class CustomerController {
     private ZipcodeService zipcodeService;
 
     @GetMapping("/dataRegistration/customers")
-        public String showCustomerOverview(Model model) {
-            List<Customer> customers = customerService.findAllCustomers();
-            model.addAttribute("customers", customers);
+    public String showCustomerOverview(Model model) {
+        List<Customer> customers = customerService.findAllCustomers();
+        model.addAttribute("customers", customers);
 
-            return "dataRegistration/customers";
-
+        return "dataRegistration/customers";
     }
-
 
     // --- Privatkunde Oprettelse ---
     @GetMapping("/customers/create/private")
@@ -201,7 +199,7 @@ public class CustomerController {
                 phone, address, zipcodeId, zipcode, cprNumber);
         try {
             customerService.update(updatedCustomer);
-            redirectAttributes.addFlashAttribute("successMessage", "Privatkunde" + fName + lName + " Opdateret succesfuldt!");
+            redirectAttributes.addFlashAttribute("successMessage", "Privatkunde " + fName + " " + lName + " Opdateret succesfuldt!");
             return "redirect:/dataRegistration/customers";
         } catch (Exception e) {
             model.addAttribute("errorMessage", "Fejl ved opdatering af privatkunde: " + e.getMessage());
