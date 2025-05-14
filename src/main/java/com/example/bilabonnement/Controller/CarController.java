@@ -1,28 +1,16 @@
-    package com.example.bilabonnement.Controller;
+package com.example.bilabonnement.Controller;
 
-import com.example.bilabonnement.Model.Car;
-import com.example.bilabonnement.Model.Brand;
-import com.example.bilabonnement.Model.FuelType;
-
-
+import com.example.bilabonnement.Model.*;
 // Importer CarStatus, TransmissionType modeller/DTO'er
 
+import com.example.bilabonnement.Service.*;
 import org.springframework.ui.Model;
-
-import com.example.bilabonnement.Service.BrandService;
-import com.example.bilabonnement.Service.CarService;
-import com.example.bilabonnement.Service.FuelTypeService;
-import com.example.bilabonnement.Service.ModelService;
-import com.example.bilabonnement.Service.CarStatusService;
-import com.example.bilabonnement.Service.TransmissionTypeService;
 // Importer CarStatusService, TransmissionTypeService
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 
 import java.util.Collections;
 import java.util.List;
@@ -44,9 +32,6 @@ public class CarController {
     @Autowired
     private TransmissionTypeService transmissionTypeService;
 
-    // TODO: Injicer CarStatusService og TransmissionTypeService
-
-
     @GetMapping("/createCar")
     public String showCreateCarForm(Model model) {
         model.addAttribute("car", new Car());
@@ -54,10 +39,14 @@ public class CarController {
         model.addAttribute("allBrands", allBrands);
         List<FuelType> allFuelTypes = fuelTypeService.findAllFuelTypes();
         model.addAttribute("allFuelTypes", allFuelTypes);
-        List<com.example.bilabonnement.Model.CarStatus> allCarStatuses = carStatusService.findAllStatuses();
-        model.addAttribute("allCarStatuses", allCarStatuses);
-        List<com.example.bilabonnement.Model.TransmissionType> allTransmissionTypes = transmissionTypeService.findAllTransmissionTypes();
-        model.addAttribute("allTransmissionTypes", allTransmissionTypes);
+
+        // TODO: Hent og tilføj data for CarStatus og TransmissionType dropdowns
+        if (!model.containsAttribute("allCarStatuses")) {
+            model.addAttribute("allCarStatuses", Collections.emptyList());
+        }
+        if (!model.containsAttribute("allTransmissionTypes")) {
+            model.addAttribute("allTransmissionTypes", Collections.emptyList());
+        }
         return "dataRegistration/createCar";
     }
 
@@ -84,10 +73,11 @@ public class CarController {
         model.addAttribute("allBrands", allBrands);
         List<FuelType> allFuelTypes = fuelTypeService.findAllFuelTypes();
         model.addAttribute("allFuelTypes", allFuelTypes);
-        List<com.example.bilabonnement.Model.CarStatus> allCarStatuses = carStatusService.findAllStatuses();
-        model.addAttribute("allCarStatuses", allCarStatuses);
-        List<com.example.bilabonnement.Model.TransmissionType> allTransmissionTypes = transmissionTypeService.findAllTransmissionTypes();
-        model.addAttribute("allTransmissionTypes", allTransmissionTypes);
+        List<CarStatus> allCarStatusTypes  = carStatusService.findAllStatuses();
+        model.addAttribute("allCarStatusTypes", allCarStatusTypes);
+        List<TransmissionType> allTransmissionTypes = transmissionTypeService.findAllTransmissionTypes();
+        model.addAttribute("allTransmissiontypes", allTransmissionTypes);
+
         return "dataRegistration/editCar";
     }
 
@@ -110,16 +100,4 @@ public class CarController {
         }
         return "redirect:/fleet/overview"; // OPDATERET REDIRECT
     }
-
-    @GetMapping ("/car/{id}")
-    public String viewCar(@PathVariable("id") int carId, org.springframework.ui.Model model){
-        Car car = carService.findById(carId);
-        if (car == null)
-        {
-            return "redirect:/dataRegistration/fleet";
-        }
-        model.addAttribute("car", car);
-        return "dataRegistration/viewCar";
-    }
-
 }
