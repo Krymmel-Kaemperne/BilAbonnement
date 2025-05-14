@@ -9,6 +9,7 @@ public class Car {
     private Double co2Emission; // Kan være null
     private String vehicleNumber;
     private String comment;
+    private int current_odometer;
 
     // ID'er til databaselagring og relationer
     private Integer modelId;

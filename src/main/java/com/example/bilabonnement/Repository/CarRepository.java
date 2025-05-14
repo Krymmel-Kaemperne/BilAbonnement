@@ -113,6 +113,7 @@ public class CarRepository {
             car.setColor(rs.getString("color"));
             car.setCo2Emission(rs.getDouble("co2_emission"));
             car.setVehicleNumber(rs.getString("vehicle_number"));
+
             car.setModelId(rs.getInt("model_id"));
             car.setBrandId(rs.getInt("brand_id"));
             car.setBrandName(rs.getString("brand_name"));
