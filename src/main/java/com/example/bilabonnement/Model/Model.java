@@ -8,13 +8,15 @@ public class Model {
 
     public Model() {}
 
-    public Model(Integer modelId, String modelName, Integer brandId) {
+    public Model(Integer modelId, String modelName, Integer brandId)
+    {
         this.modelId = modelId;
         this.modelName = modelName;
         this.brandId = brandId;
     }
 
-    public Model(String modelName, Integer brandId) {
+    public Model(String modelName, Integer brandId)
+    {
         this.modelName = modelName;
         this.brandId = brandId;
     }
