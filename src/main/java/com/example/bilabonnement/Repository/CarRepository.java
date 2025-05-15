@@ -2,13 +2,11 @@ package com.example.bilabonnement.Repository;
 
 import com.example.bilabonnement.Model.Car;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet; // Import ResultSet
-import java.sql.SQLException; // Import SQLException
 import java.sql.Statement;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper; // Import RowMapper
+import org.springframework.jdbc.core.BeanPropertyRowMapper; // Import BeanPropertyRowMapper
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
@@ -21,7 +19,8 @@ public class CarRepository {
 
     @Autowired
     private final JdbcTemplate jdbcTemplate;
-    private final CarRowMapper carRowMapper = new CarRowMapper(); // Create an instance of the inner class
+    // Use BeanPropertyRowMapper, specifying the target class
+    private final BeanPropertyRowMapper<Car> carRowMapper = new BeanPropertyRowMapper<>(Car.class);
 
     public CarRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -97,10 +96,13 @@ public class CarRepository {
     }
 
     public List<Car> findAll() {
-        String sql = "SELECT c.*, m.model_name, b.brand_id, b.brand_name, " +
-                "cs.status_name AS car_status_name, " +
-                "ft.fuel_type_name, " +
-                "tt.transmission_type_name " +
+        String sql = "SELECT c.car_id, c.registration_number, c.chassis_number, c.steel_price, " +
+                "c.color, c.co2_emission, c.vehicle_number, c.model_id, c.car_status_id, " +
+                "c.fuel_type_id, c.transmission_type_id, " +
+                "m.model_name AS modelName, b.brand_id AS brandId, b.brand_name AS brandName, " +
+                "cs.status_name AS carStatusName, " +
+                "ft.fuel_type_name AS fuelTypeName, " +
+                "tt.transmission_type_name AS transmissionTypeName " +
                 "FROM car c " +
                 "JOIN model m ON c.model_id = m.model_id " +
                 "JOIN brand b ON m.brand_id = b.brand_id " +
@@ -112,10 +114,13 @@ public class CarRepository {
     }
 
     public Car findById(int carId) {
-        String sql = "SELECT c.*, m.model_name, b.brand_id, b.brand_name, " +
-                "cs.status_name AS car_status_name, " +
-                "ft.fuel_type_name, " +
-                "tt.transmission_type_name " +
+        String sql = "SELECT c.car_id, c.registration_number, c.chassis_number, c.steel_price, " +
+                "c.color, c.co2_emission, c.vehicle_number, c.model_id, c.car_status_id, " +
+                "c.fuel_type_id, c.transmission_type_id, " +
+                "m.model_name AS modelName, b.brand_id AS brandId, b.brand_name AS brandName, " +
+                "cs.status_name AS carStatusName, " +
+                "ft.fuel_type_name AS fuelTypeName, " +
+                "tt.transmission_type_name AS transmissionTypeName " +
                 "FROM car c " +
                 "JOIN model m ON c.model_id = m.model_id " +
                 "JOIN brand b ON m.brand_id = b.brand_id " +
@@ -133,10 +138,13 @@ public class CarRepository {
 
     public List<Car> findByFilters(Integer brand, Integer status, Integer model, Integer fuelType, Integer transmissionType) {
         StringBuilder sql = new StringBuilder(
-                "SELECT c.*, m.model_name, b.brand_id, b.brand_name, " +
-                        "cs.status_name AS car_status_name, " +
-                        "ft.fuel_type_name, " +
-                        "tt.transmission_type_name " +
+                "SELECT c.car_id, c.registration_number, c.chassis_number, c.steel_price, " +
+                        "c.color, c.co2_emission, c.vehicle_number, c.model_id, c.car_status_id, " +
+                        "c.fuel_type_id, c.transmission_type_id, " +
+                        "m.model_name AS modelName, b.brand_id AS brandId, b.brand_name AS brandName, " +
+                        "cs.status_name AS carStatusName, " +
+                        "ft.fuel_type_name AS fuelTypeName, " +
+                        "tt.transmission_type_name AS transmissionTypeName " +
                         "FROM car c " +
                         "JOIN model m ON c.model_id = m.model_id " +
                         "JOIN brand b ON m.brand_id = b.brand_id " +
@@ -168,31 +176,5 @@ public class CarRepository {
         }
 
         return jdbcTemplate.query(sql.toString(), params.toArray(), carRowMapper);
-    }
-
-    // Inner class for mapping ResultSet to Car object
-    private static class CarRowMapper implements RowMapper<Car> {
-        @Override
-        public Car mapRow(ResultSet rs, int rowNum) throws SQLException {
-            Car car = new Car();
-            car.setCarId(rs.getInt("car_id"));
-            car.setRegistrationNumber(rs.getString("registration_number"));
-            car.setChassisNumber(rs.getString("chassis_number"));
-            car.setSteelPrice(rs.getDouble("steel_price"));
-            car.setColor(rs.getString("color"));
-            car.setCo2Emission(rs.getDouble("co2_emission"));
-            car.setVehicleNumber(rs.getString("vehicle_number"));
-            car.setModelId(rs.getInt("model_id"));
-            car.setBrandId(rs.getInt("brand_id"));
-            car.setBrandName(rs.getString("brand_name"));
-            car.setCarStatusId(rs.getInt("car_status_id"));
-            car.setFuelTypeId(rs.getInt("fuel_type_id"));
-            car.setTransmissionTypeId(rs.getInt("transmission_type_id"));
-            car.setModelName(rs.getString("model_name"));
-            car.setCarStatusName(rs.getString("car_status_name"));
-            car.setFuelTypeName(rs.getString("fuel_type_name"));
-            car.setTransmissionTypeName(rs.getString("transmission_type_name"));
-            return car;
-        }
     }
 }
