@@ -35,22 +35,19 @@ public class ConditionReportController {
         model.addAttribute("report", report);
         model.addAttribute("damages", damages);
 
-        // Beregn totalpris som summen af alle skader med for-each loop
-        java.math.BigDecimal totalDamagePrice = java.math.BigDecimal.ZERO;
-        for (Damage damage : damages) {
-            if (damage.getDamagePrice() != null) {
-                totalDamagePrice = totalDamagePrice.add(damage.getDamagePrice());
-            }
-        }
+        // Brug service til at beregne totalpris
+        java.math.BigDecimal totalDamagePrice = conditionReportService.calculateTotalDamagePrice(damages);
         model.addAttribute("totalDamagePrice", totalDamagePrice);
 
         return "damageRegistration/damageRegistration";
     }
 
     @GetMapping("/create")
-    public String showCreateForm(@RequestParam int rentalAgreementId, Model model) {
+    public String showCreateForm(@RequestParam(required = false) Integer rentalAgreementId, Model model) {
         ConditionReport report = new ConditionReport();
-        report.setRentalAgreementId(rentalAgreementId);
+        if (rentalAgreementId != null) {
+            report.setRentalAgreementId(rentalAgreementId);
+        }
         model.addAttribute("report", report);
         return "damageRegistration/createConditionReport";
     }

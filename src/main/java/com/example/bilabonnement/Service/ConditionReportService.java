@@ -36,4 +36,15 @@ public class ConditionReportService {
     public int delete(int id) {
         return conditionReportRepository.delete(id);
     }
+
+    // Beregn totalpris for alle skader tilknyttet en tilstandsrapport
+    public java.math.BigDecimal calculateTotalDamagePrice(java.util.List<com.example.bilabonnement.Model.Damage> damages) {
+        java.math.BigDecimal total = java.math.BigDecimal.ZERO;
+        for (com.example.bilabonnement.Model.Damage damage : damages) {
+            if (damage.getDamagePrice() != null) {
+                total = total.add(damage.getDamagePrice());
+            }
+        }
+        return total;
+    }
 } 

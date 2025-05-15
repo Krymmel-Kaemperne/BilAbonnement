@@ -6,7 +6,7 @@ import java.time.LocalDate;
 // Modelklasse for tilstandsrapporter (condition reports)
 public class ConditionReport {
     private int conditionReportId;
-    private int rentalAgreementId;
+    private Integer rentalAgreementId;
     private String conditionNotes;
     private LocalDate reportDate;
     private BigDecimal totalPrice;
@@ -14,8 +14,8 @@ public class ConditionReport {
     public int getConditionReportId() { return conditionReportId; }
     public void setConditionReportId(int conditionReportId) { this.conditionReportId = conditionReportId; }
 
-    public int getRentalAgreementId() { return rentalAgreementId; }
-    public void setRentalAgreementId(int rentalAgreementId) { this.rentalAgreementId = rentalAgreementId; }
+    public Integer getRentalAgreementId() { return rentalAgreementId; }
+    public void setRentalAgreementId(Integer rentalAgreementId) { this.rentalAgreementId = rentalAgreementId; }
 
     public String getConditionNotes() { return conditionNotes; }
     public void setConditionNotes(String conditionNotes) { this.conditionNotes = conditionNotes; }

@@ -28,6 +28,14 @@
             <label for="totalPrice">Total pris:</label>
             <input type="number" id="totalPrice" th:field="*{totalPrice}" step="0.01" required />
         </div>
+        <div class="opret-bil-form-row">
+            <label for="rentalAgreementId">Lejeaftale:</label>
+            <select id="rentalAgreementId" name="rentalAgreementId" th:field="*{rentalAgreementId}" required>
+                <option value="">Vælg lejeaftale (placeholder)</option>
+                <option value="1">Lejeaftale #1 (placeholder)</option>
+                <option value="2">Lejeaftale #2 (placeholder)</option>
+            </select>
+        </div>
         <div class="opret-bil-submit-row">
             <button class="opret-bil-knap" type="submit">Opret Rapport</button>
         </div>
