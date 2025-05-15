@@ -1,17 +1,58 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="da" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/stylesheet.css">
-  <title>Rapporter</title>
+  <meta charset="UTF-8" />
+  <title>Tilstandsrapporter</title>
+  <link rel="stylesheet" href="/stylesheet.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet" />
 </head>
 <body>
 <div th:replace="~{fragments/header :: header('rapports')}"></div>
 
-<h1>Rapporter</h1>
+<div class="container">
+  <div class="header-flex">
+    <h1>Tilstandsrapporter</h1>
+  </div>
+  <p class="description-text">
+    Her kan du se alle tilstandsrapporter og oprette nye.
+  </p>
+  <div class="action-section">
+    <div>
+      <button type="button" class="btn-opret"
+              th:onclick="|location.href='@{/conditionReport/create?rentalAgreementId=1}'|">
+        Opret ny rapport
+      </button>
+      <p>Klik her for at oprette ny tilstandsrapport</p>
+    </div>
+  </div>
+  <table class="car-table">
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>Lejeaftale ID</th>
+      <th>Rapport dato</th>
+      <th>Handling</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:if="${#lists.isEmpty(reports)}">
+      <td colspan="4" style="text-align: center;">Ingen rapporter fundet.</td>
+    </tr>
+    <tr th:each="report : ${reports}">
+      <td th:text="${report.conditionReportId}"></td>
+      <td th:text="${report.rentalAgreementId}"></td>
+      <td th:text="${report.reportDate}"></td>
+      <td>
+        <button type="button" class="btn-detaljer"
+                th:onclick="|location.href='@{/conditionReport/view/{id}(id=${report.conditionReportId})}'|">
+          Se detaljer
+        </button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
 </body>
 </html>
