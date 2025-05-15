@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+  <meta charset="UTF-8" />
+  <title>Lejeaftaler</title>
+  <link rel="stylesheet" href="/stylesheet.css" /> <!-- Sørg for stien er korrekt -->
+  <!-- Font links -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap"
+        rel="stylesheet"
+  />
+<body>
+<div th:replace="~{fragments/header :: header('dataRegistration')}"></div>
+
+<div class="container">
+  <div class="header-flex">
+    <h1>Lejeaftale Oversigt</h1>
+  </div>
+
+  <p class="description-text">
+    På denne side kan du se oversigten over vores lejeaftaler, tilføje lejeaftaler,
+    redigere deres info & status eller helt slette dem.
+  </p>
+
+  <div class="action-section">
+    <div class="create-car-section">
+
+      <!-- Peger på RentalAgreementController's createRentalAgreement mapping -->
+      <button type="button" class="btn-opret"
+              th:onclick="|location.href='@{/dataRegistration/rental-agreements/create}'|">
+        Opret lejeaftale
+      </button>
+      <p>Klik her for at oprette ny lejeaftale</p>
+    </div>
+
+    <p>Hello</p>
+
+    <!-- Er stadig bilens logik -->
+
+    <div class="search-id-container">
+      <div class="search-id-section">
+        <form class="search-id-section" th:action="@{/dataRegistration/rental-agreements}" method="get">
+          <input type="text" id="searchAgreementId" name="searchCarId" placeholder="Indtast lejeaftalens ID nummer" th:value="${param.searchCarId}" />
+          <button type="submit" class="btn-soeg">Søg</button>
+        </form>
+      </div>
+      <p>Find en lejeaftale med dens ID nummer</p>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

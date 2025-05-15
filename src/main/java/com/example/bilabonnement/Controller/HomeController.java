@@ -25,7 +25,7 @@ public class HomeController {
 
     @GetMapping("/dataRegistration/rentalAgreements")
     public String rentalAgreements() {
-        return "dataRegistration/rentalAgreements";
+        return "rental-agreements";
     }
 
     //NAVIGATION Damage-Registration
