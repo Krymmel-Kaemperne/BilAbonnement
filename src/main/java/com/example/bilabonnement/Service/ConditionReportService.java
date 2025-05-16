@@ -1,10 +1,12 @@
 package com.example.bilabonnement.Service;
 
 import com.example.bilabonnement.Model.ConditionReport;
+import com.example.bilabonnement.Model.Damage; 
 import com.example.bilabonnement.Repository.ConditionReportRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 // Serviceklasse for forretningslogik vedrørende tilstandsrapporter
@@ -38,9 +40,9 @@ public class ConditionReportService {
     }
 
     // Beregn totalpris for alle skader tilknyttet en tilstandsrapport
-    public java.math.BigDecimal calculateTotalDamagePrice(java.util.List<com.example.bilabonnement.Model.Damage> damages) {
-        java.math.BigDecimal total = java.math.BigDecimal.ZERO;
-        for (com.example.bilabonnement.Model.Damage damage : damages) {
+    public BigDecimal calculateTotalDamagePrice(List<Damage> damages) {
+        BigDecimal total =  BigDecimal.ZERO;
+        for (Damage damage : damages) {
             if (damage.getDamagePrice() != null) {
                 total = total.add(damage.getDamagePrice());
             }
