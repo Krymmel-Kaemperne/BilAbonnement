@@ -19,18 +19,12 @@ public class CarRepository {
 
     @Autowired
     private final JdbcTemplate jdbcTemplate;
-    // Use BeanPropertyRowMapper, specifying the target class
     private final BeanPropertyRowMapper<Car> carRowMapper = new BeanPropertyRowMapper<>(Car.class);
 
     public CarRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    /**
-     * Opretter en ny bil i databasen.
-     * @param car Car objektet der skal oprettes.
-     * @return Car objektet med det tildelte car_id.
-     */
     public Car create(Car car) {
         String sqlInsert = "INSERT INTO car (registration_number, chassis_number, steel_price, color, " +
                 "co2_emission, vehicle_number, model_id, car_status_id, fuel_type_id, " +

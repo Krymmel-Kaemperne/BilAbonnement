@@ -42,8 +42,15 @@ public class ModelRepository {
         }
         return model;
     }
+    public Model update(Model model) {
+        String sql = "UPDATE model SET model_name = ?, brand_id = ? = ? WHERE model_id = ?";
+        int rowsAffected = jdbcTemplate.update(sql,
+                model.getModelName(),
+                model.getBrandId(),
+                model.getModelId());
+        return rowsAffected > 0 ? model : null;
+    }
 
-    // *** NY METODE TIL AT HENTE ALLE MODELLER ***
     public List<Model> findAllModels() {
         String sql = "SELECT m.model_id, m.model_name, m.brand_id, b.brand_name " +
                 "FROM model m " +

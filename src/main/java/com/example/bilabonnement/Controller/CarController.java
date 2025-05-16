@@ -104,16 +104,4 @@ public class CarController {
         }
         return "redirect:/fleet/overview"; // OPDATERET REDIRECT
     }
-
-    @GetMapping ("/car/{id}")
-    public String viewCar(@PathVariable("id") int carId, org.springframework.ui.Model model){
-        Car car = carService.findById(carId);
-        if (car == null)
-        {
-            return "redirect:/dataRegistration/fleet";
-        }
-        model.addAttribute("car", car);
-        return "dataRegistration/viewCar";
-    }
-
 }

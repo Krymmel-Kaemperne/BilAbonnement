@@ -28,7 +28,7 @@ import java.util.Collections;
 import java.util.List;
 
 @Controller
-@RequestMapping("/fleet") // Ny base path for alt flåde-relateret
+@RequestMapping("/fleet")
 public class FleetController {
 
     @Autowired
@@ -121,7 +121,6 @@ public class FleetController {
     public String showCarDetails(@PathVariable("id") int carId, org.springframework.ui.Model model) {
         Car car = carService.findById(carId);
         if (car == null) {
-            // Overvej at tilføje en flash-attribut med fejlmeddelelse
             return "redirect:/fleet/overview"; // Omdiriger til flådeoversigten
         }
         model.addAttribute("car", car);

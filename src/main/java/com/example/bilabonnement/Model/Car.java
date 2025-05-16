@@ -28,7 +28,6 @@ public class Car {
     public Car() {
     }
 
-    // Getters and Setters for alle felter (som du havde, men konsekvent)
 
     public int getCarId() { return carId; }
     public void setCarId(int carId) { this.carId = carId; }
@@ -83,6 +82,13 @@ public class Car {
 
     public String getTransmissionTypeName() { return transmissionTypeName; }
     public void setTransmissionTypeName(String transmissionTypeName) { this.transmissionTypeName = transmissionTypeName; }
+    public int getCurrent_odometer() {
+        return current_odometer;
+    }
+
+    public void setCurrent_odometer(int current_odometer) {
+        this.current_odometer = current_odometer;
+    }
 
     @Override
     public String toString() {

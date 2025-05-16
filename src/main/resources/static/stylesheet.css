@@ -1,5 +1,3 @@
-/*flådeoversigt 500-780*/
-
 :root {
     --main-color: #c13616;
     --hover-color: #811e0a;
@@ -184,6 +182,16 @@ body {
 .opret-bil-form-header {
     padding: 0 0 0 0;
 }
+.opret-bil-knap {
+    background-color: var(--main-color); /* Bruger din CSS variabel */
+    color: white;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.95em;
+    font-weight: 400;
+    cursor: pointer;
+}
 
 
 /* Overskrift inde i formularen (hvis du har en der) */
@@ -267,7 +275,7 @@ body {
     margin-bottom: 15px;
 }
 
-.opret-bil-knap {
+.action-button {
     background-color: var(--main-color); /* Bruger din CSS variabel */
     color: white;
     padding: 10px 18px;
@@ -921,13 +929,88 @@ body {
 .btn-gem-status:hover {
     background-color: #4cae4c;
 }
-.car-table td .btn-detaljer,
-.car-table td .btn-rediger {
-    margin-bottom: 5px; /* Lidt plads hvis knapperne er over hinanden */
-    margin-right: 5px; /* Lidt plads mellem knapper på samme linje */
-    padding: 6px 10px;
-    font-size: 0.85em;
+.car-info-table {
+    width: 100%; /* Tabellen tager fuld bredde af sin .car-info-column container */
+    max-width: 700px; /* Sæt en max-bredde for tabellen for at undgå at den bliver for bred */
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    /* Tilføj skygge og afrundede hjørner som i fleetoverview, hvis ønsket */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border-radius: 6px;
+    overflow: hidden; /* Vigtigt for at border-radius virker på celler med baggrundsfarve */
+    border: 1px solid #ddd; /* Ydre ramme om tabellen */
 }
-.action-buttons-cell {
-    min-width: 180px; /* Giver plads til knapperne */
+
+.car-info-table td {
+    border: 1px solid #ddd; /* Ramme om hver celle */
+    padding: 10px 15px;    /* Lidt mere padding som i fleetoverview */
+    font-size: 0.95em;
+    text-align: left;      /* Sikrer venstrejustering */
+}
+
+/* Label-cellen (første kolonne) */
+.car-info-table td:first-child {
+    font-weight: 600; /* Er allerede i <strong>, men kan forstærkes her */
+    color: #333;
+    background-color: #f9f9f9; /* En meget lys grå for label-kolonnen, hvis ønsket */
+    width: 200px; /* Fast bredde for label-kolonnen, juster efter behov */
+    white-space: nowrap;
+}
+
+.car-info-table td:last-child {
+    color: #555;
+}
+
+.car-info-table tr:nth-child(even) td:last-child {
+    background-color: #fdf1ef;
+}
+
+.view-details-actions {
+    display: flex;         /* For at justere knapperne pænt ved siden af hinanden */
+    gap: 10px;             /* Mellemrum mellem knapperne, hvis der er flere */
+    margin-bottom: 20px;   /* **Dette skaber de 20px afstand ned til næste element** */
+}
+
+.image-section {
+    flex: 1.2;
+    flex-basis: 550px;
+    flex-shrink: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.main-image-container {
+    width: 100%;
+    max-width: 500px;
+    height: auto;
+    min-height: 300px;
+    margin-bottom: 25px; /* Lidt mere plads ned til slet-knappen */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f8f9fa;
+    border-radius: 6px;
+}
+
+.main-car-image {
+    max-width: 100%;
+    max-height: 350px;
+    height: auto;
+    object-fit: contain;
+    border-radius: 4px;
+}
+
+.main-image-placeholder {
+    width: 100%;
+    min-height: 300px;
+   /* background-color: #e9ecef;*/
+    border: 1px dashed #ced4da;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+
+    border-radius: 6px;
+    font-size: 1.1em;
 }
