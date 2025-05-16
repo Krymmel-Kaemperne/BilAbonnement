@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.ArrayList;
 import java.util.List;
 
 // Controller til håndtering af tilstandsrapporter og skader
@@ -23,21 +24,41 @@ public class ConditionReportController {
 
     @GetMapping("/list")
     public String listAll(Model model) {
-        List<ConditionReport> reports = conditionReportService.findAll();
-        model.addAttribute("reports", reports);
+        List<ConditionReport> basicReports = conditionReportService.findAll();
+        List<ConditionReport> detailedReports = new ArrayList<>();
+
+        if (basicReports != null) {
+            for (ConditionReport basicReport : basicReports) {
+                // Fetch and populate details for each report
+                ConditionReport detailedReport = conditionReportService.getConditionReportWithDetails(basicReport.getConditionReportId());
+                if (detailedReport != null) {
+                    detailedReports.add(detailedReport);
+                } else {
+                    // Fallback: add the basic report if details couldn't be fetched (should be logged)
+                    detailedReports.add(basicReport);
+                }
+            }
+        }
+        model.addAttribute("reports", detailedReports);
         return "damageRegistration/rapports";
     }
 
     @GetMapping("/view/{id}")
     public String viewReport(@PathVariable int id, Model model) {
-        ConditionReport report = conditionReportService.findById(id);
-        List<Damage> damages = damageService.findByConditionReportId(id);
-        model.addAttribute("report", report);
-        model.addAttribute("damages", damages);
-
-        // Brug service til at beregne totalpris
-        java.math.BigDecimal totalDamagePrice = conditionReportService.calculateTotalDamagePrice(damages);
-        model.addAttribute("totalDamagePrice", totalDamagePrice);
+        // Use the new service method to get all details
+        ConditionReport reportWithDetails = conditionReportService.getConditionReportWithDetails(id);
+        
+        model.addAttribute("report", reportWithDetails);
+        // The damages and total price are now part of reportWithDetails if correctly populated by the service
+        // So, explicitly adding damages and totalDamagePrice might be redundant if the template uses report.damages and report.totalPrice
+        // However, if damageRegistration.html specifically expects 'damages' and 'totalDamagePrice' as separate attributes, keep them.
+        if (reportWithDetails != null && reportWithDetails.getDamages() != null) {
+            model.addAttribute("damages", reportWithDetails.getDamages());
+            model.addAttribute("totalDamagePrice", reportWithDetails.getTotalPrice()); // Already calculated by getConditionReportWithDetails
+        } else {
+            model.addAttribute("damages", new ArrayList<Damage>());
+            model.addAttribute("totalDamagePrice", java.math.BigDecimal.ZERO);
+        }
 
         return "damageRegistration/damageRegistration";
     }
@@ -47,6 +68,9 @@ public class ConditionReportController {
         ConditionReport report = new ConditionReport();
         if (rentalAgreementId != null) {
             report.setRentalAgreementId(rentalAgreementId);
+            // Optionally, pre-populate car/customer details if rentalAgreementId is present
+            // RentalAgreement agreement = rentalAgreementService.findById(rentalAgreementId);
+            // if (agreement != null) { ... set car and customer on report ... }
         }
         model.addAttribute("report", report);
         return "damageRegistration/createConditionReport";
@@ -55,21 +79,24 @@ public class ConditionReportController {
     @PostMapping("/create")
     public String create(@ModelAttribute ConditionReport report, RedirectAttributes redirectAttributes) {
         ConditionReport created = conditionReportService.create(report);
+        // After creating, you might want to fetch with details if redirecting to a view page that needs them
         redirectAttributes.addFlashAttribute("successMessage", "Tilstandsrapport oprettet!");
-        return "redirect:/conditionReport/view/" + created.getConditionReportId();
+        return "redirect:/conditionReport/view/" + created.getConditionReportId(); // viewReport should now fetch details
     }
 
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable int id, Model model) {
-        ConditionReport report = conditionReportService.findById(id);
-        model.addAttribute("report", report);
+        // IMPORTANT: Use getConditionReportWithDetails here as well for the edit page
+        ConditionReport reportWithDetails = conditionReportService.getConditionReportWithDetails(id);
+        model.addAttribute("report", reportWithDetails);
         return "damageRegistration/editConditionReport";
     }
 
     @PostMapping("/edit")
     public String edit(@ModelAttribute ConditionReport report, RedirectAttributes redirectAttributes) {
-        conditionReportService.update(report);
+        conditionReportService.update(report); // The update service only needs the core fields
         redirectAttributes.addFlashAttribute("successMessage", "Tilstandsrapport opdateret!");
+        // Redirect to the view page, which will fetch details again
         return "redirect:/conditionReport/view/" + report.getConditionReportId();
     }
 
@@ -78,7 +105,9 @@ public class ConditionReportController {
     public String showCreateDamageForm(@RequestParam int conditionReportId, Model model) {
         Damage damage = new Damage();
         damage.setConditionReportId(conditionReportId);
-        model.addAttribute("damage", damage);
+        // Optionally, add the condition report itself to the model for context
+        // ConditionReport conditionReport = conditionReportService.getConditionReportWithDetails(conditionReportId);
+        // model.addAttribute("conditionReport", conditionReport);
         return "damageRegistration/registerDamage";
     }
 
@@ -93,6 +122,11 @@ public class ConditionReportController {
     public String showEditDamageForm(@PathVariable int id, Model model) {
         Damage damage = damageService.findById(id);
         model.addAttribute("damage", damage);
+        // Optionally, add the condition report for context
+        // if (damage != null) {
+        //    ConditionReport conditionReport = conditionReportService.getConditionReportWithDetails(damage.getConditionReportId());
+        //    model.addAttribute("conditionReport", conditionReport);
+        // }
         return "damageRegistration/editDamage";
     }
 

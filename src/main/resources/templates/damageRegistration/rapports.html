@@ -21,10 +21,10 @@
   <div class="action-section">
     <div>
       <button type="button" class="btn-opret"
-              th:onclick="|location.href='@{/conditionReport/create?rentalAgreementId=1}'|">
+              th:onclick="|location.href='@{/conditionReport/create}'|">
         Opret ny rapport
       </button>
-      <p>Klik her for at oprette ny tilstandsrapport</p>
+      <p>Klik her for at oprette ny tilstandsrapport (du skal vælge en lejeaftale).</p>
     </div>
   </div>
   <table class="car-table">
@@ -33,21 +33,31 @@
       <th>ID</th>
       <th>Lejeaftale ID</th>
       <th>Rapport dato</th>
+      <th>Bil ID</th>
+      <th>Kunde Navn</th>
+      <th>Total Pris</th>
       <th>Handling</th>
     </tr>
     </thead>
     <tbody>
     <tr th:if="${#lists.isEmpty(reports)}">
-      <td colspan="4" style="text-align: center;">Ingen rapporter fundet.</td>
+      <td colspan="7" style="text-align: center;">Ingen rapporter fundet.</td>
     </tr>
     <tr th:each="report : ${reports}">
       <td th:text="${report.conditionReportId}"></td>
       <td th:text="${report.rentalAgreementId}"></td>
-      <td th:text="${report.reportDate}"></td>
+      <td th:text="${report.reportDate != null ? #temporals.format(report.reportDate, 'dd-MM-yyyy') : 'N/A'}"></td>
+      <td th:text="${report.car != null ? report.car.carId : 'N/A'}"></td>
+      <td th:text="${report.customer != null ? (report.customer.fname + ' ' + report.customer.lname) : 'N/A'}"></td>
+      <td th:text="${report.totalPrice != null ? #numbers.formatDecimal(report.totalPrice, 1, 'POINT', 2, 'COMMA') + ' DKK' : 'N/A'}"></td>
       <td>
-        <button type="button" class="btn-detaljer"
+        <button type="button" class="btn-detaljer btn-small"
                 th:onclick="|location.href='@{/conditionReport/view/{id}(id=${report.conditionReportId})}'|">
-          Se detaljer
+          Detaljer
+        </button>
+        <button type="button" class="btn-rediger btn-small"
+                th:onclick="|location.href='@{/conditionReport/edit/{id}(id=${report.conditionReportId})}'|">
+          Rediger
         </button>
       </td>
     </tr>

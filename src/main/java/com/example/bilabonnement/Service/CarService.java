@@ -11,9 +11,12 @@ import java.util.List;
 @Service
 public class CarService {
 
-    @Autowired
     private CarRepository carRepository;
 
+    @Autowired
+    public CarService(CarRepository carRepository) {
+        this.carRepository = carRepository;
+    }
 
     public List<Car> findAllCars() {
         return carRepository.findAll();
