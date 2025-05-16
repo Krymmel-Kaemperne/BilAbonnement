@@ -10,6 +10,7 @@ public class Car {
     private String vehicleNumber;
     private String comment;
     private int current_odometer;
+    private String irkCode;
 
     // ID'er til databaselagring og relationer
     private Integer modelId;
@@ -89,6 +90,12 @@ public class Car {
     public void setCurrent_odometer(int current_odometer) {
         this.current_odometer = current_odometer;
     }
+
+    public String getIrkCode() { return irkCode; }
+    public void setIrkCode(String irkCode) { this.irkCode = irkCode; }
+
+    public int getCurrentOdometer() { return current_odometer; }
+    public void setCurrentOdometer(int currentOdometer) { this.current_odometer = currentOdometer; }
 
     @Override
     public String toString() {

@@ -117,6 +117,16 @@
         </select>
       </div>
 
+      <div class="opret-bil-form-row">
+        <label for="current_odometer">Kilometertæller:</label>
+        <input type="number" id="current_odometer" th:field="*{currentOdometer}" required>
+      </div>
+
+      <div class="opret-bil-form-row">
+        <label for="irkCode">IRK-kode:</label>
+        <input type="text" id="irkCode" th:field="*{irkCode}" required>
+      </div>
+
       <div class="opret-bil-submit-row">
         <button class="opret-bil-knap" type="submit">Gem Ændringer</button>
       </div>

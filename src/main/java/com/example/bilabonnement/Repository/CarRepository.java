@@ -28,7 +28,7 @@ public class CarRepository {
     public Car create(Car car) {
         String sqlInsert = "INSERT INTO car (registration_number, chassis_number, steel_price, color, " +
                 "co2_emission, vehicle_number, model_id, car_status_id, fuel_type_id, " +
-                "transmission_type_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                "transmission_type_id, current_odometer, irk_code) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
@@ -44,6 +44,8 @@ public class CarRepository {
             ps.setInt(8, car.getCarStatusId());
             ps.setInt(9, car.getFuelTypeId());
             ps.setInt(10, car.getTransmissionTypeId());
+            ps.setInt(11, car.getCurrentOdometer());
+            ps.setString(12, car.getIrkCode());
             return ps;
         }, keyHolder);
 
@@ -67,7 +69,7 @@ public class CarRepository {
         }
         String sqlUpdate = "UPDATE car SET registration_number = ?, chassis_number = ?, steel_price = ?, " +
                 "color = ?, co2_emission = ?, vehicle_number = ?, model_id = ?, " +
-                "car_status_id = ?, fuel_type_id = ?, transmission_type_id = ? " +
+                "car_status_id = ?, fuel_type_id = ?, transmission_type_id = ?, current_odometer = ?, irk_code = ? " +
                 "WHERE car_id = ?";
         int rowsAffected = jdbcTemplate.update(sqlUpdate,
                 car.getRegistrationNumber(),
@@ -80,6 +82,8 @@ public class CarRepository {
                 car.getCarStatusId(),
                 car.getFuelTypeId(),
                 car.getTransmissionTypeId(),
+                car.getCurrentOdometer(),
+                car.getIrkCode(),
                 car.getCarId());
 
         if (rowsAffected > 0) {
@@ -92,7 +96,7 @@ public class CarRepository {
     public List<Car> findAll() {
         String sql = "SELECT c.car_id, c.registration_number, c.chassis_number, c.steel_price, " +
                 "c.color, c.co2_emission, c.vehicle_number, c.model_id, c.car_status_id, " +
-                "c.fuel_type_id, c.transmission_type_id, " +
+                "c.fuel_type_id, c.transmission_type_id, c.current_odometer, c.irk_code, " +
                 "m.model_name AS modelName, b.brand_id AS brandId, b.brand_name AS brandName, " +
                 "cs.status_name AS carStatusName, " +
                 "ft.fuel_type_name AS fuelTypeName, " +
@@ -110,7 +114,7 @@ public class CarRepository {
     public Car findById(int carId) {
         String sql = "SELECT c.car_id, c.registration_number, c.chassis_number, c.steel_price, " +
                 "c.color, c.co2_emission, c.vehicle_number, c.model_id, c.car_status_id, " +
-                "c.fuel_type_id, c.transmission_type_id, " +
+                "c.fuel_type_id, c.transmission_type_id, c.current_odometer, c.irk_code, " +
                 "m.model_name AS modelName, b.brand_id AS brandId, b.brand_name AS brandName, " +
                 "cs.status_name AS carStatusName, " +
                 "ft.fuel_type_name AS fuelTypeName, " +
@@ -134,7 +138,7 @@ public class CarRepository {
         StringBuilder sql = new StringBuilder(
                 "SELECT c.car_id, c.registration_number, c.chassis_number, c.steel_price, " +
                         "c.color, c.co2_emission, c.vehicle_number, c.model_id, c.car_status_id, " +
-                        "c.fuel_type_id, c.transmission_type_id, " +
+                        "c.fuel_type_id, c.transmission_type_id, c.current_odometer, c.irk_code, " +
                         "m.model_name AS modelName, b.brand_id AS brandId, b.brand_name AS brandName, " +
                         "cs.status_name AS carStatusName, " +
                         "ft.fuel_type_name AS fuelTypeName, " +
