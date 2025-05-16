@@ -1,17 +1,33 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="da" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/stylesheet.css">
-  <title>Skade Registrering</title>
+  <meta charset="UTF-8" />
+  <title>Registrer Skade</title>
+  <link rel="stylesheet" href="/stylesheet.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet" />
 </head>
 <body>
 <div th:replace="~{fragments/header :: header('registerDamage')}"></div>
-
-<h1>Registrer Skade</h1>
+<div class="container">
+  <div class="header-flex">
+    <h1>Registrer Skade</h1>
+  </div>
+  <form th:action="@{/conditionReport/damage/create}" th:object="${damage}" method="post">
+    <input type="hidden" th:field="*{conditionReportId}" />
+    <div class="opret-bil-form-row">
+      <label for="damageDescription">Beskrivelse:</label>
+      <input type="text" id="damageDescription" th:field="*{damageDescription}" required />
+    </div>
+    <div class="opret-bil-form-row">
+      <label for="damagePrice">Pris:</label>
+      <input type="number" id="damagePrice" th:field="*{damagePrice}" step="0.01" required />
+    </div>
+    <div class="opret-bil-submit-row">
+      <button class="opret-bil-knap" type="submit">Opret Skade</button>
+    </div>
+  </form>
+</div>
 </body>
 </html>

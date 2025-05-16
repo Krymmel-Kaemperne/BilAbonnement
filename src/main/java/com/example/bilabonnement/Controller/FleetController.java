@@ -26,6 +26,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Collections;
 import java.util.List;
+import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
 @RequestMapping("/fleet") // Ny base path for alt flåde-relateret
@@ -53,8 +54,12 @@ public class FleetController {
             @RequestParam(required = false) Integer fuelType,
             @RequestParam(required = false) Integer transmissionType,
             @RequestParam(required = false) Integer searchCarId,
-            org.springframework.ui.Model model
+            org.springframework.ui.Model model,
+            jakarta.servlet.http.HttpServletResponse response
     ) {
+        response.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0");
+        response.setHeader("Pragma", "no-cache");
+        response.setDateHeader("Expires", 0);
         List<Car> cars;
         if (searchCarId != null) {
             Car car = carService.findById(searchCarId);
