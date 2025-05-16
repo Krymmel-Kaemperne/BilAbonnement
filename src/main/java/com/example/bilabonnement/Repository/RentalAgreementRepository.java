@@ -75,7 +75,8 @@ public class RentalAgreementRepository {
 
     public List<RentalAgreement> findAll() {
         String sql = "SELECT * FROM rental_agreement";
-        return jdbcTemplate.query(sql, rentalAgreementRowMapper);
+        List<RentalAgreement> agreements = jdbcTemplate.query(sql, rentalAgreementRowMapper);
+        return agreements;
     }
 
     public void update(RentalAgreement rentalAgreement) {

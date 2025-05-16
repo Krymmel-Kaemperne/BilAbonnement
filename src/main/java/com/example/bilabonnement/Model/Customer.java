@@ -114,4 +114,10 @@ public abstract class Customer {
     public void setCustomerType(CustomerType customerType) {
         this.customerType = customerType;
     }
+
+    public String getDisplayName() {
+        return fName + " " + lName;
+    }
+
+
 }

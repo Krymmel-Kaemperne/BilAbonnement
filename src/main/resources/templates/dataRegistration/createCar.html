@@ -20,107 +20,109 @@
     <h1>Opret bil</h1>
     <p>Indtast info for at oprette ny bil</p>
   </header>
+
   <div class="opret-bil-form-content">
 
-  <form th:action="@{/dataRegistration/createCar}" th:object="${car}" method="post"> <!-- Rettelser her ift. min controller: dataRegistrering -->
+    <form th:action="@{/dataRegistration/createCar}" th:object="${car}" method="post">
+      <!-- Rettelser her ift. min controller: dataRegistrering -->
 
-    <div class="opret-bil-form-row">
-      <label for="registrationNumber">Registreringsnummer:</label>
-      <input type="text" id="registrationNumber" th:field="*{registrationNumber}" required>
-    </div>
+      <div class="opret-bil-form-row">
+        <label for="registrationNumber">Registreringsnummer:</label>
+        <input type="text" id="registrationNumber" th:field="*{registrationNumber}" required>
+      </div>
 
-    <div class="opret-bil-form-row">
-      <label for="chassisNumber">Stelnummer:</label>
-      <input type="text" id="chassisNumber" th:field="*{chassisNumber}" required>
-    </div>
+      <div class="opret-bil-form-row">
+        <label for="chassisNumber">Stelnummer:</label>
+        <input type="text" id="chassisNumber" th:field="*{chassisNumber}" required>
+      </div>
 
-    <div class="opret-bil-form-row">
-      <label for="steelPrice">Stålpris:</label>
-      <input type="number" id="steelPrice" th:field="*{steelPrice}" step="0.01" required>
-    </div>
+      <div class="opret-bil-form-row">
+        <label for="steelPrice">Stålpris:</label>
+        <input type="number" id="steelPrice" th:field="*{steelPrice}" step="0.01" required>
+      </div>
 
-    <div class="opret-bil-form-row">
-      <label for="color">Farve:</label>
-      <input type="text" id="color" th:field="*{color}" required>
-    </div>
+      <div class="opret-bil-form-row">
+        <label for="color">Farve:</label>
+        <input type="text" id="color" th:field="*{color}" required>
+      </div>
 
-    <div class="opret-bil-form-row">
-      <label for="co2Emission">CO2-udledning:</label>
-      <input type="number" id="co2Emission" th:field="*{co2Emission}" step="0.01" required>
-    </div>
+      <div class="opret-bil-form-row">
+        <label for="co2Emission">CO2-udledning:</label>
+        <input type="number" id="co2Emission" th:field="*{co2Emission}" step="0.01" required>
+      </div>
 
-    <div class="opret-bil-form-row">
-      <label for="vehicleNumber">Køretøjsnummer:</label>
-      <input type="text" id="vehicleNumber" th:field="*{vehicleNumber}" required>
-    </div>
+      <div class="opret-bil-form-row">
+        <label for="vehicleNumber">Køretøjsnummer:</label>
+        <input type="text" id="vehicleNumber" th:field="*{vehicleNumber}" required>
+      </div>
 
-    <div class="opret-bil-form-row">
-      <label for="brandId">Mærke (Brand):</label>
-      <select id="brandId" th:field="*{brandId}" required>
-        <option value="">Vælg mærke</option>
-        <option th:each="brand : ${allBrands}"
-                th:value="${brand.brandId}"
-        th:text="${brand.brandName}">
-        </option>
-      </select>
+      <div class="opret-bil-form-row">
+        <label for="brandId">Mærke (Brand):</label>
+        <select id="brandId" th:field="*{brandId}" required>
+          <option value="">Vælg mærke</option>
+          <option th:each="brand : ${allBrands}"
+                  th:value="${brand.brandId}"
+                  th:text="${brand.brandName}">
+          </option>
+        </select>
 
-    </div>
+      </div>
 
-    <div class="opret-bil-form-row">
-      <label for="modelName">Model:</label>
-      <input type="text" id="modelName" th:field="*{modelName}" placeholder="Indtast modelnavn" required>
-    </div>
-
-
-    <div class="opret-bil-form-row">
-      <label for="carStatusId">Status:</label>
-      <select id="carStatusId" th:field="*{carStatusId}" required>
-        <option value="">Vælg status</option>
-        <option th:each="status : ${allCarStatuses}"
-                th:value="${status.carStatusId}"
-                th:text="${status.statusName}">
-        </option>
-      </select>
-    </div>
+      <div class="opret-bil-form-row">
+        <label for="modelName">Model:</label>
+        <input type="text" id="modelName" th:field="*{modelName}" placeholder="Indtast modelnavn" required>
+      </div>
 
 
-    <div class="opret-bil-form-row">
-      <label for="fuelTypeId">Brændstoftype:</label>
-      <select id="fuelTypeId" th:field="*{fuelTypeId}" required>
-        <option value="">Vælg brændstoftype</option>
-        <option th:each="fuelType : ${allFuelTypes}"
-                th:value="${fuelType.fuelTypeId}"
-                th:text="${fuelType.fuelTypeName}">
-        </option>
-      </select>
-    </div>
+      <div class="opret-bil-form-row">
+        <label for="carStatusId">Status:</label>
+        <select id="carStatusId" th:field="*{carStatusId}" required>
+          <option value="">Vælg status</option>
+          <option th:each="status : ${allCarStatuses}"
+                  th:value="${status.carStatusId}"
+                  th:text="${status.statusName}">
+          </option>
+        </select>
+      </div>
 
 
-    <div class="opret-bil-form-row">
-      <label for="transmissionTypeId">Gearkassetype:</label>
-      <select id="transmissionTypeId" th:field="*{transmissionTypeId}" required>
-        <option value="">Vælg gearkassetype</option>
-        <option th:each="trans : ${allTransmissionTypes}"
-                th:value="${trans.transmissionTypeId}"
-                th:text="${trans.transmissionTypeName}">
-        </option>
-      </select>
-    </div>
+      <div class="opret-bil-form-row">
+        <label for="fuelTypeId">Brændstoftype:</label>
+        <select id="fuelTypeId" th:field="*{fuelTypeId}" required>
+          <option value="">Vælg brændstoftype</option>
+          <option th:each="fuelType : ${allFuelTypes}"
+                  th:value="${fuelType.fuelTypeId}"
+                  th:text="${fuelType.fuelTypeName}">
+          </option>
+        </select>
+      </div>
 
-    <div class="opret-bil-form-row">
-      <label for="current_odometer">Kilometertæller:</label>
-      <input type="number" id="current_odometer" th:field="*{currentOdometer}" required>
-    </div>
 
-    <div class="opret-bil-form-row">
-      <label for="irkCode">IRK-kode:</label>
-      <input type="text" id="irkCode" th:field="*{irkCode}" required>
-    </div>
+      <div class="opret-bil-form-row">
+        <label for="transmissionTypeId">Gearkassetype:</label>
+        <select id="transmissionTypeId" th:field="*{transmissionTypeId}" required>
+          <option value="">Vælg gearkassetype</option>
+          <option th:each="trans : ${allTransmissionTypes}"
+                  th:value="${trans.transmissionTypeId}"
+                  th:text="${trans.transmissionTypeName}">
+          </option>
+        </select>
+      </div>
 
-    <div class="opret-bil-submit-row">
-      <button class="opret-bil-knap" type="submit">Opret Bil</button>
-    </div>
-  </form>
+      <div class="opret-bil-form-row">
+        <label for="current_odometer">Kilometertæller:</label>
+        <input type="number" id="current_odometer" th:field="*{currentOdometer}" required>
+      </div>
+
+      <div class="opret-bil-form-row">
+        <label for="irkCode">IRK-kode:</label>
+        <input type="text" id="irkCode" th:field="*{irkCode}" required>
+      </div>
+
+      <div class="opret-bil-submit-row">
+        <button class="opret-bil-knap" type="submit">Opret Bil</button>
+      </div>
+    </form>
   </div>
 </div>
 </div>

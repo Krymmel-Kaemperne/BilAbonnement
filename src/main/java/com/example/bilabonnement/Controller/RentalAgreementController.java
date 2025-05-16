@@ -1,6 +1,10 @@
     package com.example.bilabonnement.Controller;
 
+    import com.example.bilabonnement.Model.Car;
+    import com.example.bilabonnement.Model.Customer;
     import com.example.bilabonnement.Model.RentalAgreement;
+    import com.example.bilabonnement.Service.CarService;
+    import com.example.bilabonnement.Service.CustomerService;
     import com.example.bilabonnement.Service.RentalAgreementService;
     import org.springframework.beans.factory.annotation.Autowired;
     import org.springframework.stereotype.Controller;
@@ -17,29 +21,57 @@
         @Autowired
         private RentalAgreementService rentalAgreementService;
 
+        @Autowired
+        private CarService carService;
+
+        @Autowired
+        private CustomerService customerService;
+
         // OVERVIEW
         @GetMapping("/rental-agreements")
         public String showOverview(Model model) {
             List<RentalAgreement> agreements = rentalAgreementService.findAll();
             model.addAttribute("agreements", agreements);
+            model.addAttribute("searchRentalAgreementId", "");
+
             return "dataRegistration/rental/rental-agreements-overview";
         }
 
         //SHOW CREATE FORM
         @GetMapping("/rental-agreements/create")
         public String showCreateForm(Model model) {
+            List<Car> allCars = carService.findAllCars();
+
+            // Filter cars with car_status_id == 1 (Tilgængelig)
+            List<Car> availableCars = allCars.stream()
+                    .filter(car -> car.getCarStatusId() == 1)
+                    .toList();
+
+            List<Customer> allCustomers = customerService.findAllCustomers();
+
             model.addAttribute("rentalAgreement", new RentalAgreement());
+            model.addAttribute("cars", availableCars);
+            model.addAttribute("customers", allCustomers);
             return "dataRegistration/rental/create-agreement";
         }
 
-        // HANDLE CREATE FORM SUBMISSION
+
+        // CREATE RENTAL AGREEMENT
         @PostMapping("/rental-agreements/create")
         public String createRentalAgreement(@ModelAttribute RentalAgreement rentalAgreement,
                                             RedirectAttributes redirectAttributes) {
-            rentalAgreementService.create(rentalAgreement);
-            redirectAttributes.addFlashAttribute("successMessage", "Lejeaftale oprettet!");
+            try {
+                rentalAgreementService.create(rentalAgreement);
+                redirectAttributes.addFlashAttribute("successMessage", "Lejeaftale oprettet!");
+            } catch (Exception e) {
+                e.printStackTrace(); // Print error to console
+                redirectAttributes.addFlashAttribute("errorMessage", "Fejl ved oprettelse!");
+            }
             return "redirect:/dataRegistration/rental-agreements";
+
         }
+
+
 
         //SHOW EDIT FORM
         @GetMapping("/rental-agreements/edit/{id}")
