@@ -43,4 +43,7 @@ public class BusinessCustomer extends Customer {
         public void setCompanyName(String companyName) {
             this.companyName = companyName;
         }
+
+
+
 }

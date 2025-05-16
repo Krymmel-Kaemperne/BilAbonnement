@@ -14,16 +14,58 @@
     />
 <body>
 <div th:replace="~{fragments/header :: header('dataRegistration')}"></div>
-<div class="container">
-    <div class="header-flex">
-        <h1>Opret Lejeaftale</h1>
+
+<div class="page-container">
+    <div class="opret-bil-page-container">
+
+        <header class="opret-bil-form-header">
+            <h1>Opret bil</h1>
+            <p>Indtast info for at oprette ny bil</p>
+        </header>
+
+        <div class="opret-bil-form-content">
+
+
+            <form th:action="@{/dataRegistration/rental-agreements/create}" th:object="${rentalAgreement}"
+                  method="post">
+
+                <div class="opret-bil-form-row">
+                    <label for="carId">Vælg tilgængelig bil:</label>
+
+                    <select id="carId" th:field="*{carId}" required>
+
+                        <option th:each="car : ${cars}"
+                                th:value="${car.carId}"
+                                th:text="|${car.brandName} ${car.modelName} - ${car.registrationNumber} (ID: ${car.carId})|">
+                        </option>
+                    </select>
+
+                </div>
+
+                <div class="opret-bil-form-row">
+                    <label for="customerId">Vælg kunde:</label>
+
+                    <select id="customerId" th:field="*{customerId}" required>
+
+                        <option th:each="customer : ${customers}"
+                                th:value="${customer.customerId}"
+                                th:text="|${customer.fname} ${customer.lname} (${customer.customerId})|">
+                        </option>
+                    </select>
+                </div>
+
+
+
+            </form>
+
+
+        </div>
     </div>
-
-    <p class="description-text">
-        XXXX
-    </p>
-
-
 </div>
+
+
 </body>
 </html>
+
+
+
