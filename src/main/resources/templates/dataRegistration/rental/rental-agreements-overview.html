@@ -144,8 +144,8 @@
 
       <tr th:unless="${#lists.isEmpty(agreements)}" th:each="agreement : ${agreements}">
         <td th:text="${agreement.rentalAgreementId}">0</td>
-        <td th:text="${agreement.carId}">N/A</td>
-        <td th:text="${agreement.customerId}">N/A</td>
+        <td th:text="${carNames[agreement.carId]}">Ukendt bil</td>
+        <td th:text="${customerNames[agreement.customerId]}">N/A</td>
         <td th:text="${agreement.startDate}">N/A</td>
         <td th:text="${agreement.endDate}">N/A</td>
         <td th:text="${agreement.monthlyPrice}">N/A</td>

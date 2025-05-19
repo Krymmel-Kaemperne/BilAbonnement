@@ -1,50 +1,61 @@
-package com.example.bilabonnement.Controller;
+    package com.example.bilabonnement.Controller;
+    import com.example.bilabonnement.Model.Car;
+    import com.example.bilabonnement.Model.Customer;
+    import com.example.bilabonnement.Model.Location;
+    import com.example.bilabonnement.Model.RentalAgreement;
+    import com.example.bilabonnement.Service.CarService;
+    import com.example.bilabonnement.Service.CustomerService;
+    import com.example.bilabonnement.Service.LocationService;
+    import com.example.bilabonnement.Service.RentalAgreementService;
+    import org.springframework.beans.factory.annotation.Autowired;
+    import org.springframework.stereotype.Controller;
+    import org.springframework.ui.Model;
+    import org.springframework.web.bind.annotation.*;
+    import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.example.bilabonnement.Model.Car;
-import com.example.bilabonnement.Model.Customer;
-import com.example.bilabonnement.Model.Location;
-import com.example.bilabonnement.Model.RentalAgreement;
-import com.example.bilabonnement.Service.CarService;
-import com.example.bilabonnement.Service.CustomerService;
-import com.example.bilabonnement.Service.LocationService;
-import com.example.bilabonnement.Service.RentalAgreementService;
+    import java.util.List;
+    import java.util.Map;
+    import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+    @Controller
+    @RequestMapping("/dataRegistration")
+    public class RentalAgreementController {
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+        @Autowired
+        private RentalAgreementService rentalAgreementService;
 
-@Controller
-@RequestMapping("/dataRegistration") // Tilbage til den mere generelle klasse-mapping
-public class RentalAgreementController {
+        @Autowired
+        private CarService carService;
 
+        @Autowired
+        private CustomerService customerService;
 
-    @Autowired
-    private RentalAgreementService rentalAgreementService;
+        @Autowired
+        private LocationService locationService;
 
-    @Autowired
-    private CarService carService;
-
-    @Autowired
-    private CustomerService customerService;
-
-    @Autowired
-    private LocationService locationService;
-
-    // OVERVIEW
-    @GetMapping("/rental-agreements")
-    public String showOverview(Model model) {
-
-        try {
+        // OVERVIEW
+        @GetMapping("/rental-agreements")
+        public String showOverview(Model model) {
             List<RentalAgreement> agreements = rentalAgreementService.findAll();
-            List<Car> allCars = carService.findAllCars(); // Eller findAll()
+            List<Car> allCars = carService.findAllCars();
             List<Customer> allCustomers = customerService.findAllCustomers();
+
+            Map <Integer, String>  carNamesById = allCars.stream()
+                            .collect(Collectors.toMap(
+                                    Car::getCarId,
+                                    car -> car.getBrandName() + " " + car.getModelName()
+                            ));
+
+            Map<Integer, String> customerNamesById = allCustomers.stream()
+                    .collect(Collectors.toMap(
+                            Customer::getCustomerId,
+                            c -> c.getFname() + " " + c.getLname()
+                    ));
+
+            model.addAttribute("agreements", agreements);
+            model.addAttribute("carNames", carNamesById);
+            model.addAttribute("customerNames", customerNamesById);
+            model.addAttribute("searchRentalAgreementId", "");
 
             Map<Integer, String> carNamesById = allCars.stream()
                     .collect(Collectors.toMap(
@@ -82,6 +93,9 @@ public class RentalAgreementController {
             List<Customer> allCustomers = customerService.findAllCustomers();
             List<Location> allLocations = locationService.findAllLocations(); // Tilføjet for create form
 
+            RentalAgreement rentalAgreement = new RentalAgreement();
+
+
             model.addAttribute("rentalAgreement", new RentalAgreement());
             model.addAttribute("availableCars", availableCars); // Ændret fra "cars"
             model.addAttribute("allCustomers", allCustomers);
@@ -97,30 +111,40 @@ public class RentalAgreementController {
         return "dataRegistration/rental/create-agreement";
     }
 
+        // CREATE RENTAL AGREEMENT
+        @PostMapping("/rental-agreements/create")
+        public String createRentalAgreement(@ModelAttribute RentalAgreement rentalAgreement,
+                                            Model model,
+                                            RedirectAttributes redirectAttributes) {
 
-    // CREATE RENTAL AGREEMENT
-    @PostMapping("/rental-agreements/create")
-    public String createRentalAgreement(@ModelAttribute RentalAgreement rentalAgreement,
-                                        // Model model, // Ikke længere nødvendig her, hvis vi ikke returnerer til formen ved denne specifikke fejl
-                                        RedirectAttributes redirectAttributes) {
+            if (!rentalAgreement.isEndDateValid()) {
+                List<Car> allCars = carService.findAllCars().stream()
+                        .filter(car -> car.getCarStatusId() == 1 )
+                        .toList();
 
-        try {
-            if (rentalAgreement.getCarId() != null && rentalAgreement.getCarId() > 0) {
-                Car selectedCar = carService.findById(rentalAgreement.getCarId());
-                if (selectedCar != null) {
-                    rentalAgreement.setStartOdometer(selectedCar.getCurrentOdometer());
+                List<Customer> allCustomers = customerService.findAllCustomers();
 
-                    selectedCar.setCarStatusId(2); //
-                    carService.update(selectedCar); // Opdater bilens status
-                } else {
-                    // kaste en fejl eller sætte en fejlbesked og returnere til formen.
-                    redirectAttributes.addFlashAttribute("errorMessage", "Valgt bil blev ikke fundet!");
+                model.addAttribute("rentalAgreement", rentalAgreement);
+                model.addAttribute("cars", allCars);
+                model.addAttribute("customers", allCustomers);
+                model.addAttribute("errorMessage", "Slutdato skal være mindst 3 måneder efter startdato.");
+                return "dataRegistration/rental/create-agreement";
+            }
 
-                    return "redirect:/dataRegistration/rental-agreements/create";
-                }
-            } else {
-                redirectAttributes.addFlashAttribute("errorMessage", "Ingen bil valgt for lejeaftalen.");
-                return "redirect:/dataRegistration/rental-agreements/create";
+            Car selectedCar = carService.findById(rentalAgreement.getCarId());
+            if (selectedCar != null) {
+                rentalAgreement.setStartOdometer(selectedCar.getCurrentOdometer());
+
+                selectedCar.setCarStatusId(2);
+                carService.update(selectedCar);
+            }
+
+            try {
+                rentalAgreementService.create(rentalAgreement);
+                redirectAttributes.addFlashAttribute("successMessage", "Lejeaftale oprettet!");
+            } catch (Exception e) {
+                e.printStackTrace(); // Print error to console
+                redirectAttributes.addFlashAttribute("errorMessage", "Fejl ved oprettelse!");
             }
 
             rentalAgreementService.create(rentalAgreement);
