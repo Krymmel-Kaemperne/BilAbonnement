@@ -180,6 +180,20 @@ public class ConditionReportController {
         return "redirect:/conditionReport/view/" + damage.getConditionReportId();
     }
 
+    @PostMapping("/damage/delete/{id}")
+    public String deleteDamage(@PathVariable int id, RedirectAttributes redirectAttributes) {
+        Damage damage = damageService.findById(id);
+        if (damage != null) {
+            int conditionReportId = damage.getConditionReportId();
+            damageService.delete(id);
+            redirectAttributes.addFlashAttribute("successMessage", "Skade slettet!");
+            return "redirect:/conditionReport/view/" + conditionReportId;
+        } else {
+            redirectAttributes.addFlashAttribute("errorMessage", "Skade ikke fundet.");
+            return "redirect:/conditionReport/list";
+        }
+    }
+
     @GetMapping("/reparationStatus")
     public String showReparationStatus(Model model) {
         double averageDamagesPerRental = conditionReportService.getAverageDamagesPerRental();
