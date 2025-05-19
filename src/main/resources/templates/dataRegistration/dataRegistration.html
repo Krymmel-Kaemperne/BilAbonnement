@@ -23,20 +23,21 @@
 
             <div class="section-group">
                 <h3>Biler</h3>
-                <a href="/fleet/overview" class="section-card">Se fleet oversigt</a>
-                <a href="/dataRegistration/createCar" class="section-card">Opret bil</a>
+                <a th:href="@{/fleet/overview}" class="section-card">Se fleet oversigt</a>
+                <a th:href="@{/dataRegistration/createCar}" class="section-card">Opret bil</a>
             </div>
 
             <div class="section-group">
                 <h3>Kunder</h3>
-                <a href="/dataRegistration/customers" class="section-card">Se kunde oversigt</a>
-                <a href="/customers/create/private" class="section-card">Opret kunde</a>
+                <a th:href="@{/dataRegistration/customers}" class="section-card">Se kunde oversigt</a>
+                <a th:href="@{/customers/create/private}" class="section-card">Opret kunde</a>
             </div>
 
             <div class="section-group">
                 <h3>Lejeaftaler</h3>
-                <a href="/dataRegistration/rental-agreements" class="section-card">Se lejeaftaler</a>
-                <a href="#" class="section-card">Opret lejeaftale</a>
+                <a th:href="@{/dataRegistration/rental-agreements}" class="section-card">Se lejeaftaler</a>
+                <a th:href="@{/dataRegistration/rental-agreements/create}" class="section-card">Opret lejeaftale</a>
+
             </div>
 
 
