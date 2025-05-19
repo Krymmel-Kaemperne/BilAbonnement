@@ -15,6 +15,8 @@
     import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
     import java.util.List;
+    import java.util.Map;
+    import java.util.stream.Collectors;
 
     @Controller
     @RequestMapping("/dataRegistration")
@@ -36,7 +38,24 @@
         @GetMapping("/rental-agreements")
         public String showOverview(Model model) {
             List<RentalAgreement> agreements = rentalAgreementService.findAll();
+            List<Car> allCars = carService.findAllCars();
+            List<Customer> allCustomers = customerService.findAllCustomers();
+
+            Map <Integer, String>  carNamesById = allCars.stream()
+                            .collect(Collectors.toMap(
+                                    Car::getCarId,
+                                    car -> car.getBrandName() + " " + car.getModelName()
+                            ));
+
+            Map<Integer, String> customerNamesById = allCustomers.stream()
+                    .collect(Collectors.toMap(
+                            Customer::getCustomerId,
+                            c -> c.getFname() + " " + c.getLname()
+                    ));
+
             model.addAttribute("agreements", agreements);
+            model.addAttribute("carNames", carNamesById);
+            model.addAttribute("customerNames", customerNamesById);
             model.addAttribute("searchRentalAgreementId", "");
 
             return "dataRegistration/rental/rental-agreements-overview";
@@ -54,6 +73,9 @@
 
             List<Customer> allCustomers = customerService.findAllCustomers();
 
+            RentalAgreement rentalAgreement = new RentalAgreement();
+
+
             model.addAttribute("rentalAgreement", new RentalAgreement());
             model.addAttribute("cars", availableCars);
             model.addAttribute("customers", allCustomers);
@@ -64,7 +86,31 @@
         // CREATE RENTAL AGREEMENT
         @PostMapping("/rental-agreements/create")
         public String createRentalAgreement(@ModelAttribute RentalAgreement rentalAgreement,
+                                            Model model,
                                             RedirectAttributes redirectAttributes) {
+
+            if (!rentalAgreement.isEndDateValid()) {
+                List<Car> allCars = carService.findAllCars().stream()
+                        .filter(car -> car.getCarStatusId() == 1 )
+                        .toList();
+
+                List<Customer> allCustomers = customerService.findAllCustomers();
+
+                model.addAttribute("rentalAgreement", rentalAgreement);
+                model.addAttribute("cars", allCars);
+                model.addAttribute("customers", allCustomers);
+                model.addAttribute("errorMessage", "Slutdato skal være mindst 3 måneder efter startdato.");
+                return "dataRegistration/rental/create-agreement";
+            }
+
+            Car selectedCar = carService.findById(rentalAgreement.getCarId());
+            if (selectedCar != null) {
+                rentalAgreement.setStartOdometer(selectedCar.getCurrentOdometer());
+
+                selectedCar.setCarStatusId(2);
+                carService.update(selectedCar);
+            }
+
             try {
                 rentalAgreementService.create(rentalAgreement);
                 redirectAttributes.addFlashAttribute("successMessage", "Lejeaftale oprettet!");
