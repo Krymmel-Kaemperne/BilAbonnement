@@ -1062,3 +1062,30 @@ body {
    its corresponding .details-column div will still be created, but the inner div with content won't.
    Flexbox will distribute the remaining columns. If all are null, the parent container won't render.
 */
+
+/* Dashboard metric cards */
+.metric-card {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    padding: 30px;
+    margin-bottom: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 220px;
+    flex: 1 1 250px;
+}
+
+.metric-card h2 {
+    color: var(--main-color);
+}
+
+.metric-card p {
+    font-size: 2em;
+    font-weight: bold;
+    margin: 0;
+    color: #222;
+    text-align: center;
+}

@@ -37,5 +37,7 @@ public class DamageService {
         return damageRepository.delete(id);
     }
 
-
+    public int countAllDamages() {
+        return damageRepository.countAllDamages();
+    }
 } 

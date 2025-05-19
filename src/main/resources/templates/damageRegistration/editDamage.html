@@ -3,28 +3,37 @@
 <head>
     <meta charset="UTF-8" />
     <title>Rediger Skade</title>
+    <!-- Import af stylesheet og skrifttype -->
     <link rel="stylesheet" href="/stylesheet.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet" />
 </head>
 <body>
+<!-- Header indsættes her -->
 <div th:replace="~{fragments/header :: header('registerDamage')}"></div>
 <div class="container">
+    <!-- Side titel -->
     <div class="header-flex">
         <h1>Rediger Skade</h1>
     </div>
+    <!-- Formular til at redigere en skade -->
     <form th:action="@{/conditionReport/damage/edit}" th:object="${damage}" method="post">
+        <!-- Skjult felt til skade ID -->
         <input type="hidden" th:field="*{damageId}" />
+        <!-- Skjult felt til rapport ID -->
         <input type="hidden" th:field="*{conditionReportId}" />
+        <!-- Beskrivelse af skade -->
         <div class="opret-bil-form-row">
             <label for="damageDescription">Beskrivelse:</label>
             <input type="text" id="damageDescription" th:field="*{damageDescription}" required />
         </div>
+        <!-- Pris for skade -->
         <div class="opret-bil-form-row">
             <label for="damagePrice">Pris:</label>
             <input type="number" id="damagePrice" th:field="*{damagePrice}" step="0.01" required />
         </div>
+        <!-- Knap til at opdatere skade -->
         <div class="opret-bil-submit-row">
             <button class="opret-bil-knap" type="submit">Opdater Skade</button>
         </div>

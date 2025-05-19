@@ -3,75 +3,74 @@
 <head>
     <meta charset="UTF-8" />
     <title>Rediger Tilstandsrapport</title>
+    <!-- Import af stylesheet og skrifttype -->
     <link rel="stylesheet" href="/stylesheet.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet" />
 </head>
 <body>
+<!-- Header indsættes her -->
 <div th:replace="~{fragments/header :: header('rapports')}"></div>
 <div class="container">
+    <!-- Side titel -->
     <div class="header-flex">
         <h1>Rediger Tilstandsrapport</h1>
     </div>
 
-    <!-- New 3-column layout container for details -->
-    <div class="details-columns-container" th:if="${report.rentalAgreement != null or report.car != null or report.customer != null}">
-        <!-- Column 1: Rental Agreement Details -->
+    <!-- Information om rapporten (lejeaftale, bil, kunde) -->
+    <div class="details-columns-container" th:if="${report != null}">
+        <!-- Lejeaftale info -->
         <div class="details-column">
-            <div th:if="${report.rentalAgreement != null}">
-                <h2>Lejeaftale Detaljer</h2>
-                <p><strong>Aftale ID:</strong> <span th:text="${report.rentalAgreement.rentalAgreementId}"></span></p>
-                <p><strong>Startdato:</strong> <span th:text="${#temporals.format(report.rentalAgreement.startDate, 'dd-MM-yyyy')}"></span></p>
-                <p><strong>Slutdato:</strong> <span th:text="${#temporals.format(report.rentalAgreement.endDate, 'dd-MM-yyyy')}"></span></p>
-            </div>
+            <h2>Lejeaftale</h2>
+            <p><strong>ID:</strong> <span th:text="${report.rentalAgreement?.rentalAgreementId}">1</span></p>
+            <p><strong>Start:</strong> <span th:text="${report.rentalAgreement?.startDate}">01-01-2024</span></p>
+            <p><strong>Slut:</strong> <span th:text="${report.rentalAgreement?.endDate}">31-01-2024</span></p>
         </div>
-
-        <!-- Column 2: Car Details -->
+        <!-- Bil info -->
         <div class="details-column">
-            <div th:if="${report.car != null}">
-                <h2>Bil Detaljer</h2>
-                <p><strong>Registreringsnr.:</strong> <span th:text="${report.car.registrationNumber}"></span></p>
-                <p><strong>Stelnummer:</strong> <span th:text="${report.car.chassisNumber}"></span></p>
-                <p><strong>Mærke:</strong> <span th:text="${report.car.brandName != null ? report.car.brandName : (report.car.model != null ? report.car.model.brandName : 'N/A')}"></span></p>
-                <p><strong>Model:</strong> <span th:text="${report.car.modelName != null ? report.car.modelName : (report.car.model != null ? report.car.model.modelName : 'N/A')}"></span></p>
-            </div>
+            <h2>Bil</h2>
+            <p><strong>ID:</strong> <span th:text="${report.car?.carId}">1</span></p>
+            <p><strong>Registreringsnr.:</strong> <span th:text="${report.car?.registrationNumber}">AB12345</span></p>
+            <p><strong>Model:</strong> <span th:text="${report.car?.modelName}">Model X</span></p>
         </div>
-
-        <!-- Column 3: Customer Details -->
+        <!-- Kunde info -->
         <div class="details-column">
-            <div th:if="${report.customer != null}">
-                <h2>Kunde Detaljer</h2>
-                <p><strong>Kunde ID:</strong> <span th:text="${report.customer.customerId}"></span></p>
-                <p><strong>Navn:</strong> <span th:text="${report.customer.fname + ' ' + report.customer.lname}"></span></p>
-                <p><strong>Email:</strong> <span th:text="${report.customer.email}"></span></p>
-                <p><strong>Telefon:</strong> <span th:text="${report.customer.phone}"></span></p>
-            </div>
+            <h2>Kunde</h2>
+            <p><strong>ID:</strong> <span th:text="${report.customer?.customerId}">1</span></p>
+            <p><strong>Navn:</strong> <span th:text="${report.customer?.fname + ' ' + report.customer?.lname}">Navn</span></p>
+            <p><strong>Email:</strong> <span th:text="${report.customer?.email}">mail@mail.dk</span></p>
         </div>
     </div>
-    <hr th:if="${report.rentalAgreement != null or report.car != null or report.customer != null}" />
+    <hr />
 
-    <form th:action="@{/conditionReport/edit}" th:object="${report}" method="post">
-        <input type="hidden" th:field="*{conditionReportId}" />
-        <input type="hidden" th:field="*{rentalAgreementId}" /> 
-        <!-- The rentalAgreementId hidden input is kept for form submission, though the details are now displayed -->
+    <!-- Formular til at redigere rapporten -->
+    <form th:action="@{/conditionReport/edit}" method="post">
+        <!-- Skjulte felter til ID'er -->
+        <input type="hidden" name="conditionReportId" th:value="${report.conditionReportId}" />
+        <input type="hidden" name="rentalAgreementId" th:value="${report.rentalAgreementId}" />
 
+        <!-- Noter felt -->
         <div class="opret-bil-form-row">
             <label for="conditionNotes">Noter:</label>
-            <textarea id="conditionNotes" th:field="*{conditionNotes}"></textarea>
+            <textarea id="conditionNotes" name="conditionNotes" th:text="${report.conditionNotes}"></textarea>
         </div>
+        <!-- Rapportdato felt -->
         <div class="opret-bil-form-row">
             <label for="reportDate">Rapportdato:</label>
-            <input type="date" id="reportDate" th:field="*{reportDate}" required />
+            <input type="date" id="reportDate"
+                   name="reportDate"
+                   th:value="${report.reportDate}" required />
         </div>
+        <!-- Total pris felt -->
         <div class="opret-bil-form-row">
             <label for="totalPrice">Total pris (DKK):</label>
-            <input type="number" id="totalPrice" th:field="*{totalPrice}" step="0.01" /> 
-            <!-- Removed 'required' for totalPrice as it can be auto-calculated from damages -->
+            <input type="number" id="totalPrice" name="totalPrice"
+                   th:value="${report.totalPrice}" step="0.01" />
         </div>
-        
-        <!-- Display associated damages -->
-        <div th:if="${report.damages != null and not #lists.isEmpty(report.damages)}" class="details-section">
+
+        <!-- Tabel med skader (kun visning) -->
+        <div th:if="${report.damages != null and !#lists.isEmpty(report.damages)}" class="details-section">
             <h2>Registrerede Skader</h2>
             <table>
                 <thead>
@@ -82,17 +81,17 @@
                 </thead>
                 <tbody>
                     <tr th:each="damage : ${report.damages}">
-                        <td th:text="${damage.damageDescription}"></td>
-                        <td th:text="${#numbers.formatDecimal(damage.damagePrice, 1, 'POINT', 2, 'COMMA')}"></td>
+                        <td><span th:text="${damage.damageDescription}">Rids i dør</span></td>
+                        <td th:text="${damage.damagePrice}">500</td>
                     </tr>
                 </tbody>
             </table>
         </div>
 
+        <!-- Knapper til at opdatere eller administrere skader -->
         <div class="opret-bil-submit-row">
             <button class="opret-bil-knap" type="submit">Opdater Rapport</button>
-            <!-- Optional: Link to add/edit damages for this report -->
-            <a th:href="@{/damage/registerDamage(conditionReportId=${report.conditionReportId})}" class="secondary-knap">Administrer Skader</a>
+            <a th:href="@{/conditionReport/view/{id}(id=${report.conditionReportId})}" class="opret-bil-knap" style="margin-left: 10px;">Administrer Skader</a>
         </div>
     </form>
 </div>

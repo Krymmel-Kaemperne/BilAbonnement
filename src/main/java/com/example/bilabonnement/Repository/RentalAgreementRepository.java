@@ -1,4 +1,3 @@
-
 package com.example.bilabonnement.Repository;
 
 import com.example.bilabonnement.Model.RentalAgreement;
@@ -147,6 +146,11 @@ public class RentalAgreementRepository {
     public void delete(int id) {
         String sql = "DELETE FROM rental_agreement WHERE rental_agreement_id = ?";
         jdbcTemplate.update(sql, id);
+    }
+
+    public int countAllRentalAgreements() {
+        String sql = "SELECT COUNT(*) FROM rental_agreement";
+        return jdbcTemplate.queryForObject(sql, Integer.class);
     }
 
 }

@@ -97,13 +97,38 @@ public class ConditionReportService {
         List<Damage> damages = damageService.findByConditionReportId(conditionReportId);
         report.setDamages(damages);
         
-        // Recalculate total price based on fetched damages, if not already set or to ensure consistency
-        if (report.getTotalPrice() == null || report.getTotalPrice().compareTo(BigDecimal.ZERO) == 0) {
-             if (damages != null && !damages.isEmpty()) {
-                 report.setTotalPrice(calculateTotalDamagePrice(damages));
-             }
+        // Always recalculate total price based on current damages
+        if (damages != null && !damages.isEmpty()) {
+            report.setTotalPrice(calculateTotalDamagePrice(damages));
+        } else {
+            report.setTotalPrice(BigDecimal.ZERO);
         }
 
         return report;
+    }
+
+    public double getAverageDamagesPerRental() {
+        int totalDamages = damageService.countAllDamages();
+        int totalRentals = rentalAgreementService.countAllRentalAgreements();
+        if (totalRentals == 0) return 0.0;
+        return (double) totalDamages / totalRentals;
+    }
+
+    public int getTotalDamages() {
+        return damageService.countAllDamages();
+    }
+
+    public int getTotalRentals() {
+        return rentalAgreementService.countAllRentalAgreements();
+    }
+
+    public double getAverageDamagePrice() {
+        List<Damage> damages = damageService.findAll();
+        if (damages.isEmpty()) return 0.0;
+        double total = damages.stream()
+            .filter(d -> d.getDamagePrice() != null)
+            .mapToDouble(d -> d.getDamagePrice().doubleValue())
+            .sum();
+        return total / damages.size();
     }
 } 

@@ -37,4 +37,8 @@ public class RentalAgreementService {
         rentalAgreementRepository.delete(id);
     }
 
+    public int countAllRentalAgreements() {
+        return rentalAgreementRepository.countAllRentalAgreements();
+    }
+
 }
