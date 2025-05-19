@@ -49,7 +49,7 @@ public class RentalAgreementRepository {
             ps.setInt(6, rentalAgreement.getKilometersIncluded());
             ps.setInt(7, rentalAgreement.getStartOdometer());
 
-            //NULL-SAFE
+
             if (rentalAgreement.getEndOdometer() != null)
             {
                 ps.setInt(8, rentalAgreement.getEndOdometer());

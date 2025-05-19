@@ -639,8 +639,6 @@ body {
     background-color: #5a6268;
 }
 
-/*Flådeoversigt styling slut 750*/
-
 body {
     font-family: "Plus Jakarta Sans", sans-serif;
     margin: 0;
@@ -948,7 +946,6 @@ body {
     text-align: left;      /* Sikrer venstrejustering */
 }
 
-/* Label-cellen (første kolonne) */
 .car-info-table td:first-child {
     font-weight: 600; /* Er allerede i <strong>, men kan forstærkes her */
     color: #333;
@@ -985,11 +982,10 @@ body {
     max-width: 500px;
     height: auto;
     min-height: 300px;
-    margin-bottom: 25px; /* Lidt mere plads ned til slet-knappen */
+    margin-bottom: 25px;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #f8f9fa;
     border-radius: 6px;
 }
 
@@ -1004,13 +1000,11 @@ body {
 .main-image-placeholder {
     width: 100%;
     min-height: 300px;
-   /* background-color: #e9ecef;*/
-    border: 1px dashed #ced4da;
+    background-color: #e9ecef;
     display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
-
     border-radius: 6px;
     font-size: 1.1em;
 }

@@ -1,26 +1,18 @@
 package com.example.bilabonnement.Controller;
-
 import com.example.bilabonnement.Model.Car;
 import com.example.bilabonnement.Model.Brand;
 import com.example.bilabonnement.Model.FuelType;
 import org.springframework.ui.Model;
-
 import com.example.bilabonnement.Service.BrandService;
 import com.example.bilabonnement.Service.CarService;
 import com.example.bilabonnement.Service.FuelTypeService;
 import com.example.bilabonnement.Service.ModelService;
 import com.example.bilabonnement.Service.CarStatusService;
 import com.example.bilabonnement.Service.TransmissionTypeService;
-// Importer CarStatusService, TransmissionTypeService
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-
-import java.util.Collections;
 import java.util.List;
 
 @Controller

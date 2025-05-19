@@ -19,26 +19,15 @@ public class CarService {
         return carRepository.findAll();
     }
 
-    /**
-     * Finder en specifik bil ud fra dens ID.
-     *
-     * @param carId ID'et på bilen der skal findes.
-     * @return Car objektet hvis det findes, ellers null.
-     */
+
+    // Finder en specifik bil ud fra dens ID.
     public Car findById(int carId) {
         // Her kunne man tilføje logik, f.eks. hvis bilen ikke findes,
         // kunne man kaste en custom exception i stedet for bare at returnere null.
         return carRepository.findById(carId);
     }
 
-    /**
-     * Opretter en ny bil i systemet.
-     * Udfører grundlæggende validering før kald til repository.
-     *
-     * @param car Bilen der skal oprettes.
-     * @return Den oprettede bil med tildelt ID.
-     * @throws IllegalArgumentException hvis validering fejler.
-     */
+
     public Car create(Car car) {
         if (car == null) {
             throw new IllegalArgumentException("Car object cannot be null.");
@@ -48,7 +37,6 @@ public class CarService {
             throw new IllegalArgumentException("Registreringsnummer er påkrævet.");
         }
         if (car.getModelId() == null || car.getModelId() <= 0) {
-            // I en rigtig applikation ville du måske her kalde modelService.findById(car.getModelId())
             // for at sikre, at modellen rent faktisk eksisterer.
             throw new IllegalArgumentException("Et gyldigt Model ID er påkrævet.");
         }
@@ -69,9 +57,8 @@ public class CarService {
         return carRepository.create(car);
     }
 
-    /**
+    /*
      * Opdaterer en eksisterende bil.
-     *
      * @param car Bilen med opdaterede data (skal have et gyldigt carId).
      * @return Den opdaterede bil.
      * @throws IllegalArgumentException hvis carId er ugyldigt eller car objektet er null.

@@ -172,6 +172,7 @@ public class CarRepository {
             sql.append(" AND tt.transmission_type_id = ?");
             params.add(transmissionType);
         }
+        sql.append(" ORDER BY c.car_id ASC");
 
         return jdbcTemplate.query(sql.toString(), params.toArray(), carRowMapper);
     }

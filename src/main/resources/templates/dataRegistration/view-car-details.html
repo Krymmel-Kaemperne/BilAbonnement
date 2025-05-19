@@ -90,7 +90,7 @@
                     <!-- Tjek om modelName er sat -->
                     <th:block th:if="${car.modelName != null && !car.modelName.trim().isEmpty()}">
                         <!-- Konstruer billedstien dynamisk -->
-                        <img th:src="@{/img/{imageFileName}(imageFileName=${car.modelName} + '.png')}"
+                        <img th:src="@{/img/cars/{imageFileName}(imageFileName=${car.modelName} + '.png')}"
                              th:alt="'Billede af ' + ${car.brandName} + ' ' + ${car.modelName}"
                              class="main-car-image"
                              onerror="this.style.display='none'; document.getElementById('imagePlaceholder').style.display='flex';" />
@@ -103,5 +103,7 @@
             </div>
         </div>
         </div>
+    </div>
+</div>
 </body>
 </html>
