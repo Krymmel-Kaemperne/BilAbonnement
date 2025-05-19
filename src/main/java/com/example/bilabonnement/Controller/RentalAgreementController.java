@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -187,21 +188,72 @@ public class RentalAgreementController {
     @GetMapping("/rental-agreements/edit/{id}")
     public String showEditForm(@PathVariable int id, Model model, RedirectAttributes redirectAttributes) {
         RentalAgreement agreement = rentalAgreementService.findById(id);
-        if (agreement == null)
-        {
-            redirectAttributes.addFlashAttribute("errorMessage", "Lejeaftale ikke fundet.");
+        if (agreement == null) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Lejeaftale med ID " + id + " blev ikke fundet.");
             return "redirect:/dataRegistration/rental-agreements";
         }
+
+        try {
+            List<Car> allCars = carService.findAllCars();
+
+            Car initialCurrentCarOnAgreement = null; // Midlertidig variabel
+            if (agreement.getCarId() != null && agreement.getCarId() > 0) {
+                initialCurrentCarOnAgreement = carService.findById(agreement.getCarId());
+            }
+
+            // Denne variabel er nu effektivt final for lambdaet nedenfor
+            final Car currentCarForFilter = initialCurrentCarOnAgreement;
+
+            List<Car> availableCarsForEdit = allCars.stream()
+                    .filter(carInLoop -> {
+                        boolean isGenerallyAvailable = (carInLoop.getCarStatusId() != null && carInLoop.getCarStatusId() == 1);
+                        boolean isTheCurrentCar = false;
+                        if (currentCarForFilter != null) { // Brug den effektivt finale variabel
+                            // Antager carInLoop.getCarId() og currentCarForFilter.getCarId() returnerer int
+                            isTheCurrentCar = (carInLoop.getCarId() == currentCarForFilter.getCarId());
+                        }
+                        return isGenerallyAvailable || isTheCurrentCar;
+                    })
+                    .distinct()
+                    .collect(Collectors.toList());
+            model.addAttribute("availableCars", availableCarsForEdit);
+
+            List<Customer> allCustomers = customerService.findAllCustomers();
+            model.addAttribute("allCustomers", allCustomers);
+
+            List<Location> allLocations = locationService.findAllLocations();
+            model.addAttribute("allLocations", allLocations);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("errorMessage", "Fejl ved indlæsning af data til redigeringsformularen: " + e.getMessage());
+            model.addAttribute("rentalAgreement", agreement);
+            model.addAttribute("availableCars", Collections.emptyList());
+            model.addAttribute("allCustomers", Collections.emptyList());
+            model.addAttribute("allLocations", Collections.emptyList());
+            return "dataRegistration/rental/editRentalAgreement";
+        }
+
         model.addAttribute("rentalAgreement", agreement);
         return "dataRegistration/rental/editRentalAgreement";
     }
 
+
+
     // HANDLE EDIT SUBMISSION
     @PostMapping("/rental-agreements/update")
-    public String updateRentalAgreement(@ModelAttribute RentalAgreement rentalAgreement,
+    public String updateRentalAgreement(@ModelAttribute("rentalAgreement") RentalAgreement rentalAgreement,
                                         RedirectAttributes redirectAttributes) {
-        rentalAgreementService.update(rentalAgreement);
-        redirectAttributes.addFlashAttribute("successMessage", "Lejeaftale opdateret!");
+        try {
+            rentalAgreementService.update(rentalAgreement);
+            redirectAttributes.addFlashAttribute("successMessage", "Lejeaftale med ID " + rentalAgreement.getRentalAgreementId() + " opdateret succesfuldt!");
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            return "redirect:/dataRegistration/rental-agreements/edit/" + rentalAgreement.getRentalAgreementId();
+        } catch (Exception e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("errorMessage", "En uventet fejl opstod under opdatering.");
+        }
         return "redirect:/dataRegistration/rental-agreements";
     }
 

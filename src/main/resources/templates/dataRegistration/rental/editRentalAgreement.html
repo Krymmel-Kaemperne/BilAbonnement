@@ -38,6 +38,7 @@
                     <select id="customerId" th:field="*{customerId}" required>
                         <option value="">Vælg kunde</option>
                         <option th:each="custOpt : ${allCustomers}"
+                                th:if="${custOpt != null}"
                                 th:value="${custOpt.customerId}"
                                 th:text="${custOpt.displayName}"> <!-- ÆNDRET HER -->
                         </option>
@@ -62,6 +63,7 @@
                     <select id="pickupLocation" th:field="*{pickupLocationId}" required>
                         <option value="">Vælg afhentningssted</option> <!-- Tom værdi for "ikke valgt" -->
                         <option th:each="locOpt : ${allLocations}"
+                                th:if="${locOpt != null}"
                                 th:value="${locOpt.locationId}"
                                 th:text="${locOpt.displayName}"> <!-- Bruger displayName fra Location model -->
                         </option>
@@ -74,6 +76,7 @@
                     <select id="returnLocation" th:field="*{returnLocationId}">
                         <option value="">Vælg returneringssted</option>
                         <option th:each="locOpt : ${allLocations}"
+                                th:if="${locOpt != null}"
                                 th:value="${locOpt.locationId}"
                                 th:text="${locOpt.displayName}">
                         </option>

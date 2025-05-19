@@ -121,6 +121,4 @@ public abstract class Customer {
         String fullName = (firstNamePart + " " + lastNamePart).trim();
         return fullName.isEmpty() ? "Ukendt Kunde (ID: " + customerId + ")" : fullName;
     }
-
-
 }

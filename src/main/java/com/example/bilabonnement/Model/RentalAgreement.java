@@ -115,11 +115,11 @@ public class RentalAgreement {
         this.rentalAgreementId = rentalAgreementId;
     }
 
-    public void setCarId(int carId) {
+    public void setCarId(Integer carId) {
         this.carId = carId;
     }
 
-    public void setCustomerId(int customerId) {
+    public void setCustomerId(Integer customerId) {
         this.customerId = customerId;
     }
 
@@ -147,7 +147,7 @@ public class RentalAgreement {
         this.endOdometer = endOdometer;
     }
 
-    public void setPickupLocationId(int pickupLocationId) {
+    public void setPickupLocationId(Integer pickupLocationId) {
         this.pickupLocationId = pickupLocationId;
     }
 
