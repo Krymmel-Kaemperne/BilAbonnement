@@ -3,30 +3,36 @@
 <head>
     <meta charset="UTF-8" />
     <title>Tilstandsrapport Detaljer</title>
+    <!-- Import af stylesheet og skrifttype -->
     <link rel="stylesheet" href="/stylesheet.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet" />
 </head>
 <body>
+<!-- Header indsættes her -->
 <div th:replace="~{fragments/header :: header('damageRegistration')}"></div>
 <div class="container">
+    <!-- Side titel -->
     <div class="header-flex">
         <h1>Tilstandsrapport Detaljer</h1>
     </div>
+    <!-- Viser information om rapporten -->
     <div class="description-text">
-        <p><strong>ID:</strong> <span th:text="${report.conditionReportId}"></span></p>
-        <p><strong>Lejeaftale ID:</strong> <span th:text="${report.rentalAgreementId}"></span></p>
-        <p><strong>Rapportdato:</strong> <span th:text="${report.reportDate}"></span></p>
-        <p><strong>Noter:</strong> <span th:text="${report.conditionNotes}"></span></p>
-        <p><strong>Total pris:</strong> <span th:text="${totalDamagePrice}"></span></p>
+        <p><strong>ID:</strong> <span th:text="${report.conditionReportId}">1</span></p>
+        <p><strong>Lejeaftale ID:</strong> <span th:text="${report.rentalAgreementId}">1</span></p>
+        <p><strong>Rapportdato:</strong> <span th:text="${report.reportDate}">01-01-2024</span></p>
+        <p><strong>Noter:</strong> <span th:text="${report.conditionNotes}">Ingen noter</span></p>
+        <p><strong>Total pris:</strong> <span th:text="${totalDamagePrice}">0</span></p>
     </div>
+    <!-- Knap til at tilføje en skade -->
     <div class="action-section">
         <button type="button" class="btn-opret"
                 th:onclick="|location.href='@{/conditionReport/damage/create?conditionReportId={id}(id=${report.conditionReportId})}'|">
             Tilføj skade
         </button>
     </div>
+    <!-- Tabel med skader -->
     <h2>Skader</h2>
     <table class="car-table">
         <thead>
@@ -38,14 +44,17 @@
         </tr>
         </thead>
         <tbody>
+        <!-- Hvis der ikke er nogen skader -->
         <tr th:if="${#lists.isEmpty(damages)}">
             <td colspan="4" style="text-align: center;">Ingen skader fundet.</td>
         </tr>
+        <!-- Gennemløb alle skader og vis dem i tabellen -->
         <tr th:each="damage : ${damages}">
-            <td th:text="${damage.damageId}"></td>
-            <td th:text="${damage.damageDescription}"></td>
-            <td th:text="${damage.damagePrice}"></td>
+            <td th:text="${damage.damageId}">1</td>
+            <td th:text="${damage.damageDescription}">Rids i dør</td>
+            <td th:text="${damage.damagePrice}">500</td>
             <td>
+                <!-- Knap til at redigere skade -->
                 <button type="button" class="btn-detaljer"
                         th:onclick="|location.href='@{/conditionReport/damage/edit/{id}(id=${damage.damageId})}'|">
                     Rediger

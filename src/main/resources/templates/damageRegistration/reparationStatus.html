@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="da">
 <head>
   <meta charset="UTF-8">
-
+  <!-- Import af skrifttype og stylesheet -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
@@ -10,8 +10,31 @@
   <title>Reparations Status</title>
 </head>
 <body>
+<!-- Header indsættes her -->
 <div th:replace="~{fragments/header :: header('reparationStatus')}"></div>
 
-<h1>Reparations status</h1>
+<div class="container">
+    <!-- Side titel -->
+    <div class="header-flex">
+        <h1>Reparations status</h1>
+    </div>
+    <!-- Kort beskrivelse af siden -->
+    <p class="description-text">
+        Her kan du se nøgletal for skader og reparationer på tværs af alle lejeaftaler.
+    </p>
+    <!-- Visning af nøgletal -->
+    <div class="action-section">
+        <!-- Gennemsnitlige skader pr. lejeaftale -->
+        <div class="metric-card">
+            <h2>Gennemsnitlige skader pr. lejeaftale</h2>
+            <p th:text="${#numbers.formatDecimal(averageDamagesPerRental, 1, 2)}">0.00</p>
+        </div>
+        <!-- Gennemsnitlig skadepris -->
+        <div class="metric-card">
+            <h2>Gennemsnitlig skadepris</h2>
+            <p th:text="${#numbers.formatDecimal(averageDamagePrice, 1, 2)} + ' DKK'">0.00 DKK</p>
+        </div>
+    </div>
+</div>
 </body>
 </html>

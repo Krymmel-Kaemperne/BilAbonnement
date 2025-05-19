@@ -11,6 +11,12 @@ public class ConditionReport {
     private LocalDate reportDate;
     private BigDecimal totalPrice;
 
+    // Transient fields for additional details - not persisted in condition_report table directly
+    private transient Car car;
+    private transient Customer customer;
+    private transient RentalAgreement rentalAgreement;
+    private transient java.util.List<Damage> damages; // To also hold associated damages
+
     public int getConditionReportId() { return conditionReportId; }
     public void setConditionReportId(int conditionReportId) { this.conditionReportId = conditionReportId; }
 
@@ -25,4 +31,17 @@ public class ConditionReport {
 
     public BigDecimal getTotalPrice() { return totalPrice; }
     public void setTotalPrice(BigDecimal totalPrice) { this.totalPrice = totalPrice; }
+
+    // Getters and Setters for transient fields
+    public Car getCar() { return car; }
+    public void setCar(Car car) { this.car = car; }
+
+    public Customer getCustomer() { return customer; }
+    public void setCustomer(Customer customer) { this.customer = customer; }
+
+    public RentalAgreement getRentalAgreement() { return rentalAgreement; }
+    public void setRentalAgreement(RentalAgreement rentalAgreement) { this.rentalAgreement = rentalAgreement; }
+
+    public java.util.List<Damage> getDamages() { return damages; }
+    public void setDamages(java.util.List<Damage> damages) { this.damages = damages; }
 } 

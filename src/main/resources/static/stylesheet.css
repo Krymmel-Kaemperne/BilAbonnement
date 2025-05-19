@@ -1008,3 +1008,78 @@ body {
     border-radius: 6px;
     font-size: 1.1em;
 }
+
+/* For 3-column layout in editConditionReport.html details section */
+.details-columns-container {
+    display: flex;
+    flex-wrap: wrap; /* Allows columns to wrap on smaller screens */
+    justify-content: space-between; /* Distributes space, or use space-around */
+    gap: 20px; /* Consistent space between columns */
+    margin-bottom: 25px; /* Space before the next element (e.g., the form or hr) */
+}
+
+.details-column {
+    flex: 1; /* Allows columns to grow and shrink */
+    min-width: 280px; /* Minimum width before wrapping or shrinking too much; adjust as needed */
+    /* background-color: #ffffff; */ /* Optional: if you want each column to have a white background */
+    /* padding: 15px; */ /* Padding can be added here if not on the container */
+    /* border: 1px solid #e9ecef; */ /* Optional: if each column needs its own border */
+    /* border-radius: 6px; */
+}
+
+/* Styling for headings within the columns */
+.details-column h2 {
+    font-size: 1.25em; /* Adjust as needed */
+    margin-top: 0; /* Remove default top margin */
+    margin-bottom: 15px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--main-color); /* Accent color border */
+}
+
+/* Styling for paragraphs within the columns */
+.details-column p {
+    font-size: 0.9em; /* Slightly smaller text for details */
+    line-height: 1.6;
+    color: #495057;
+    margin-bottom: 8px;
+}
+
+.details-column p strong {
+    color: #212529; /* Darker text for the labels */
+    margin-right: 5px;
+}
+
+/* You might want to ensure that if a column has no content (e.g. report.car is null),
+   it doesn't take up unnecessary space or look broken. The th:if on the inner div
+   should prevent content from rendering, and flexbox should handle the empty space.
+   If one of the report.rentalAgreement, report.car, or report.customer is null,
+   its corresponding .details-column div will still be created, but the inner div with content won't.
+   Flexbox will distribute the remaining columns. If all are null, the parent container won't render.
+*/
+
+/* Dashboard metric cards */
+.metric-card {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    padding: 30px;
+    margin-bottom: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 220px;
+    flex: 1 1 250px;
+}
+
+.metric-card h2 {
+    color: var(--main-color);
+}
+
+.metric-card p {
+    font-size: 2em;
+    font-weight: bold;
+    margin: 0;
+    color: #222;
+    text-align: center;
+}

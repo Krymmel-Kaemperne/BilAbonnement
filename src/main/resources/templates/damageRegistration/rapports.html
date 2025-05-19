@@ -3,51 +3,71 @@
 <head>
   <meta charset="UTF-8" />
   <title>Tilstandsrapporter</title>
+  <!-- Import af stylesheet og skrifttype -->
   <link rel="stylesheet" href="/stylesheet.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet" />
 </head>
 <body>
+<!-- Header indsættes her -->
 <div th:replace="~{fragments/header :: header('rapports')}"></div>
 
 <div class="container">
+  <!-- Side titel -->
   <div class="header-flex">
     <h1>Tilstandsrapporter</h1>
   </div>
+  <!-- Kort beskrivelse af siden -->
   <p class="description-text">
     Her kan du se alle tilstandsrapporter og oprette nye.
   </p>
+  <!-- Knap til at oprette ny rapport -->
   <div class="action-section">
     <div>
       <button type="button" class="btn-opret"
-              th:onclick="|location.href='@{/conditionReport/create?rentalAgreementId=1}'|">
+              th:onclick="|location.href='@{/conditionReport/create}'|">
         Opret ny rapport
       </button>
-      <p>Klik her for at oprette ny tilstandsrapport</p>
+      <p>Klik her for at oprette ny tilstandsrapport (du skal vælge en lejeaftale).</p>
     </div>
   </div>
+  <!-- Tabel med alle rapporter -->
   <table class="car-table">
     <thead>
     <tr>
       <th>ID</th>
       <th>Lejeaftale ID</th>
       <th>Rapport dato</th>
+      <th>Bil ID</th>
+      <th>Kunde Navn</th>
+      <th>Total Pris</th>
       <th>Handling</th>
     </tr>
     </thead>
     <tbody>
+    <!-- Hvis der ikke er nogen rapporter -->
     <tr th:if="${#lists.isEmpty(reports)}">
-      <td colspan="4" style="text-align: center;">Ingen rapporter fundet.</td>
+      <td colspan="7" style="text-align: center;">Ingen rapporter fundet.</td>
     </tr>
+    <!-- Gennemløb alle rapporter og vis dem i tabellen -->
     <tr th:each="report : ${reports}">
-      <td th:text="${report.conditionReportId}"></td>
-      <td th:text="${report.rentalAgreementId}"></td>
-      <td th:text="${report.reportDate}"></td>
+      <td th:text="${report.conditionReportId}">1</td>
+      <td th:text="${report.rentalAgreementId}">1</td>
+      <td th:text="${report.reportDate}">01-01-2024</td>
+      <td th:text="${report.car?.carId}">1</td>
+      <td th:text="${report.customer?.fname + ' ' + report.customer?.lname}">Navn</td>
+      <td th:text="${report.totalPrice}">1000 DKK</td>
       <td>
-        <button type="button" class="btn-detaljer"
+        <!-- Knap til detaljer -->
+        <button type="button" class="btn-detaljer btn-small"
                 th:onclick="|location.href='@{/conditionReport/view/{id}(id=${report.conditionReportId})}'|">
-          Se detaljer
+          Detaljer
+        </button>
+        <!-- Knap til redigering -->
+        <button type="button" class="btn-detaljer btn-small"
+                th:onclick="|location.href='@{/conditionReport/edit/{id}(id=${report.conditionReportId})}'|">
+          Rediger
         </button>
       </td>
     </tr>

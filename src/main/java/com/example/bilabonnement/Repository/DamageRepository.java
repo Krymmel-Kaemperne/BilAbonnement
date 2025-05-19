@@ -61,4 +61,9 @@ public class DamageRepository {
         String sql = "DELETE FROM damage WHERE damage_id = ?";
         return jdbcTemplate.update(sql, id);
     }
+
+    public int countAllDamages() {
+        String sql = "SELECT COUNT(*) FROM damage";
+        return jdbcTemplate.queryForObject(sql, Integer.class);
+    }
 } 
