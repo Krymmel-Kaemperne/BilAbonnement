@@ -5,16 +5,17 @@ import java.time.LocalDate;
 
 public class RentalAgreement {
     private int rentalAgreementId;
+
     private Integer carId;
     private Integer customerId;
     private LocalDate startDate;
     private LocalDate endDate;
     private BigDecimal monthlyPrice;
-    private int kilometersIncluded;
-    private int startOdometer;
-    private Integer endOdometer;
-    private int pickupLocationId;
-    private Integer returnLocationId;
+    private int kilometersIncluded;   // Kan forblive int, hvis det altid skal have en værdi
+    private int startOdometer;        // Kan forblive int
+    private Integer endOdometer;      // Allerede Integer, godt
+    private Integer pickupLocationId; // ÆNDRET til Integer
+    private Integer returnLocationId; // Allerede Integer, godt
     private String leasingCode;
 
     // DEFAUlT CONSTUCTOR
@@ -25,7 +26,7 @@ public class RentalAgreement {
     public RentalAgreement(int rentalAgreementId, Integer carId, Integer customerId,
                            LocalDate startDate, LocalDate endDate, BigDecimal monthlyPrice,
                            int kilometersIncluded, int startOdometer, Integer endOdometer,
-                           int pickupLocationId, Integer returnLocationId, String leasingCode) {
+                           Integer pickupLocationId, Integer returnLocationId, String leasingCode) { // Ændret
         this.rentalAgreementId = rentalAgreementId;
         this.carId = carId;
         this.customerId = customerId;
@@ -40,12 +41,11 @@ public class RentalAgreement {
         this.leasingCode = leasingCode;
     }
 
-    //CONSTRUCTOR WITH ID
+
     public RentalAgreement(Integer carId, Integer customerId, LocalDate startDate, LocalDate endDate,
                            BigDecimal monthlyPrice, int kilometersIncluded, int startOdometer,
-                           Integer endOdometer, int pickupLocationId, Integer returnLocationId,
+                           Integer endOdometer, Integer pickupLocationId, Integer returnLocationId, // Ændret
                            String leasingCode) {
-
         this.carId = carId;
         this.customerId = customerId;
         this.startDate = startDate;
@@ -60,7 +60,6 @@ public class RentalAgreement {
     }
 
     //GETTERS
-
     public int getRentalAgreementId() {
         return rentalAgreementId;
     }
@@ -97,7 +96,7 @@ public class RentalAgreement {
         return endOdometer;
     }
 
-    public int getPickupLocationId() {
+    public Integer getPickupLocationId() { // ÆNDRET returtype
         return pickupLocationId;
     }
 
@@ -110,16 +109,15 @@ public class RentalAgreement {
     }
 
     //SETTERS
-
     public void setRentalAgreementId(int rentalAgreementId) {
         this.rentalAgreementId = rentalAgreementId;
     }
 
-    public void setCarId(int carId) {
+    public void setCarId(Integer carId) { // ÆNDRET parameter type
         this.carId = carId;
     }
 
-    public void setCustomerId(int customerId) {
+    public void setCustomerId(Integer customerId) { // ÆNDRET parameter type
         this.customerId = customerId;
     }
 
@@ -147,7 +145,7 @@ public class RentalAgreement {
         this.endOdometer = endOdometer;
     }
 
-    public void setPickupLocationId(int pickupLocationId) {
+    public void setPickupLocationId(Integer pickupLocationId) { // ÆNDRET parameter type
         this.pickupLocationId = pickupLocationId;
     }
 
@@ -167,9 +165,9 @@ public class RentalAgreement {
     }
 
     //TO STRING
-
     @Override
     public String toString() {
+        // Overvej at opdatere pickupLocation til pickupLocationId for konsistens med feltnavn
         return "RentalAgreement{" +
                 "rentalAgreementId=" + rentalAgreementId +
                 ", carId=" + carId +
@@ -180,10 +178,9 @@ public class RentalAgreement {
                 ", kilometersIncluded=" + kilometersIncluded +
                 ", startOdometer=" + startOdometer +
                 ", endOdometer=" + endOdometer +
-                ", pickupLocation=" + pickupLocationId +
-                ", returnLocation=" + returnLocationId +
+                ", pickupLocationId=" + pickupLocationId + // Opdateret her for konsistens
+                ", returnLocationId=" + returnLocationId +
                 ", leasingCode='" + leasingCode + '\'' +
                 '}';
     }
-
 }

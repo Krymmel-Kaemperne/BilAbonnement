@@ -44,6 +44,10 @@ public class BusinessCustomer extends Customer {
             this.companyName = companyName;
         }
 
+    @Override
+    public String getDisplayName() {
+        return this.companyName != null && !this.companyName.isEmpty() ? this.companyName : "Ukendt Firma (ID: " + getCustomerId() + ")";
+    }
 
 
 }

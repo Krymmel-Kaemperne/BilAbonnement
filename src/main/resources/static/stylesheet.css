@@ -1083,3 +1083,38 @@ body {
     color: #222;
     text-align: center;
 }
+
+.readonly-field-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+.readonly-field-container label {
+    flex-basis: 160px; /* Matcher .opret-bil-form-row label */
+    flex-shrink: 0;
+    margin-right: 15px;
+    font-weight: 500;
+    color: #444;
+    font-size: 0.9em;
+}
+.readonly-field-value {
+    flex-grow: 1;
+    padding: 9px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #e9ecef; /* Lys grå baggrund for at indikere read-only */
+    color: #495057;
+    font-size: 0.9em;
+    font-family: "Plus Jakarta Sans", sans-serif;
+    box-sizing: border-box;
+    min-height: 37px; /* Ca. samme højde som input/select */
+    display: flex;
+    align-items: center;
+}
+.form-info-text {
+    font-size: 0.9em;
+    color: #666;
+    margin-left: 175px; /* Juster for at flugte med input-felter */
+    margin-top: -10px;
+    margin-bottom: 15px;
+}

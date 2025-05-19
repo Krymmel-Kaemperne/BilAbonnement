@@ -1,5 +1,4 @@
     package com.example.bilabonnement.Controller;
-
     import com.example.bilabonnement.Model.Car;
     import com.example.bilabonnement.Model.Customer;
     import com.example.bilabonnement.Model.Location;
@@ -58,30 +57,59 @@
             model.addAttribute("customerNames", customerNamesById);
             model.addAttribute("searchRentalAgreementId", "");
 
-            return "dataRegistration/rental/rental-agreements-overview";
+            Map<Integer, String> carNamesById = allCars.stream()
+                    .collect(Collectors.toMap(
+                            Car::getCarId,
+                            car -> (car.getBrandName() != null ? car.getBrandName() : "") + " " + (car.getModelName() != null ? car.getModelName() : "")
+                    ));
+
+            Map<Integer, String> customerNamesById = allCustomers.stream()
+                    .collect(Collectors.toMap(
+                            Customer::getCustomerId,
+                            Customer::getDisplayName
+                    ));
+
+            model.addAttribute("agreements", agreements);
+            model.addAttribute("carNames", carNamesById);
+            model.addAttribute("customerNames", customerNamesById);
+            // model.addAttribute("searchRentalAgreementId", ""); // Hvis du har søgning
+        } catch (Exception e) {
+            e.printStackTrace();
+            model.addAttribute("agreements", Collections.emptyList());
+            model.addAttribute("errorMessage", "Kunne ikke indlæse lejeaftaler.");
         }
+        return "dataRegistration/rental/rental-agreements-overview";
+    }
 
-        //SHOW CREATE FORM
-        @GetMapping("/rental-agreements/create")
-        public String showCreateForm(Model model) {
-            List<Car> allCars = carService.findAllCars();
-
-            // Filter cars with car_status_id == 1 (Tilgængelig)
+    //SHOW CREATE FORM
+    @GetMapping("/rental-agreements/create")
+    public String showCreateForm(Model model) {
+        try {
+            List<Car> allCars = carService.findAllCars(); // Eller findAll()
             List<Car> availableCars = allCars.stream()
-                    .filter(car -> car.getCarStatusId() == 1)
-                    .toList();
+                    .filter(car -> car.getCarStatusId() != null && car.getCarStatusId() == 1)
+                    .collect(Collectors.toList());
 
             List<Customer> allCustomers = customerService.findAllCustomers();
+            List<Location> allLocations = locationService.findAllLocations(); // Tilføjet for create form
 
             RentalAgreement rentalAgreement = new RentalAgreement();
 
 
             model.addAttribute("rentalAgreement", new RentalAgreement());
-            model.addAttribute("cars", availableCars);
-            model.addAttribute("customers", allCustomers);
-            return "dataRegistration/rental/create-agreement";
+            model.addAttribute("availableCars", availableCars); // Ændret fra "cars"
+            model.addAttribute("allCustomers", allCustomers);
+            model.addAttribute("allLocations", allLocations); // Tilføjet
+        } catch (Exception e) {
+            e.printStackTrace();
+            model.addAttribute("errorMessage", "Kunne ikke indlæse data til formularen.");
+            model.addAttribute("rentalAgreement", new RentalAgreement());
+            model.addAttribute("availableCars", Collections.emptyList());
+            model.addAttribute("allCustomers", Collections.emptyList());
+            model.addAttribute("allLocations", Collections.emptyList());
         }
-
+        return "dataRegistration/rental/create-agreement";
+    }
 
         // CREATE RENTAL AGREEMENT
         @PostMapping("/rental-agreements/create")
@@ -118,87 +146,139 @@
                 e.printStackTrace(); // Print error to console
                 redirectAttributes.addFlashAttribute("errorMessage", "Fejl ved oprettelse!");
             }
-            return "redirect:/dataRegistration/rental-agreements";
 
+            rentalAgreementService.create(rentalAgreement);
+            redirectAttributes.addFlashAttribute("successMessage", "Lejeaftale oprettet succesfuldt!");
+        } catch (Exception e) {
+            // logger.error("Fejl ved oprettelse af lejeaftale: ", e);
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("errorMessage", "Fejl ved oprettelse: " + e.getMessage());
+            // Overvej at redirecte tilbage til create-siden med en fejlbesked
+            // return "redirect:/dataRegistration/rental-agreements/create";
+        }
+        return "redirect:/dataRegistration/rental-agreements"; // Redirect til oversigt
+    }
+
+    //SHOW EDIT FORM
+
+    @GetMapping("/rental-agreements/edit/{id}")
+    public String showEditForm(@PathVariable int id, Model model, RedirectAttributes redirectAttributes) {
+        RentalAgreement agreement = rentalAgreementService.findById(id);
+        if (agreement == null) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Lejeaftale med ID " + id + " blev ikke fundet.");
+            return "redirect:/dataRegistration/rental-agreements";
         }
 
+        try {
+            List<Car> allCars = carService.findAllCars();
 
-
-        //SHOW EDIT FORM
-        @GetMapping("/rental-agreements/edit/{id}")
-        public String showEditForm(@PathVariable int id, Model model, RedirectAttributes redirectAttributes) {
-            RentalAgreement agreement = rentalAgreementService.findById(id);
-            if (agreement == null) {
-                redirectAttributes.addFlashAttribute("errorMessage", "Lejeaftale ikke fundet.");
-                return "redirect:/dataRegistration/rental-agreements";
+            Car initialCurrentCarOnAgreement = null; // Midlertidig variabel
+            if (agreement.getCarId() != null && agreement.getCarId() > 0) {
+                initialCurrentCarOnAgreement = carService.findById(agreement.getCarId());
             }
+
+            // Denne variabel er nu effektivt final for lambdaet nedenfor
+            final Car currentCarForFilter = initialCurrentCarOnAgreement;
+
+            List<Car> availableCarsForEdit = allCars.stream()
+                    .filter(carInLoop -> {
+                        boolean isGenerallyAvailable = (carInLoop.getCarStatusId() != null && carInLoop.getCarStatusId() == 1);
+                        boolean isTheCurrentCar = false;
+                        if (currentCarForFilter != null) { // Brug den effektivt finale variabel
+                            // Antager carInLoop.getCarId() og currentCarForFilter.getCarId() returnerer int
+                            isTheCurrentCar = (carInLoop.getCarId() == currentCarForFilter.getCarId());
+                        }
+                        return isGenerallyAvailable || isTheCurrentCar;
+                    })
+                    .distinct()
+                    .collect(Collectors.toList());
+            model.addAttribute("availableCars", availableCarsForEdit);
+
+            List<Customer> allCustomers = customerService.findAllCustomers();
+            model.addAttribute("allCustomers", allCustomers);
+
+            List<Location> allLocations = locationService.findAllLocations();
+            model.addAttribute("allLocations", allLocations);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("errorMessage", "Fejl ved indlæsning af data til redigeringsformularen: " + e.getMessage());
             model.addAttribute("rentalAgreement", agreement);
+            model.addAttribute("availableCars", Collections.emptyList());
+            model.addAttribute("allCustomers", Collections.emptyList());
+            model.addAttribute("allLocations", Collections.emptyList());
             return "dataRegistration/rental/editRentalAgreement";
         }
 
-        // HANDLE EDIT SUBMISSION
-        @PostMapping("/rental-agreements/update")
-        public String updateRentalAgreement(@ModelAttribute RentalAgreement rentalAgreement,
-                                            RedirectAttributes redirectAttributes) {
-            rentalAgreementService.update(rentalAgreement);
-            redirectAttributes.addFlashAttribute("successMessage", "Lejeaftale opdateret!");
-            return "redirect:/dataRegistration/rental-agreements";
-        }
-
-        // VIEW SINGLE AGREEMENT
-        @GetMapping("/rental-agreements/{id}")
-        public String viewRentalAgreementDetails(@PathVariable("id") int rentalAgreementId,
-                                                 Model model,
-                                                 RedirectAttributes redirectAttributes) {
-            RentalAgreement agreement = rentalAgreementService.findById(rentalAgreementId);
-
-            if (agreement == null) {
-                redirectAttributes.addFlashAttribute("errorMessage",
-                        "Lejeaftale med ID " + rentalAgreementId + " blev ikke fundet.");
-                return "redirect:/dataRegistration/rental-agreements";
-            }
-
-            model.addAttribute("rentalAgreement", agreement);
-
-            if(agreement.getCarId() > 0) {
-                Car car = carService.findById(agreement.getCarId());
-                model.addAttribute("carDetails", car);
-            } else {
-                model.addAttribute("carDetails", null);
-            }
-
-            if(agreement.getCustomerId() > 0) {
-                Customer customer = customerService.findById(agreement.getCustomerId());
-                model.addAttribute("customerDetails", customer);
-            } else {
-                model.addAttribute("customerDetails", null);
-            }
-
-            if(agreement.getPickupLocationId() > 0) {
-                System.out.println("Pickup Location ID: " + agreement.getPickupLocationId()); // Se hvad ID'et faktisk er
-                Location pickupLoc = locationService.findLocationById(agreement.getPickupLocationId());
-                System.out.println("Pickup Location object: " + (pickupLoc != null ? "Found" : "Not found")); // Se om objektet findes
-                model.addAttribute("pickupLocationDetails", pickupLoc);
-            } else {
-                System.out.println("Pickup Location ID er 0 eller mindre"); // Bekræft at dette er tilfældet
-                model.addAttribute("pickupLocationDetails", null);
-            }
-
-            if(agreement.getReturnLocationId() != null && agreement.getReturnLocationId() > 0) {
-                Location returnLoc = locationService.findLocationById(agreement.getReturnLocationId());
-                model.addAttribute("returnLocationDetails", returnLoc);
-            } else {
-                model.addAttribute("returnLocationDetails", null);
-            }
-            return "dataRegistration/rental/view-rental-details";
-        }
-
-        // DELETE AGREEMENT
-        @PostMapping("/rental-agreements/delete/{id}")
-        public String deleteRentalAgreement(@PathVariable int id,
-                                            RedirectAttributes redirectAttributes) {
-            rentalAgreementService.delete(id);
-            redirectAttributes.addFlashAttribute("successMessage", "Lejeaftale slettet.");
-            return "redirect:/dataRegistration/rental-agreements";
-        }
+        model.addAttribute("rentalAgreement", agreement);
+        return "dataRegistration/rental/editRentalAgreement";
     }
+
+
+
+    // HANDLE EDIT SUBMISSION
+    @PostMapping("/rental-agreements/update")
+    public String updateRentalAgreement(@ModelAttribute("rentalAgreement") RentalAgreement rentalAgreement,
+                                        RedirectAttributes redirectAttributes) {
+        try {
+            rentalAgreementService.update(rentalAgreement);
+            redirectAttributes.addFlashAttribute("successMessage", "Lejeaftale med ID " + rentalAgreement.getRentalAgreementId() + " opdateret succesfuldt!");
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            return "redirect:/dataRegistration/rental-agreements/edit/" + rentalAgreement.getRentalAgreementId();
+        } catch (Exception e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("errorMessage", "En uventet fejl opstod under opdatering.");
+        }
+        return "redirect:/dataRegistration/rental-agreements";
+    }
+
+    // VIEW SINGLE AGREEMENT
+    @GetMapping("/rental-agreements/{id}") // Fuld sti: /dataRegistration/rental-agreements/{id}
+    public String viewRentalAgreementDetails(@PathVariable("id") int rentalAgreementId,
+                                             Model model,
+                                             RedirectAttributes redirectAttributes) {
+        // logger.info("Viser detaljer for lejeaftale ID: {}", rentalAgreementId);
+        RentalAgreement agreement = rentalAgreementService.findById(rentalAgreementId);
+
+        if (agreement == null) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Lejeaftale med ID " + rentalAgreementId + " blev ikke fundet.");
+            return "redirect:/dataRegistration/rental-agreements";
+        }
+        model.addAttribute("rentalAgreement", agreement);
+
+        try {
+            if (agreement.getCarId() != null && agreement.getCarId() > 0) {
+                model.addAttribute("carDetails", carService.findById(agreement.getCarId()));
+            }
+            if (agreement.getCustomerId() != null && agreement.getCustomerId() > 0) {
+                model.addAttribute("customerDetails", customerService.findById(agreement.getCustomerId()));
+            }
+            if (agreement.getPickupLocationId() != null && agreement.getPickupLocationId() > 0) {
+                model.addAttribute("pickupLocationDetails", locationService.findLocationById(agreement.getPickupLocationId()));
+            }
+            if (agreement.getReturnLocationId() != null && agreement.getReturnLocationId() > 0) {
+                model.addAttribute("returnLocationDetails", locationService.findLocationById(agreement.getReturnLocationId()));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            model.addAttribute("errorMessage", "Kunne ikke indlæse alle detaljer for lejeaftalen.");
+        }
+        return "dataRegistration/rental/view-rental-details";
+    }
+
+    // DELETE AGREEMENT
+   /* @PostMapping("/rental-agreements/delete/{id}") // Fuld sti: /dataRegistration/rental-agreements/delete/{id}
+    public String deleteRentalAgreement(@PathVariable int id,
+                                        RedirectAttributes redirectAttributes) {
+        // logger.info("Forsøger at slette lejeaftale ID: {}", id);
+        try {
+            rentalAgreementService.deleteById(id);
+            redirectAttributes.addFlashAttribute("successMessage", "Lejeaftale slettet succesfuldt.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            redirectAttributes.addFlashAttribute("errorMessage", "Fejl ved sletning: " + e.getMessage());
+        }
+        return "redirect:/dataRegistration/rental-agreements";
+    }*/
+}
