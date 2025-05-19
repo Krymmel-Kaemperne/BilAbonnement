@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+            href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap"
+            rel="stylesheet"
+    />
+    <link rel="stylesheet" type="text/css" th:href="@{/stylesheet.css}" />
+    <title>Detaljer for Lejeaftale</title>
+</head>
+<body>
+<div th:replace="~{fragments/header :: header('dataRegistration')}"></div>
+
+<div class="container" th:if="${rentalAgreement != null}">
+    <h1 class="page-title main-content-title">
+        Detaljer for Lejeaftale #<span
+            th:text="${rentalAgreement.rentalAgreementId}"
+    ></span>
+    </h1>
+
+    <div class="action-buttons view-details-actions">
+        <a
+                th:href="@{/dataRegistration/rental-agreements}"
+                class="btn-opret"
+        >Tilbage til oversigt</a
+        >
+        <a
+                th:href="@{/dataRegistration/rental-agreements/edit/{id}(id=${rentalAgreement.rentalAgreementId})}"
+                class="btn-opret"
+        >Rediger Lejeaftale</a
+        >
+        <!-- Slet-knap funktionalitet kan tilføjes her senere hvis nødvendigt -->
+    </div>
+
+    <div class="details-grid">
+        <!-- Sektion: Lejeaftale Detaljer -->
+        <div class="details-section rental-agreement-details">
+            <h2>Lejeaftale Information</h2>
+            <table class="info-table">
+                <tbody>
+                <tr>
+                    <td><strong>ID:</strong></td>
+                    <td th:text="${rentalAgreement.rentalAgreementId}">N/A</td>
+                </tr>
+                <tr>
+                    <td><strong>Startdato:</strong></td>
+                    <td
+                            th:text="${rentalAgreement.startDate != null ? #temporals.format(rentalAgreement.startDate, 'dd-MM-yyyy') : 'N/A'}"
+                    >
+                        N/A
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>Slutdato:</strong></td>
+                    <td
+                            th:text="${rentalAgreement.endDate != null ? #temporals.format(rentalAgreement.endDate, 'dd-MM-yyyy') : 'N/A'}"
+                    >
+                        N/A
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>Månedlig Pris:</strong></td>
+                    <td
+                            th:text="${rentalAgreement.monthlyPrice != null ? #numbers.formatDecimal(rentalAgreement.monthlyPrice, 1, 'POINT', 2, 'COMMA') + ' kr.' : 'N/A'}"
+                    >
+                        N/A
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>Inkl. Kilometer:</strong></td>
+                    <td
+                            th:text="${rentalAgreement.kilometersIncluded >= 0 ? #numbers.formatInteger(rentalAgreement.kilometersIncluded, 0, 'POINT') + ' km' : 'N/A'}"
+                    >
+                        N/A
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>Start Odometer:</strong></td>
+                    <td
+                            th:text="${rentalAgreement.startOdometer >= 0 ? #numbers.formatInteger(rentalAgreement.startOdometer, 0, 'POINT') + ' km' : 'N/A'}"
+                    >
+                        N/A
+                    </td>
+                </tr>
+                <tr th:if="${rentalAgreement.endOdometer != null}">
+                    <td><strong>Slut Odometer:</strong></td>
+                    <td
+                            th:text="${#numbers.formatInteger(rentalAgreement.endOdometer, 0, 'POINT') + ' km'}"
+                    >
+                        N/A
+                    </td>
+                </tr>
+                <!-- Afhentningssted -->
+                <tr>
+                    <td><strong>Afhentningssted:</strong></td>
+                    <td th:if="${pickupLocationDetails != null}"
+                        th:text="${pickupLocationDetails.address}">
+                        N/A
+                    </td>
+                    <td th:if="${pickupLocationDetails == null}"
+                        th:text="${rentalAgreement.pickupLocationId > 0 ? 'Ukendt Lokation (ID: ' + rentalAgreement.pickupLocationId + ')' : 'N/A'}">
+                        N/A
+                    </td>
+                </tr>
+
+                <!-- Returneringssted -->
+                <tr th:if="${rentalAgreement.returnLocationId != null || returnLocationDetails != null}">
+                    <td><strong>Returneringssted:</strong></td>
+                    <td th:if="${returnLocationDetails != null}"
+                        th:text="${returnLocationDetails.address}">
+                        N/A
+                    </td>
+                    <td th:if="${returnLocationDetails == null and rentalAgreement.returnLocationId != null and rentalAgreement.returnLocationId > 0}"
+                        th:text="'Ukendt Lokation (ID: ' + ${rentalAgreement.returnLocationId} + ')'">
+                        N/A
+                    </td>
+                    <td th:if="${returnLocationDetails == null and (rentalAgreement.returnLocationId == null or rentalAgreement.returnLocationId <= 0)}">
+                        Ikke specificeret
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>Leasingkode:</strong></td>
+                    <td
+                            th:text="${rentalAgreement.leasingCode != null ? rentalAgreement.leasingCode : 'N/A'}"
+                    >
+                        N/A
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Sektion: Bil Detaljer -->
+        <div
+                class="details-section car-details-summary"
+                th:if="${carDetails != null}"
+        >
+            <h2>Tilknyttet Bil</h2>
+            <table class="info-table">
+                <tbody>
+                <tr>
+                    <td><strong>Mærke:</strong></td>
+                    <td
+                            th:text="${carDetails.brandName != null ? carDetails.brandName : 'N/A'}"
+                    >
+                        N/A
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>Model:</strong></td>
+                    <td
+                            th:text="${carDetails.modelName != null ? carDetails.modelName : 'N/A'}"
+                    >
+                        N/A
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>Registreringsnr.:</strong></td>
+                    <td
+                            th:text="${carDetails.registrationNumber != null ? carDetails.registrationNumber : 'N/A'}"
+                    >
+                        N/A
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>Nuværende Odometer:</strong></td>
+                    <td
+                            th:text="${carDetails.currentOdometer >= 0 ? #numbers.formatInteger(carDetails.currentOdometer, 0, 'POINT') + ' km' : 'N/A'}"
+                    >
+                        N/A
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>Status:</strong></td>
+                    <td
+                            th:text="${carDetails.carStatusName != null ? carDetails.carStatusName : 'N/A'}"
+                    >
+                        N/A
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="action-buttons-inline">
+                <a
+                        th:href="@{/fleet/details/{id}(id=${carDetails.carId})}"
+                        class="btn-secondary"
+                >Se Fuld Bilinfo</a
+                >
+            </div>
+            <div
+                    class="image-section-summary"
+                    th:if="${carDetails.modelName != null && !carDetails.modelName.trim().isEmpty()}"
+            >
+                <img
+                        th:src="@{/img/{imageFileName}(imageFileName=${carDetails.modelName} + '.png')}"
+                        th:alt="'Billede af ' + ${carDetails.brandName} + ' ' + ${carDetails.modelName}"
+                        class="summary-car-image"
+                        th:attr="onerror='this.style.display=\'none\'; document.getElementById(\'summaryImagePlaceholder-' + ${carDetails.carId} + '\').style.display=\'flex\';'"
+                />
+                <div
+                        th:id="'summaryImagePlaceholder-' + ${carDetails.carId}"
+                        class="summary-image-placeholder"
+                        style="display: none"
+                >
+              <span
+              >Billede for
+                <th:block
+                        th:text="${carDetails.brandName + ' ' +  carDetails.modelName}"
+                ></th:block>
+                ikke fundet.</span
+              >
+                </div>
+            </div>
+        </div>
+        <div
+                class="details-section car-details-summary"
+                th:if="${carDetails == null}"
+        >
+            <h2>Tilknyttet Bil</h2>
+            <p>Ingen bilinformation tilgængelig for denne lejeaftale.</p>
+        </div>
+
+        <!-- Sektion: Kunde Detaljer -->
+        <div
+                class="details-section customer-details-summary"
+                th:if="${customerDetails != null}"
+        >
+            <h2>Kunde Information</h2>
+            <table class="info-table">
+                <tbody>
+                <tr>
+                    <td><strong>Navn:</strong></td>
+                    <td th:text="${customerDetails.displayName}">N/A</td>
+                </tr>
+                <tr>
+                    <td><strong>Kundetype:</strong></td>
+                    <td
+                            th:text="${customerDetails.customerType != null ? (customerDetails.customerType.name() == 'PRIVATE' ? 'Privat' : (customerDetails.customerType.name() == 'BUSINESS' ? 'Erhverv' : customerDetails.customerType.name())) : 'N/A'}"
+                    >
+                        N/A
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>Email:</strong></td>
+                    <td
+                            th:text="${customerDetails.email != null ? customerDetails.email : 'N/A'}"
+                    >
+                        N/A
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>Telefon:</strong></td>
+                    <td
+                            th:text="${customerDetails.phone != null ? customerDetails.phone : 'N/A'}"
+                    >
+                        N/A
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>Adresse:</strong></td>
+                    <td
+                            th:text="${customerDetails.address != null ? customerDetails.address : 'N/A'}"
+                    >
+                        N/A
+                    </td>
+                </tr>
+                <tr th:if="${customerDetails.zipcode != null}">
+                    <td><strong>Postnr. & By:</strong></td>
+                    <td
+                            th:text="${customerDetails.zipcode.zipcode + ' ' + customerDetails.zipcode.cityName}"
+                    >
+                        N/A
+                    </td>
+                </tr>
+                <!-- Specifik info for Privatkunde -->
+                <tr
+                        th:if="${customerDetails.customerType.name() == 'PRIVATE' and customerDetails instanceof T(com.example.bilabonnement.Model.PrivateCustomer)}"
+                >
+                    <td><strong>CPR-nummer:</strong></td>
+                    <td
+                            th:text="${customerDetails.cprNumber != null ? customerDetails.cprNumber : 'N/A'}"
+                    >
+                        N/A
+                    </td>
+                </tr>
+                <!-- Specifik info for Erhvervskunde -->
+                <tr
+                        th:if="${customerDetails.customerType.name() == 'BUSINESS' and customerDetails instanceof T(com.example.bilabonnement.Model.BusinessCustomer)}"
+                >
+                    <td><strong>CVR-nummer:</strong></td>
+                    <td
+                            th:text="${customerDetails.cvrNumber != null ? customerDetails.cvrNumber : 'N/A'}"
+                    >
+                        N/A
+                    </td>
+                </tr>
+                <tr
+                        th:if="${customerDetails.customerType.name() == 'BUSINESS' and customerDetails instanceof T(com.example.bilabonnement.Model.BusinessCustomer)}"
+                >
+                    <td><strong>Firmanavn:</strong></td>
+                    <td
+                            th:text="${customerDetails.companyName != null ? customerDetails.companyName : 'N/A'}"
+                    >
+                        N/A
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <!-- Link til fuld kundeinfo kan tilføjes her senere hvis nødvendigt -->
+        </div>
+        <div
+                class="details-section customer-details-summary"
+                th:if="${customerDetails == null}"
+        >
+            <h2>Kunde Information</h2>
+            <p>Ingen kundeinformation tilgængelig for denne lejeaftale.</p>
+        </div>
+    </div>
+</div>
+
+<div class="container" th:if="${rentalAgreement == null}">
+    <h1 class="page-title">Lejeaftale ikke fundet</h1>
+    <p
+            th:if="${errorMessage}"
+            th:text="${errorMessage}"
+            class="error-message"
+    ></p>
+    <p th:unless="${errorMessage}">
+        Den specificerede lejeaftale kunne ikke findes.
+    </p>
+    <div class="action-buttons">
+        <a
+                th:href="@{/dataRegistration/rental-agreements}"
+                class="btn-opret"
+        >Tilbage til oversigt</a
+        >
+    </div>
+</div>
+</body>
+</html>

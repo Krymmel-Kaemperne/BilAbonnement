@@ -19,8 +19,7 @@ public class ZipcodeRepository {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
-    @Autowired
-    private JdbcClient jdbcClient;
+
 
     // Gemmer et nyt postnummer. Returnerer det gemte postnummer med id
     public Zipcode save(Zipcode zipcode) {
