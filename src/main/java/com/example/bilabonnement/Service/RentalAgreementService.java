@@ -74,4 +74,12 @@ public class RentalAgreementService {
         return rentalAgreementRepository.countAllRentalAgreements();
     }
 
+    public int findNextId() {
+        List<RentalAgreement> all = rentalAgreementRepository.findAll();
+        return all.stream()
+                .mapToInt(RentalAgreement::getRentalAgreementId)
+                .max()
+                .orElse(0) + 1;
+    }
+
 }
