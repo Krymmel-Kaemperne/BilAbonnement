@@ -29,9 +29,6 @@
 
             <form th:if="${rentalAgreement != null}" th:action="@{/dataRegistration/rental-agreements/update}" th:object="${rentalAgreement}" method="post">
                 <input type="hidden" th:field="*{rentalAgreementId}"/>
-
-                <input type="hidden" th:field="*{startDate}" />
-                <input type="hidden" th:field="*{endDate}" />
                 <input type="hidden" th:field="*{startOdometer}"/>
                 <input type="hidden" th:field="*{endOdometer}"/>
 
@@ -101,18 +98,18 @@
                     <input type="text" id="leasingCode" th:field="*{leasingCode}">
                 </div>
 
-                <!-- Startdato -->
                 <div class="opret-bil-form-row">
                     <label for="startDate">Startdato:</label>
-                    <input type="date" id="startDate" th:field="*{startDate}" required>
+                    <input type="date" id="startDate" th:field="*{startDate}"
+                           th:value="${rentalAgreement.startDate != null ? #temporals.format(rentalAgreement.startDate, 'yyyy-MM-dd') : ''}" required>
                 </div>
 
                 <!-- Slutdato  -->
                 <div class="opret-bil-form-row">
                     <label for="endDate">Slutdato:</label>
-                    <input type="date" id="endDate" th:field="*{endDate}" required>
+                    <input type="date" id="endDate" th:field="*{endDate}"
+                           th:value="${rentalAgreement.endDate != null ? #temporals.format(rentalAgreement.endDate, 'yyyy-MM-dd') : ''}" required>
                 </div>
-
                 <!-- Start Kilometerstand (Read-only) -->
                 <div class="readonly-field-container">
                     <label>Start Kilometerstand:</label>
