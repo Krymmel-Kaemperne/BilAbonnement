@@ -2,9 +2,11 @@
 
     import com.example.bilabonnement.Model.Car;
     import com.example.bilabonnement.Model.Customer;
+    import com.example.bilabonnement.Model.Location;
     import com.example.bilabonnement.Model.RentalAgreement;
     import com.example.bilabonnement.Service.CarService;
     import com.example.bilabonnement.Service.CustomerService;
+    import com.example.bilabonnement.Service.LocationService;
     import com.example.bilabonnement.Service.RentalAgreementService;
     import org.springframework.beans.factory.annotation.Autowired;
     import org.springframework.stereotype.Controller;
@@ -26,6 +28,9 @@
 
         @Autowired
         private CustomerService customerService;
+
+        @Autowired
+        private LocationService locationService;
 
         // OVERVIEW
         @GetMapping("/rental-agreements")
@@ -96,13 +101,50 @@
 
         // VIEW SINGLE AGREEMENT
         @GetMapping("/rental-agreements/{id}")
-        public String viewRentalAgreement(@PathVariable int id, Model model) {
-            RentalAgreement agreement = rentalAgreementService.findById(id);
+        public String viewRentalAgreementDetails(@PathVariable("id") int rentalAgreementId,
+                                                 Model model,
+                                                 RedirectAttributes redirectAttributes) {
+            RentalAgreement agreement = rentalAgreementService.findById(rentalAgreementId);
+
             if (agreement == null) {
+                redirectAttributes.addFlashAttribute("errorMessage",
+                        "Lejeaftale med ID " + rentalAgreementId + " blev ikke fundet.");
                 return "redirect:/dataRegistration/rental-agreements";
             }
+
             model.addAttribute("rentalAgreement", agreement);
-            return "dataRegistration/rental/viewRentalAgreement";
+
+            if(agreement.getCarId() > 0) {
+                Car car = carService.findById(agreement.getCarId());
+                model.addAttribute("carDetails", car);
+            } else {
+                model.addAttribute("carDetails", null);
+            }
+
+            if(agreement.getCustomerId() > 0) {
+                Customer customer = customerService.findById(agreement.getCustomerId());
+                model.addAttribute("customerDetails", customer);
+            } else {
+                model.addAttribute("customerDetails", null);
+            }
+
+            if(agreement.getPickupLocationId() > 0) {
+                System.out.println("Pickup Location ID: " + agreement.getPickupLocationId()); // Se hvad ID'et faktisk er
+                Location pickupLoc = locationService.findLocationById(agreement.getPickupLocationId());
+                System.out.println("Pickup Location object: " + (pickupLoc != null ? "Found" : "Not found")); // Se om objektet findes
+                model.addAttribute("pickupLocationDetails", pickupLoc);
+            } else {
+                System.out.println("Pickup Location ID er 0 eller mindre"); // Bekræft at dette er tilfældet
+                model.addAttribute("pickupLocationDetails", null);
+            }
+
+            if(agreement.getReturnLocationId() != null && agreement.getReturnLocationId() > 0) {
+                Location returnLoc = locationService.findLocationById(agreement.getReturnLocationId());
+                model.addAttribute("returnLocationDetails", returnLoc);
+            } else {
+                model.addAttribute("returnLocationDetails", null);
+            }
+            return "dataRegistration/rental/view-rental-details";
         }
 
         // DELETE AGREEMENT

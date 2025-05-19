@@ -13,8 +13,8 @@ public class RentalAgreement {
     private int kilometersIncluded;
     private int startOdometer;
     private Integer endOdometer;
-    private int pickupLocation;
-    private Integer returnLocation;
+    private int pickupLocationId;
+    private Integer returnLocationId;
     private String leasingCode;
 
     // DEFAUlT CONSTUCTOR
@@ -25,7 +25,7 @@ public class RentalAgreement {
     public RentalAgreement(int rentalAgreementId, int carId, int customerId,
                            LocalDate startDate, LocalDate endDate, BigDecimal monthlyPrice,
                            int kilometersIncluded, int startOdometer, Integer endOdometer,
-                           int pickupLocation, Integer returnLocation, String leasingCode) {
+                           int pickupLocationId, Integer returnLocationId, String leasingCode) {
         this.rentalAgreementId = rentalAgreementId;
         this.carId = carId;
         this.customerId = customerId;
@@ -35,15 +35,15 @@ public class RentalAgreement {
         this.kilometersIncluded = kilometersIncluded;
         this.startOdometer = startOdometer;
         this.endOdometer = endOdometer;
-        this.pickupLocation = pickupLocation;
-        this.returnLocation = returnLocation;
+        this.pickupLocationId = pickupLocationId;
+        this.returnLocationId = returnLocationId;
         this.leasingCode = leasingCode;
     }
 
     //CONSTRUCTOR WITH ID
     public RentalAgreement(int carId, int customerId, LocalDate startDate, LocalDate endDate,
                            BigDecimal monthlyPrice, int kilometersIncluded, int startOdometer,
-                           Integer endOdometer, int pickupLocation, Integer returnLocation,
+                           Integer endOdometer, int pickupLocationId, Integer returnLocationId,
                            String leasingCode) {
 
         this.carId = carId;
@@ -54,8 +54,8 @@ public class RentalAgreement {
         this.kilometersIncluded = kilometersIncluded;
         this.startOdometer = startOdometer;
         this.endOdometer = endOdometer;
-        this.pickupLocation = pickupLocation;
-        this.returnLocation = returnLocation;
+        this.pickupLocationId = pickupLocationId;
+        this.returnLocationId = returnLocationId;
         this.leasingCode = leasingCode;
     }
 
@@ -97,12 +97,12 @@ public class RentalAgreement {
         return endOdometer;
     }
 
-    public int getPickupLocation() {
-        return pickupLocation;
+    public int getPickupLocationId() {
+        return pickupLocationId;
     }
 
-    public Integer getReturnLocation() {
-        return returnLocation;
+    public Integer getReturnLocationId() {
+        return returnLocationId;
     }
 
     public String getLeasingCode() {
@@ -147,12 +147,12 @@ public class RentalAgreement {
         this.endOdometer = endOdometer;
     }
 
-    public void setPickupLocation(int pickupLocation) {
-        this.pickupLocation = pickupLocation;
+    public void setPickupLocationId(int pickupLocationId) {
+        this.pickupLocationId = pickupLocationId;
     }
 
-    public void setReturnLocation(Integer returnLocation) {
-        this.returnLocation = returnLocation;
+    public void setReturnLocationId(Integer returnLocationId) {
+        this.returnLocationId = returnLocationId;
     }
 
     public void setLeasingCode(String leasingCode) {
@@ -173,8 +173,8 @@ public class RentalAgreement {
                 ", kilometersIncluded=" + kilometersIncluded +
                 ", startOdometer=" + startOdometer +
                 ", endOdometer=" + endOdometer +
-                ", pickupLocation=" + pickupLocation +
-                ", returnLocation=" + returnLocation +
+                ", pickupLocation=" + pickupLocationId +
+                ", returnLocation=" + returnLocationId +
                 ", leasingCode='" + leasingCode + '\'' +
                 '}';
     }

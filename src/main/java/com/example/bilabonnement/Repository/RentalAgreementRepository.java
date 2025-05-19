@@ -58,11 +58,11 @@ public class RentalAgreementRepository {
                 ps.setNull(8, java.sql.Types.INTEGER);
             }
 
-            ps.setInt(9, rentalAgreement.getPickupLocation());
+            ps.setInt(9, rentalAgreement.getPickupLocationId());
 
-            if (rentalAgreement.getReturnLocation() != null)
+            if (rentalAgreement.getReturnLocationId() != null)
             {
-                ps.setInt(10, rentalAgreement.getReturnLocation());
+                ps.setInt(10, rentalAgreement.getReturnLocationId());
             } else
             {
                 ps.setNull(10, java.sql.Types.INTEGER);
@@ -115,11 +115,11 @@ public class RentalAgreementRepository {
                 ps.setNull(8, java.sql.Types.INTEGER);
             }
 
-            ps.setInt(9, rentalAgreement.getPickupLocation());
+            ps.setInt(9, rentalAgreement.getPickupLocationId());
 
-            if (rentalAgreement.getReturnLocation() != null)
+            if (rentalAgreement.getReturnLocationId() != null)
             {
-                ps.setInt(10, rentalAgreement.getReturnLocation());
+                ps.setInt(10, rentalAgreement.getReturnLocationId());
             } else
             {
                 ps.setNull(10, java.sql.Types.INTEGER);
