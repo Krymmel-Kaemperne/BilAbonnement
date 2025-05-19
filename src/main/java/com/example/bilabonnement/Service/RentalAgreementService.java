@@ -29,10 +29,43 @@ public class RentalAgreementService {
         return rentalAgreementRepository.findById(id);
     }
 
-    public void update(RentalAgreement rentalAgreement) {
-        rentalAgreementRepository.update(rentalAgreement);
-    }
 
+    public void update(RentalAgreement rentalAgreement) { // Parameter fra formen
+        RentalAgreement existingAgreement = rentalAgreementRepository.findById(rentalAgreement.getRentalAgreementId());
+        if (existingAgreement == null) {
+            throw new IllegalArgumentException("Lejeaftale med ID " + rentalAgreement.getRentalAgreementId() + " ikke fundet for opdatering.");
+        }
+
+
+        if (rentalAgreement.getCarId() != null) {
+            existingAgreement.setCarId(rentalAgreement.getCarId());
+        }
+        if (rentalAgreement.getCustomerId() != null) {
+            existingAgreement.setCustomerId(rentalAgreement.getCustomerId());
+        }
+
+        if (rentalAgreement.getMonthlyPrice() != null) {
+            existingAgreement.setMonthlyPrice(rentalAgreement.getMonthlyPrice());
+        }
+        existingAgreement.setKilometersIncluded(rentalAgreement.getKilometersIncluded());
+
+        if (rentalAgreement.getPickupLocationId() != null) {
+            existingAgreement.setPickupLocationId(rentalAgreement.getPickupLocationId());
+        }
+        if (rentalAgreement.getReturnLocationId() != null) {
+            existingAgreement.setReturnLocationId(rentalAgreement.getReturnLocationId());
+        }
+
+        if (rentalAgreement.getLeasingCode() != null) {
+            existingAgreement.setLeasingCode(rentalAgreement.getLeasingCode());
+        } else {
+
+            existingAgreement.setLeasingCode(rentalAgreement.getLeasingCode());
+        }
+
+
+        rentalAgreementRepository.update(existingAgreement);
+    }
     public void delete(int id) {
         rentalAgreementRepository.delete(id);
     }
