@@ -5,8 +5,8 @@ import java.time.LocalDate;
 
 public class RentalAgreement {
     private int rentalAgreementId;
-    private int carId;
-    private int customerId;
+    private Integer carId;
+    private Integer customerId;
     private LocalDate startDate;
     private LocalDate endDate;
     private BigDecimal monthlyPrice;
@@ -22,7 +22,7 @@ public class RentalAgreement {
     }
 
     //CONSTRUCTOR WITHOUT ID
-    public RentalAgreement(int rentalAgreementId, int carId, int customerId,
+    public RentalAgreement(int rentalAgreementId, Integer carId, Integer customerId,
                            LocalDate startDate, LocalDate endDate, BigDecimal monthlyPrice,
                            int kilometersIncluded, int startOdometer, Integer endOdometer,
                            int pickupLocationId, Integer returnLocationId, String leasingCode) {
@@ -41,7 +41,7 @@ public class RentalAgreement {
     }
 
     //CONSTRUCTOR WITH ID
-    public RentalAgreement(int carId, int customerId, LocalDate startDate, LocalDate endDate,
+    public RentalAgreement(Integer carId, Integer customerId, LocalDate startDate, LocalDate endDate,
                            BigDecimal monthlyPrice, int kilometersIncluded, int startOdometer,
                            Integer endOdometer, int pickupLocationId, Integer returnLocationId,
                            String leasingCode) {
@@ -65,11 +65,11 @@ public class RentalAgreement {
         return rentalAgreementId;
     }
 
-    public int getCarId() {
+    public Integer getCarId() {
         return carId;
     }
 
-    public int getCustomerId() {
+    public Integer getCustomerId() {
         return customerId;
     }
 
@@ -157,6 +157,13 @@ public class RentalAgreement {
 
     public void setLeasingCode(String leasingCode) {
         this.leasingCode = leasingCode;
+    }
+
+    // END DATE VALIDATION
+
+    public boolean isEndDateValid()
+    {
+        return startDate != null && endDate != null && endDate.isAfter(startDate.plusMonths(3).minusDays(1));
     }
 
     //TO STRING
