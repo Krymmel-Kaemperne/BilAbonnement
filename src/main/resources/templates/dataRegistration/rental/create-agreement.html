@@ -77,19 +77,30 @@
 
 
                 <div class="opret-bil-form-row">
-                    <label for="pickupLocation">Afhentningssted (ID):</label>
-                    <input type="number" min="1" id="pickupLocation" th:field="*{pickupLocation}" required>
+                    <label for="pickupLocationId">Afhentningssted:</label>
+                    <select id="pickupLocationId" th:field="*{pickupLocationId}" required>
+                        <option value="">-- Vælg afhentningssted --</option>
+                        <option th:each="location : ${locations}"
+                                th:value="${location.locationId}"
+                                th:text="|${location.address} ( By: ${location.zipcode.cityName})|">
+                        </option>
+                    </select>
                 </div>
 
-                <div class="opret-bil-form-row">
-                    <label for="returnLocation">Returneringssted (ID - valgfri):</label>
-                    <input type="number" min="1" id="returnLocation" th:field="*{returnLocation}">
-                </div>
 
                 <div class="opret-bil-form-row">
-                    <label for="leasingCode">Leasingkode:</label>
-                    <input type="text" id="leasingCode" th:field="*{leasingCode}" required>
+                    <label for="returnLocationId">Returneringssted:</label>
+                    <select id="returnLocationId" th:field="*{returnLocationId}">
+                        <option value="" style="color: #aaa;">-- Vælg returneringssted --</option>->
+                        <option th:each="location : ${locations}"
+                                th:value="${location.locationId}"
+                                th:text="|${location.address} (By: ${location.zipcode.cityName})|">
+                        </option>
+                    </select>
                 </div>
+
+
+
 
 
                 <div class="opret-bil-submit-row">

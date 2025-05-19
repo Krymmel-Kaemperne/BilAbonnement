@@ -38,14 +38,14 @@
             <p>Klik her for at oprette ny lejeaftale</p>
         </div>
 
-        <!-- 😡 MÅSKE virker den - Er stadig bilens logik -->
+        <!-- 😃 OPDATERET - Søg på lejeaftale id -->
         <div class="search-id-container">
             <div class="search-id-section">
-                <form class="search-id-section" th:action="@{/dataRegistration/rental-agreements/{id}}" method="get">
-
+                <form class="search-id-section" th:action="@{/dataRegistration/rental-agreements}" method="get">
                     <input type="text" id="searchAgreementId"
-                           name="searchRentalAgreementId" placeholder="Indtast lejeaftalens ID nummer"
-                           th:value="${param.searchRentalAgreementId}"/>
+                           name="searchRentalAgreementId"
+                           placeholder="Indtast lejeaftalens ID nummer"
+                           th:value="${param.searchRentalAgreementId}" />
                     <button type="submit" class="btn-soeg">Søg</button>
                 </form>
             </div>
@@ -56,73 +56,28 @@
 
 
   <!-- 😡 IKKE OPDATERET Filter Formular peger nu på FleetController -->
-  <form class="filter-section" th:action="@{/dataRegistration/rentalAgreements}" method="get">
-    <!-- Brand Filter -->
-    <div class="filter-group">
-      <select id="brandFilter" name="brand">
-        <option value="">Brand</option>
-        <option th:each="brandObj : ${availableBrands}"
-                th:value="${brandObj.brandId}"
-                th:text="${brandObj.brandName}"
-                th:selected="${brandObj.brandId} == ${param.brand}">
-        </option>
-      </select>
-    </div>
+  <form class="filter-section" th:action="@{/dataRegistration/rental-agreements}" method="get">
 
-    <!-- Model Filter -->
-    <div class="filter-group">
-      <select id="modelFilter" name="model">
-        <option value="">Model</option>
-        <option th:each="modelObj : ${availableModels}"
-                th:value="${modelObj.modelId}"
-                th:text="${modelObj.modelName}"
-                th:selected="${modelObj.modelId} == ${param.model}">
-        </option>
-      </select>
-    </div>
 
-    <!-- Fuel Type Filter -->
-    <div class="filter-group">
-      <select id="fuelTypeFilter" name="fuelType">
-        <option value="">Fuel Type</option>
-        <option th:each="fuel : ${availableFuelTypes}"
-                th:value="${fuel.fuelTypeId}"
-                th:text="${fuel.fuelTypeName}"
-                th:selected="${fuel.fuelTypeId} == ${param.fuelType}">
-        </option>
-      </select>
-    </div>
 
-    <!-- Transmission Type Filter -->
-    <div class="filter-group">
-      <select id="transmissionTypeFilter" name="transmissionType">
-        <option value="">Transmission Type</option>
-        <option th:each="trans : ${availableTransmissionTypes}"
-                th:value="${trans.transmissionTypeId}"
-                th:text="${trans.transmissionTypeName}"
-                th:selected="${trans.transmissionTypeId} == ${param.transmissionType}">
-        </option>
-      </select>
-    </div>
-
-    <!-- Status Filter (bruger CarStatus DTO direkte) -->
-    <div class="filter-group">
-      <select id="statusFilter" name="status">
-        <option value="">Status</option>
-        <option th:each="stat : ${availableStatuses}"
-                th:value="${stat.carStatusId}"
-                th:text="${stat.statusName}"
-                th:selected="${stat.carStatusId} == ${param.status}">
-        </option>
-      </select>
-    </div>
+    <!-- Status Filter  -->
+      <div class="filter-group">
+          <select name="statusFilter">
+              <option value="">Status</option>
+              <option value="upcoming" th:selected="${param.statusFilter == 'upcoming'}">Ikke påbegyndt</option>
+              <option value="active" th:selected="${param.statusFilter == 'active'}">Aktiv</option>
+              <option value="completed" th:selected="${param.statusFilter == 'completed'}">Afsluttet</option>
+          </select>
+      </div>
 
     <div class="filter-button-group">
       <button type="submit" class="btn-soeg-filter">Søg</button>
-      <!-- Vis Alle peger nu på FleetController -->
-      <a th:href="@{/fleet/overview}" class="btn btn-vis-alle">Vis Alle</a>
+      <!-- Vis Alle peger nu på rentalAgreementController -->
+      <a th:href="@{/dataRegistration/rental-agreements}" class="btn btn-vis-alle">Vis Alle</a>
     </div>
   </form>
+
+
 
 
     <table class="car-table">
@@ -148,7 +103,7 @@
         <td th:text="${customerNames[agreement.customerId]}">N/A</td>
         <td th:text="${agreement.startDate}">N/A</td>
         <td th:text="${agreement.endDate}">N/A</td>
-        <td th:text="${agreement.monthlyPrice}">N/A</td>
+          <td th:text="${agreement.monthlyPrice}">N/A</td>
         <td th:text="${agreement.kilometersIncluded}">N/A</td>
         <td>
 
