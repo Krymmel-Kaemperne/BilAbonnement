@@ -13,6 +13,7 @@
     import org.springframework.web.bind.annotation.*;
     import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+    import java.util.Collections;
     import java.util.List;
     import java.util.Map;
     import java.util.stream.Collectors;
@@ -34,54 +35,45 @@
         private LocationService locationService;
 
         // OVERVIEW
+        // OVERVIEW
         @GetMapping("/rental-agreements")
         public String showOverview(Model model) {
-            List<RentalAgreement> agreements = rentalAgreementService.findAll();
-            List<Car> allCars = carService.findAllCars();
-            List<Customer> allCustomers = customerService.findAllCustomers();
+            try { // <-- Start af try blok
+                List<RentalAgreement> agreements = rentalAgreementService.findAll();
+                List<Car> allCars = carService.findAllCars();
+                List<Customer> allCustomers = customerService.findAllCustomers();
 
-            Map <Integer, String>  carNamesById = allCars.stream()
-                            .collect(Collectors.toMap(
-                                    Car::getCarId,
-                                    car -> car.getBrandName() + " " + car.getModelName()
-                            ));
+                // Første definition af Maps - Jeg antager, du kun ønsker én version.
+                // Jeg beholder denne version, da den ser mest detaljeret ud.
+                Map <Integer, String>  carNamesById = allCars.stream()
+                        .collect(Collectors.toMap(
+                                Car::getCarId,
+                                car -> (car.getBrandName() != null ? car.getBrandName() : "") + " " + (car.getModelName() != null ? car.getModelName() : "")
+                        ));
 
-            Map<Integer, String> customerNamesById = allCustomers.stream()
-                    .collect(Collectors.toMap(
-                            Customer::getCustomerId,
-                            c -> c.getFname() + " " + c.getLname()
-                    ));
+                Map<Integer, String> customerNamesById = allCustomers.stream()
+                        .collect(Collectors.toMap(
+                                Customer::getCustomerId,
+                                Customer::getDisplayName // Antager getDisplayName er en metode i Customer
+                        ));
 
-            model.addAttribute("agreements", agreements);
-            model.addAttribute("carNames", carNamesById);
-            model.addAttribute("customerNames", customerNamesById);
-            model.addAttribute("searchRentalAgreementId", "");
+                model.addAttribute("agreements", agreements);
+                model.addAttribute("carNames", carNamesById);
+                model.addAttribute("customerNames", customerNamesById);
+                model.addAttribute("searchRentalAgreementId", ""); // Beholder denne
 
-            Map<Integer, String> carNamesById = allCars.stream()
-                    .collect(Collectors.toMap(
-                            Car::getCarId,
-                            car -> (car.getBrandName() != null ? car.getBrandName() : "") + " " + (car.getModelName() != null ? car.getModelName() : "")
-                    ));
+                // Jeg fjerner den dobbelte definition af Maps og addAttribute kald herfra
 
-            Map<Integer, String> customerNamesById = allCustomers.stream()
-                    .collect(Collectors.toMap(
-                            Customer::getCustomerId,
-                            Customer::getDisplayName
-                    ));
-
-            model.addAttribute("agreements", agreements);
-            model.addAttribute("carNames", carNamesById);
-            model.addAttribute("customerNames", customerNamesById);
-            // model.addAttribute("searchRentalAgreementId", ""); // Hvis du har søgning
-        } catch (Exception e) {
-            e.printStackTrace();
-            model.addAttribute("agreements", Collections.emptyList());
-            model.addAttribute("errorMessage", "Kunne ikke indlæse lejeaftaler.");
+            } catch (Exception e) { // <-- Slut på try blok, start på catch blok
+                e.printStackTrace();
+                model.addAttribute("agreements", Collections.emptyList());
+                model.addAttribute("errorMessage", "Kunne ikke indlæse lejeaftaler.");
+            }
+            return "dataRegistration/rental/rental-agreements-overview";
         }
-        return "dataRegistration/rental/rental-agreements-overview";
-    }
 
-    //SHOW CREATE FORM
+
+        //SHOW CREATE FORM
     @GetMapping("/rental-agreements/create")
     public String showCreateForm(Model model) {
         try {
@@ -145,16 +137,6 @@
             } catch (Exception e) {
                 e.printStackTrace(); // Print error to console
                 redirectAttributes.addFlashAttribute("errorMessage", "Fejl ved oprettelse!");
-            }
-
-            rentalAgreementService.create(rentalAgreement);
-            redirectAttributes.addFlashAttribute("successMessage", "Lejeaftale oprettet succesfuldt!");
-        } catch (Exception e) {
-            // logger.error("Fejl ved oprettelse af lejeaftale: ", e);
-            e.printStackTrace();
-            redirectAttributes.addFlashAttribute("errorMessage", "Fejl ved oprettelse: " + e.getMessage());
-            // Overvej at redirecte tilbage til create-siden med en fejlbesked
-            // return "redirect:/dataRegistration/rental-agreements/create";
         }
         return "redirect:/dataRegistration/rental-agreements"; // Redirect til oversigt
     }
