@@ -47,22 +47,40 @@ public class ConditionReportController {
     }
 
     @GetMapping("/list")
-    public String listAll(Model model) {
-        // Overvej at flytte denne logik til en service metode som findAllWithDetails()
-        List<ConditionReport> basicReports = conditionReportService.findAll();
-        List<ConditionReport> detailedReports = new ArrayList<>();
+    public String listAll(
+            @RequestParam(required = false) String searchReportId,
+            @RequestParam(required = false) Integer customerId,
+            @RequestParam(required = false) Integer rentalAgreementId,
+            @RequestParam(required = false) String startDate,
+            @RequestParam(required = false) String endDate,
+            Model model) {
 
-        if (basicReports != null) {
-            for (ConditionReport basicReport : basicReports) {
-                ConditionReport detailedReport = conditionReportService.getConditionReportWithDetails(basicReport.getConditionReportId());
-                if (detailedReport != null) {
-                    detailedReports.add(detailedReport);
-                } else {
-                    detailedReports.add(basicReport); // Fallback
-                }
-            }
+        // Parse dates if provided
+        LocalDate startDateParsed = null;
+        LocalDate endDateParsed = null;
+        DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        
+        if (startDate != null && !startDate.isEmpty()) {
+            startDateParsed = LocalDate.parse(startDate, inputFormatter);
         }
-        model.addAttribute("reports", detailedReports);
+        if (endDate != null && !endDate.isEmpty()) {
+            endDateParsed = LocalDate.parse(endDate, inputFormatter);
+        }
+
+        // Get filtered reports
+        List<ConditionReport> filteredReports = conditionReportService.findByFilters(
+            searchReportId, customerId, rentalAgreementId, startDateParsed, endDateParsed
+        );
+
+        // Format dates for display
+        conditionReportService.formatReportDates(filteredReports);
+
+        // Add filter options to the model
+        model.addAttribute("availableCustomers", customerService.findAllCustomers());
+        model.addAttribute("availableRentals", rentalAgreementService.findAll());
+        
+        // Add the filtered reports to the model
+        model.addAttribute("reports", filteredReports);
         return "damageRegistration/rapports";
     }
 
@@ -73,8 +91,14 @@ public class ConditionReportController {
             // Håndter hvis rapport ikke findes
             return "redirect:/conditionReport/list?error=notFound";
         }
+        
+        // Format the date if it exists
+        if (reportWithDetails.getReportDate() != null) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            reportWithDetails.setFormattedDate(reportWithDetails.getReportDate().format(formatter));
+        }
+        
         model.addAttribute("report", reportWithDetails);
-        // Tilføj damages og totalDamagePrice til modellet, så template virker som før
         model.addAttribute("damages", reportWithDetails.getDamages() != null ? reportWithDetails.getDamages() : new ArrayList<>());
         model.addAttribute("totalDamagePrice", reportWithDetails.getTotalPrice() != null ? reportWithDetails.getTotalPrice() : java.math.BigDecimal.ZERO);
         return "damageRegistration/damageRegistration";
@@ -88,7 +112,7 @@ public class ConditionReportController {
             report.setRentalAgreementId(rentalAgreementId);
         }
         // Hent lejeaftaler (overvej en metode som findAllActiveOrRelevant() i din service)
-        List<RentalAgreement> rentalAgreements = rentalAgreementService.findAll(); // Eller findAllActiveOrRelevant()
+        List<RentalAgreement> rentalAgreements = conditionReportService.getFinishedRentalAgreementsForReportCreation();
 
         // Kald den nye private hjælpemetode
         model.addAttribute("rentalAgreementOptions", formatRentalAgreementsForDropdown(rentalAgreements));
@@ -99,10 +123,23 @@ public class ConditionReportController {
 
     @PostMapping("/create")
     public String create(@ModelAttribute ConditionReport report, RedirectAttributes redirectAttributes) {
-        // Sæt dato hvis den ikke er sat
+        // Validate that rentalAgreementId is not null
+        if (report.getRentalAgreementId() == null) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Fejl: Du skal vælge en lejeaftale.");
+            return "redirect:/conditionReport/create";
+        }
+
+        // Set date to today if not provided
         if (report.getReportDate() == null) {
             report.setReportDate(LocalDate.now());
         }
+
+        // Format the date as dd-MM-yyyy
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        if (report.getReportDate() != null) {
+            report.setFormattedDate(report.getReportDate().format(formatter));
+        }
+
         ConditionReport created = conditionReportService.create(report);
         if (created == null || created.getConditionReportId() == 0) {
             redirectAttributes.addFlashAttribute("errorMessage", "Fejl: Kunne ikke oprette tilstandsrapport.");
@@ -196,9 +233,9 @@ public class ConditionReportController {
 
     @GetMapping("/reparationStatus")
     public String showReparationStatus(Model model) {
-        double averageDamagesPerRental = conditionReportService.getAverageDamagesPerRental();
+        double averageDamagesPerReport = conditionReportService.getAverageDamagesPerReport();
         double averageDamagePrice = conditionReportService.getAverageDamagePrice();
-        model.addAttribute("averageDamagesPerRental", averageDamagesPerRental);
+        model.addAttribute("averageDamagesPerReport", averageDamagesPerReport);
         model.addAttribute("averageDamagePrice", averageDamagePrice);
         return "damageRegistration/reparationStatus";
     }
