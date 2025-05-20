@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/fleet")
@@ -62,6 +64,9 @@ public class FleetController {
         } else {
             cars = carService.findCarsByFilters(brand, status, modelId, fuelType, transmissionType);
         }
+
+
+
         model.addAttribute("cars", cars);
 
         List<Brand> availableBrands = brandService.findAllBrands();
@@ -75,6 +80,13 @@ public class FleetController {
 
         List<CarStatus> availableStatuses = carStatusService.findAllStatuses();
         model.addAttribute("availableStatuses", availableStatuses);
+
+        Map<Integer, String> statusNames = availableStatuses.stream()
+                .collect(Collectors.toMap(
+                        CarStatus::getCarStatusId,
+                        CarStatus::getStatusName
+                ));
+        model.addAttribute("statusNames", statusNames);
 
         List<TransmissionType> availableTransmissionTypes = transmissionTypeService.findAllTransmissionTypes();
         model.addAttribute("availableTransmissionTypes", availableTransmissionTypes);

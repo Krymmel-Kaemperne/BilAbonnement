@@ -90,7 +90,8 @@
           <option value="">Vælg status</option>
           <option th:each="status : ${allCarStatuses}"
                   th:value="${status.carStatusId}"
-                  th:text="${status.statusName}">
+                  th:text="${status.statusName}"
+                  th:disabled="${car.carStatusId == 2} ? (${status.statusName.equalsIgnoreCase('Tilgængelig')} or ${status.statusName.equalsIgnoreCase('Solgt')} or ${status.statusName.equalsIgnoreCase('På værksted')}) : false">
           </option>
         </select>
       </div>
