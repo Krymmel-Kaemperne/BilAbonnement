@@ -61,8 +61,11 @@
                     <input type="date" id="endDate" th:field="*{endDate}" required>
                 </div>
 
-                <div th:if="${errorMessage}" class="error-message">
-                    <p th:text="${errorMessage}"></p>
+                <div class="opret-bil-form-row">
+
+                    <div style="color: red; font-style: italic; font-size: 15px;" th:if="${errorMessage}" class="error-message">
+                        <p th:text="${errorMessage}"></p>
+                    </div>
                 </div>
 
                 <div class="opret-bil-form-row">
@@ -97,6 +100,12 @@
                     </select>
                 </div>
 
+                <div class="opret-bil-form-row">
+                    <label for="leasingCode">Leasingkode:</label>
+                    <input style="color: gray;" type="text" id="leasingCode" th:field="*{leasingCode}" readonly/>
+                </div>
+
+
 
                 <div class="opret-bil-submit-row">
                     <button class="opret-bil-knap" type="submit">Opret Lejeaftale</button>
@@ -111,6 +120,4 @@
 
 </body>
 </html>
-
-
 
