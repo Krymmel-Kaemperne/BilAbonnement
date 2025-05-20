@@ -87,8 +87,11 @@ public class RentalAgreementController {
         Map<Integer, String> carNamesById = allCars.stream()
                 .collect(Collectors.toMap(
                         Car::getCarId,
+
                         car -> car.getBrandName() + " " + car.getModelName()
-                ));
+                        ));
+
+
 
         Map<Integer, String> customerNamesById = allCustomers.stream()
                 .collect(Collectors.toMap(
@@ -100,7 +103,6 @@ public class RentalAgreementController {
 
         model.addAttribute("agreements", agreements);
         model.addAttribute("carNames", carNamesById);
-
         model.addAttribute("customerNames", customerNamesById);
         model.addAttribute("searchRentalAgreementId", "");
         model.addAttribute("searchRentalAgreementId", searchId != null ? searchId : "");
