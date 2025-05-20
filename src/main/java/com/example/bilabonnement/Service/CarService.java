@@ -1,17 +1,28 @@
 package com.example.bilabonnement.Service;
 
 import com.example.bilabonnement.Model.Car;
+import com.example.bilabonnement.Model.RentalAgreement;
 import com.example.bilabonnement.Repository.CarRepository;
+import com.example.bilabonnement.Repository.RentalAgreementRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils; // Bruges til at tjekke om strenge har indhold
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
 public class CarService {
 
+
+
+    @Autowired
+    RentalAgreementRepository rentalAgreementRepository;
+
+
     private CarRepository carRepository;
+
+
 
     @Autowired
     public CarService(CarRepository carRepository) {
@@ -84,6 +95,28 @@ public class CarService {
 
     public List<Car> findCarsByFilters(Integer brand, Integer status, Integer model, Integer fuelType, Integer transmissionType) {
         return carRepository.findByFilters(brand, status, model, fuelType, transmissionType);
+    }
+
+
+
+    public boolean isCarCurrentlyRentedOut(int carId) {
+        List<RentalAgreement> agreements = rentalAgreementRepository.findAgreementsByCarId(carId);
+        LocalDate today = LocalDate.now();
+
+        System.out.println("Car ID: " + carId);
+        System.out.println("Found " + agreements.size() + " rental agreements");
+
+        for (RentalAgreement ag : agreements) {
+            System.out.println("Start: " + ag.getStartDate() + ", End: " + ag.getEndDate());
+        }
+
+        boolean result = agreements.stream().anyMatch(agreement ->
+                !agreement.getEndDate().isBefore(today)
+        );
+
+        System.out.println("Rented out? " + result);
+
+        return result;
     }
 }
 

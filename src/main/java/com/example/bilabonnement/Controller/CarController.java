@@ -1,6 +1,7 @@
 package com.example.bilabonnement.Controller;
 import com.example.bilabonnement.Model.Car;
 import com.example.bilabonnement.Model.Brand;
+import com.example.bilabonnement.Model.CarStatus;
 import com.example.bilabonnement.Model.FuelType;
 import org.springframework.ui.Model;
 import com.example.bilabonnement.Service.BrandService;
@@ -79,6 +80,23 @@ public class CarController {
 
     @PostMapping("/car/update")
     public String updateCar(@ModelAttribute Car car, RedirectAttributes redirectAttributes) {
+
+        // Get existing car from DB
+        Car existingCar = carService.findById(car.getCarId());
+
+        // Get old and new status names
+        String oldStatus = carStatusService.findCarStatusById(existingCar.getCarStatusId()).getStatusName();
+        String newStatus = carStatusService.findCarStatusById(car.getCarStatusId()).getStatusName();
+
+        // 🔒 STOP 'Udlejet' from going to 'Tilgængelig' or Solgt
+        if ("Udlejet".equalsIgnoreCase(oldStatus)
+                && ("Tilgængelig".equalsIgnoreCase(newStatus) || "Solgt".equalsIgnoreCase(newStatus))) {
+
+            redirectAttributes.addFlashAttribute("errorMessage",
+                    "Bilen har status 'Udlejet' og kan ikke ændres til 'Tilgængelig' eller 'Solgt'.");
+            return "redirect:/dataRegistration/car/edit/" + car.getCarId();
+        }
+
         com.example.bilabonnement.Model.Model carModelEntity = modelService.findByBrandIdAndModelName(car.getBrandId(), car.getModelName());
         if (carModelEntity == null) {
             carModelEntity = modelService.create(new com.example.bilabonnement.Model.Model(car.getModelName(), car.getBrandId()));

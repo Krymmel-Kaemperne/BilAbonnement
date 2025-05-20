@@ -15,6 +15,10 @@ public class RentalAgreementRepository {
     @Autowired
     private final JdbcTemplate jdbcTemplate;
 
+    @Autowired
+    CarRepository carRepository;
+
+
     private final BeanPropertyRowMapper<RentalAgreement> rentalAgreementRowMapper = new BeanPropertyRowMapper<>(RentalAgreement.class);
 
     public RentalAgreementRepository(JdbcTemplate jdbcTemplate) {
@@ -158,6 +162,21 @@ public class RentalAgreementRepository {
         String sql = "SELECT COUNT(*) FROM rental_agreement";
         return jdbcTemplate.queryForObject(sql, Integer.class);
     }
+
+    public List<RentalAgreement> findAgreementsByCarId(int carId) {
+        String sql = "SELECT * FROM rental_agreement WHERE car_id = ?";
+        List<RentalAgreement> results = jdbcTemplate.query(sql, rentalAgreementRowMapper, carId);
+
+        System.out.println("📊 SQL executed: " + sql + " with carId=" + carId);
+        System.out.println("📊 Found " + results.size() + " agreements");
+
+        for (RentalAgreement ag : results) {
+            System.out.println("📝 " + ag);
+        }
+
+        return results;
+    }
+
 
 }
 
