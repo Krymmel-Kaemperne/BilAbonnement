@@ -67,13 +67,6 @@ public class ConditionReportService {
         return total;
     }
 
-    /**
-     * Finds a ConditionReport by its ID and populates it with related details
-     * like RentalAgreement, Car, Customer, and its list of Damages.
-     *
-     * @param conditionReportId The ID of the condition report to find.
-     * @return A ConditionReport object with populated transient fields, or null if not found.
-     */
     public ConditionReport getConditionReportWithDetails(int conditionReportId) {
         ConditionReport report = conditionReportRepository.findById(conditionReportId);
         if (report == null) {

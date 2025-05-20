@@ -203,9 +203,6 @@ public class ConditionReportController {
         return "damageRegistration/reparationStatus";
     }
 
-    // ========================================================================
-    // HER INDSÆTTES DEN PRIVATE HJÆLPEMETODE
-    // ========================================================================
     private List<String[]> formatRentalAgreementsForDropdown(List<RentalAgreement> agreements) {
         if (agreements == null) {
             return new ArrayList<>();
@@ -242,8 +239,5 @@ public class ConditionReportController {
         }
         return dropdownOptions;
     }
-    // ========================================================================
-    // SLUT PÅ HJÆLPEMETODE
-    // ========================================================================
 
-} // SLUT PÅ ConditionReportController KLASSEN
+}

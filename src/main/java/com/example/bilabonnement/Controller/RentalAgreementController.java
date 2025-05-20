@@ -153,10 +153,12 @@ public class RentalAgreementController {
                     .toList();
 
             List<Customer> allCustomers = customerService.findAllCustomers();
+            List<Location> allLocations = locationService.findAllLocations();
 
             model.addAttribute("rentalAgreement", rentalAgreement);
             model.addAttribute("cars", allCars);
             model.addAttribute("customers", allCustomers);
+            model.addAttribute("locations", allLocations);
             model.addAttribute("errorMessage", "Slutdato skal være mindst 3 måneder efter startdato.");
             return "dataRegistration/rental/create-agreement";
         }
