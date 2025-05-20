@@ -11,31 +11,25 @@
 </head>
 <body>
 <!-- Header indsættes her -->
-<div th:replace="~{fragments/header :: header('rapports')}"></div>
+<div th:replace="~{fragments/header :: header('conditionReports')}"></div>
 <div class="container">
     <!-- Side titel -->
     <div class="header-flex">
         <h1>Opret Tilstandsrapport</h1>
     </div>
+
+    <!-- Error message display -->
+    <div th:if="${errorMessage}" class="alert alert-error" role="alert">
+        <p th:text="${errorMessage}">Error message here</p>
+    </div>
+
+    <!-- Success message display -->
+    <div th:if="${successMessage}" class="alert alert-success" role="alert">
+        <p th:text="${successMessage}">Success message here</p>
+    </div>
+
     <!-- Formular til at oprette en ny tilstandsrapport -->
     <form th:action="@{/conditionReport/create}" th:object="${report}" method="post">
-        <!-- Skjult felt til lejeaftale ID -->
-        <input type="hidden" th:field="*{rentalAgreementId}" />
-        <!-- Noter felt -->
-        <div class="opret-bil-form-row">
-            <label for="conditionNotes">Noter:</label>
-            <textarea id="conditionNotes" th:field="*{conditionNotes}"></textarea>
-        </div>
-        <!-- Rapportdato felt -->
-        <div class="opret-bil-form-row">
-            <label for="reportDate">Rapportdato:</label>
-            <input type="date" id="reportDate" th:field="*{reportDate}" required />
-        </div>
-        <!-- Total pris felt -->
-        <div class="opret-bil-form-row">
-            <label for="totalPrice">Total pris:</label>
-            <input type="number" id="totalPrice" th:field="*{totalPrice}" step="0.01" required />
-        </div>
         <!-- Vælg lejeaftale -->
         <div class="opret-bil-form-row">
             <label for="rentalAgreementId">Lejeaftale:</label>
@@ -46,6 +40,18 @@
                         th:text="${option[1]}"></option>
             </select>
         </div>
+
+        <!-- Noter felt -->
+        <div class="opret-bil-form-row">
+            <label for="conditionNotes">Noter:</label>
+            <textarea id="conditionNotes" th:field="*{conditionNotes}"></textarea>
+        </div>
+        <!-- Rapportdato felt -->
+        <div class="opret-bil-form-row">
+            <label for="formattedDate">Rapportdato:</label>
+            <input type="text" id="formattedDate" th:field="*{formattedDate}" required placeholder="dd-MM-yyyy" />
+        </div>
+        
         <!-- Knap til at oprette rapport -->
         <div class="opret-bil-submit-row">
             <button class="opret-bil-knap" type="submit">Opret Rapport</button>

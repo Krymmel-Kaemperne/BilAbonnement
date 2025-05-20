@@ -7,7 +7,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-
+import java.time.LocalDate;
 
 @Repository
 public class RentalAgreementRepository {
@@ -75,6 +75,12 @@ public class RentalAgreementRepository {
     public List<RentalAgreement> findAll() {
         String sql = "SELECT * FROM rental_agreement";
         List<RentalAgreement> agreements = jdbcTemplate.query(sql, rentalAgreementRowMapper);
+        return agreements;
+    }
+
+    public List<RentalAgreement> findFinishedRentalAgreements() {
+        String sql = "SELECT * FROM rental_agreement WHERE end_date <= ?";
+        List<RentalAgreement> agreements = jdbcTemplate.query(sql, rentalAgreementRowMapper, LocalDate.now());
         return agreements;
     }
 

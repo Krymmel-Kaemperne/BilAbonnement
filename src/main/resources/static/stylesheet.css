@@ -437,15 +437,6 @@ body {
     line-height: 1.6;
 }
 
-.action-section {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start; /* Juster til toppen */
-    margin-bottom: 30px;
-    gap: 20px;
-    flex-wrap: wrap; /* Tillad wrap på mindre skærme */
-}
-
 .create-car-section {
     text-align: left;
 }
@@ -633,6 +624,7 @@ body {
     font-size: 0.9em;
     font-weight: 500;
     transition: background-color 0.3s ease;
+    text-decoration: none;
 }
 
 .btn-detaljer:hover {
@@ -737,7 +729,7 @@ body {
 
 .action-section {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: flex-start; /* Juster til toppen */
     margin-bottom: 30px;
     gap: 20px;
@@ -884,18 +876,6 @@ body {
 .car-table tr:hover td {
     /* Kun td for at undgå at overskrive th */
     background-color: #fce5e1; /* Lidt mørkere hover */
-}
-
-.btn-detaljer {
-    background-color: #6c757d; /* Mørkegrå knap */
-    color: white;
-    padding: 8px 15px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.9em;
-    font-weight: 500;
-    transition: background-color 0.3s ease;
 }
 
 .btn-detaljer:hover {

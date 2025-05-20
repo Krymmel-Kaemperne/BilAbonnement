@@ -34,13 +34,13 @@
 
         <!-- Skade-registrering Dropdown -->
         <div class="dropdown">
-            <a th:href="@{/damageRegistration}"
+            <a th:href="@{/conditionReport/list}"
                th:classappend="${currentPage == 'damageRegistration' or currentPage == 'rapports' or currentPage == 'registerDamage' or currentPage == 'reparationStatus'} ? 'aktive' : ''"
                class="nav-link">
                 Skade Registrering <span class="arrow">&#x25BE;</span>
             </a>
             <div class="dropdown-content">
-                <a th:href="@{/conditionReport/list}">Tilstandsrapporter</a>
+                <a th:href="@{/conditionReport/create}">Opret tilstandsrapport</a>
                 <a th:href="@{/conditionReport/reparationStatus}">Reparation Status</a>
             </div>
         </div>

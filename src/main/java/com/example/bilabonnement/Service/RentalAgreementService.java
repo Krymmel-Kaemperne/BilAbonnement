@@ -29,6 +29,9 @@ public class RentalAgreementService {
         return rentalAgreementRepository.findById(id);
     }
 
+    public List<RentalAgreement> findFinishedRentalAgreements() {
+        return rentalAgreementRepository.findFinishedRentalAgreements();
+    }
 
     public void update(RentalAgreement rentalAgreement) { // Parameter fra formen
         RentalAgreement existingAgreement = rentalAgreementRepository.findById(rentalAgreement.getRentalAgreementId());

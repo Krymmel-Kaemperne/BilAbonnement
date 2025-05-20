@@ -8,6 +8,9 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.time.format.DateTimeFormatter;
 
 import com.example.bilabonnement.Model.Car;
 import com.example.bilabonnement.Model.Customer;
@@ -32,7 +35,29 @@ public class ConditionReportService {
     @Autowired
     private DamageService damageService;
 
+    private final DateTimeFormatter displayFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+
     public ConditionReport create(ConditionReport report) {
+        // Set date to today if not provided
+        if (report.getReportDate() == null) {
+            report.setReportDate(LocalDate.now());
+        }
+
+        // Parse the date in dd-MM-yyyy format if it's a string
+        if (report.getFormattedDate() != null && !report.getFormattedDate().isEmpty()) {
+            try {
+                report.setReportDate(LocalDate.parse(report.getFormattedDate(), displayFormatter));
+            } catch (Exception e) {
+                // If parsing fails, keep the existing date or today's date
+                if (report.getReportDate() == null) {
+                    report.setReportDate(LocalDate.now());
+                }
+            }
+        }
+
+        // Format the date for display
+        formatReportDate(report);
+
         return conditionReportRepository.create(report);
     }
 
@@ -123,5 +148,79 @@ public class ConditionReportService {
             .mapToDouble(d -> d.getDamagePrice().doubleValue())
             .sum();
         return total / damages.size();
+    }
+
+    public List<ConditionReport> findByFilters(String searchReportId, Integer customerId, 
+                                             Integer rentalAgreementId, LocalDate startDate, 
+                                             LocalDate endDate) {
+        List<ConditionReport> allReports = findAll();
+        List<ConditionReport> filteredReports = new ArrayList<>();
+
+        for (ConditionReport basicReport : allReports) {
+            ConditionReport detailedReport = getConditionReportWithDetails(basicReport.getConditionReportId());
+            if (detailedReport == null) continue;
+
+            // Apply filters
+            boolean includeReport = true;
+
+            // Search by report ID
+            if (searchReportId != null && !searchReportId.isEmpty()) {
+                includeReport = String.valueOf(detailedReport.getConditionReportId()).equals(searchReportId);
+            }
+
+            // Filter by customer
+            if (includeReport && customerId != null && detailedReport.getCustomer() != null) {
+                includeReport = detailedReport.getCustomer().getCustomerId() == customerId;
+            }
+
+            // Filter by rental agreement
+            if (includeReport && rentalAgreementId != null) {
+                includeReport = detailedReport.getRentalAgreementId() != null && 
+                              detailedReport.getRentalAgreementId().equals(rentalAgreementId);
+            }
+
+            // Filter by date range
+            if (includeReport && startDate != null && detailedReport.getReportDate() != null) {
+                includeReport = !detailedReport.getReportDate().isBefore(startDate);
+            }
+            if (includeReport && endDate != null && detailedReport.getReportDate() != null) {
+                includeReport = !detailedReport.getReportDate().isAfter(endDate);
+            }
+
+            if (includeReport) {
+                filteredReports.add(detailedReport);
+            }
+        }
+
+        return filteredReports;
+    }
+
+    // Format a single report's date
+    public void formatReportDate(ConditionReport report) {
+        if (report != null && report.getReportDate() != null) {
+            report.setFormattedDate(report.getReportDate().format(displayFormatter));
+        }
+    }
+
+    // Format dates for a list of reports
+    public void formatReportDates(List<ConditionReport> reports) {
+        if (reports == null) return;
+        
+        for (ConditionReport report : reports) {
+            formatReportDate(report);
+        }
+    }
+
+    // Beregn gennemsnitlige antal skader pr. tilstandsrapport
+    public double getAverageDamagesPerReport() {
+        int totalDamages = damageService.countAllDamages();
+        int totalReports = findAll().size();
+        if (totalReports == 0) return 0.0;
+        return (double) totalDamages / totalReports;
+    }
+
+    // Get finished rental agreements for condition report creation
+    public List<RentalAgreement> getFinishedRentalAgreementsForReportCreation() {
+        return rentalAgreementService.findFinishedRentalAgreements();
     }
 } 
