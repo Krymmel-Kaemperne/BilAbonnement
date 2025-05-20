@@ -61,8 +61,11 @@
                     <input type="date" id="endDate" th:field="*{endDate}" required>
                 </div>
 
-                <div th:if="${errorMessage}" class="error-message">
-                    <p th:text="${errorMessage}"></p>
+                <div class="opret-bil-form-row">
+
+                    <div style="color: red; font-style: italic; font-size: 15px;" th:if="${errorMessage}" class="error-message">
+                        <p th:text="${errorMessage}"></p>
+                    </div>
                 </div>
 
                 <div class="opret-bil-form-row">
@@ -91,7 +94,8 @@
                 <div class="opret-bil-form-row">
                     <label for="returnLocationId">Returneringssted:</label>
                     <select id="returnLocationId" th:field="*{returnLocationId}">
-                        <option value="" style="color: #aaa;">-- Vælg returneringssted --</option>->
+                        <option value="" style="color: #aaa;">-- Vælg returneringssted --</option>
+                        ->
                         <option th:each="location : ${locations}"
                                 th:value="${location.locationId}"
                                 th:text="|${location.address} (By: ${location.zipcode.cityName})|">
@@ -99,8 +103,10 @@
                     </select>
                 </div>
 
-
-
+                <div class="opret-bil-form-row">
+                    <label for="leasingCode">Leasingkode:</label>
+                    <input style="color: gray;" type="text" id="leasingCode" th:field="*{leasingCode}" readonly/>
+                </div>
 
 
                 <div class="opret-bil-submit-row">
@@ -116,6 +122,4 @@
 
 </body>
 </html>
-
-
 

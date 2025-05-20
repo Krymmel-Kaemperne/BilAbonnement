@@ -123,16 +123,15 @@ public class RentalAgreementController {
                 .filter(car -> car.getCarStatusId() == 1)
                 .toList();
 
-
-
         RentalAgreement rentalAgreement = new RentalAgreement();
 
         // Generate a new leasing code (e.g., "LEASING-0010")
         int nextId = rentalAgreementService.findNextId(); // You need to implement this
-        String generatedCode = "LEASING-" + String.format("%04d", nextId);
+        String generatedCode = "LA" + String.format("%04d", nextId);
+
         rentalAgreement.setLeasingCode(generatedCode);
 
-        model.addAttribute("rentalAgreement", new RentalAgreement());
+        model.addAttribute("rentalAgreement", rentalAgreement);
         model.addAttribute("cars", availableCars);
         model.addAttribute("customers", allCustomers);
         model.addAttribute("locations", allLocations);
