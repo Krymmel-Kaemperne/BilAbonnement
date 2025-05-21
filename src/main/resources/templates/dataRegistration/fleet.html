@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="da" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8" />
   <title>Flåde Oversigt</title>
@@ -11,161 +11,139 @@
 </head>
 <body>
 
-<div th:replace="~{fragments/header :: header('fleet')}"></div>
+<div th:replace="~{fragments/header :: header('dataRegistration')}"></div>
 
 <div class="container">
-  <h1 class="page-title main-content-title">
-    <h1>Fleet Oversigt</h1>
-  </h1>
-  <p class="description-text">
-    På denne side kan du se oversigten over vores fleet, tilføje biler,
-    redigere deres info & status eller helt slette dem.
-  </p>
-  <!-- Viser succes- og fejlbeskeder -->
-  <div
-          th:if="${successMessage}"
-          class="message success-message"
-          th:text="${successMessage}"
-          style="margin-bottom: 20px"
-  ></div>
-  <div
-          th:if="${errorMessage}"
-          class="message error-message"
-          th:text="${errorMessage}"
-          style="margin-bottom: 20px"
-  ></div>
-  <div class="action-section">
-    <div class="create-car-section">
-      <!-- Peger på CarController's createCar mapping -->
-      <button type="button" class="btn-opret"
-              th:onclick="|location.href='@{/dataRegistration/createCar}'|">
-        Opret bil
-      </button>
-      <p>Klik her for at oprette ny bil</p>
-    </div>
-    <div class="search-id-container">
-      <div class="search-id-section">
-        <form class="search-id-section" th:action="@{/fleet/overview}" method="get">
-          <input type="text" id="searchCarId" name="searchCarId" placeholder="Indtast bilens ID nummer" th:value="${param.searchCarId}" />
-          <button type="submit" class="btn-soeg">Søg</button>
-        </form>
-      </div>
-      <p>Find en bil med dens ID nummer</p>
-    </div>
-  </div>
-
-  <!-- Filter Formular peger nu på FleetController -->
-  <form class="filter-section" th:action="@{/fleet/overview}" method="get">
-    <!-- Brand Filter -->
-    <div class="filter-group">
-      <select id="brandFilter" name="brand">
-        <option value="">Brand</option>
-        <option th:each="brandObj : ${availableBrands}"
-                th:value="${brandObj.brandId}"
-                th:text="${brandObj.brandName}"
-                th:selected="${brandObj.brandId} == ${param.brand}">
-        </option>
-      </select>
+    <div class="header-flex">
+        <h1>Flåde Oversigt</h1>
+        <p class="description-text">
+            På denne side kan du se oversigten over vores fleet, tilføje biler,
+            redigere deres info & status eller helt slette dem.
+        </p>
     </div>
 
-    <!-- Model Filter -->
-    <div class="filter-group">
-      <select id="modelFilter" name="model">
-        <option value="">Model</option>
-        <option th:each="modelObj : ${availableModels}"
-                th:value="${modelObj.modelId}"
-                th:text="${modelObj.modelName}"
-                th:selected="${modelObj.modelId} == ${param.model}">
-        </option>
-      </select>
+    <!-- Viser succes- eller fejlmeddelelser fra RedirectAttributes -->
+    <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}" style="color: green; margin-bottom: 15px;"></div>
+    <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}" style="color: red; margin-bottom: 15px;"></div>
+
+    <div class="action-section">
+        <div class="create-customer-section">
+            <a class="btn-opret" th:onclick="|location.href='@{/dataRegistration/createCar}'|">Opret bil</a>
+        </div>
+        <div class="search-id-container">
+            <div class="search-id-section">
+                <form class="search-id-section" th:action="@{/fleet/overview}" method="get">
+                    <input type="text" id="searchCarId" name="searchCarId" placeholder="Søg på bil ID" th:value="${param.searchCarId}" />
+                    <button type="submit" class="btn-soeg">Søg</button>
+                </form>
+            </div>
+        </div>
     </div>
 
-    <!-- Fuel Type Filter -->
-    <div class="filter-group">
-      <select id="fuelTypeFilter" name="fuelType">
-        <option value="">Fuel Type</option>
-        <option th:each="fuel : ${availableFuelTypes}"
-                th:value="${fuel.fuelTypeId}"
-                th:text="${fuel.fuelTypeName}"
-                th:selected="${fuel.fuelTypeId} == ${param.fuelType}">
-        </option>
-      </select>
-    </div>
+    <!-- Filter section -->
+    <form class="filter-section" th:action="@{/fleet/overview}" method="get">
+        <!-- Brand Filter -->
+        <div class="filter-group">
+            <select id="brandFilter" name="brand">
+                <option value="">Brand</option>
+                <option th:each="brandObj : ${availableBrands}"
+                        th:value="${brandObj.brandId}"
+                        th:text="${brandObj.brandName}"
+                        th:selected="${brandObj.brandId} == ${param.brand}">
+                </option>
+            </select>
+        </div>
 
-    <!-- Transmission Type Filter -->
-    <div class="filter-group">
-      <select id="transmissionTypeFilter" name="transmissionType">
-        <option value="">Transmission Type</option>
-        <option th:each="trans : ${availableTransmissionTypes}"
-                th:value="${trans.transmissionTypeId}"
-                th:text="${trans.transmissionTypeName}"
-                th:selected="${trans.transmissionTypeId} == ${param.transmissionType}">
-        </option>
-      </select>
-    </div>
+        <!-- Model Filter -->
+        <div class="filter-group">
+            <select id="modelFilter" name="model">
+                <option value="">Model</option>
+                <option th:each="modelObj : ${availableModels}"
+                        th:value="${modelObj.modelId}"
+                        th:text="${modelObj.modelName}"
+                        th:selected="${modelObj.modelId} == ${param.model}">
+                </option>
+            </select>
+        </div>
 
-    <!-- Status Filter (bruger CarStatus DTO direkte) -->
-    <div class="filter-group">
-      <select id="statusFilter" name="status">
-        <option value="">Status</option>
-        <option th:each="stat : ${availableStatuses}"
-                th:value="${stat.carStatusId}"
-                th:text="${stat.statusName}"
-                th:selected="${stat.carStatusId} == ${param.status}">
-        </option>
-      </select>
-    </div>
+        <!-- Fuel Type Filter -->
+        <div class="filter-group">
+            <select id="fuelTypeFilter" name="fuelType">
+                <option value="">Brændstof Type</option>
+                <option th:each="fuel : ${availableFuelTypes}"
+                        th:value="${fuel.fuelTypeId}"
+                        th:text="${fuel.fuelTypeName}"
+                        th:selected="${fuel.fuelTypeId} == ${param.fuelType}">
+                </option>
+            </select>
+        </div>
 
-    <div class="filter-button-group">
-      <button type="submit" class="btn-soeg-filter">Søg</button>
-      <!-- Vis Alle peger nu på FleetController -->
-      <a th:href="@{/fleet/overview}" class="btn btn-vis-alle">Vis Alle</a>
-    </div>
-  </form>
+        <!-- Transmission Type Filter -->
+        <div class="filter-group">
+            <select id="transmissionTypeFilter" name="transmissionType">
+                <option value="">Transmission</option>
+                <option th:each="trans : ${availableTransmissionTypes}"
+                        th:value="${trans.transmissionTypeId}"
+                        th:text="${trans.transmissionTypeName}"
+                        th:selected="${trans.transmissionTypeId} == ${param.transmissionType}">
+                </option>
+            </select>
+        </div>
 
-  <table class="car-table">
-    <thead>
-    <tr>
-      <th>ID nummer</th>
-      <th>Brand</th>
-      <th>Model</th>
-      <th>Fuel Type</th>
-      <th>Transmission</th>
-      <th>Status</th>
-      <th>Handlinger</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:if="${#lists.isEmpty(cars)}">
-      <td colspan="7" style="text-align: center;">Ingen biler fundet.</td> <!-- Opdateret colspan -->
-    </tr>
+        <!-- Status Filter -->
+        <div class="filter-group">
+            <select id="statusFilter" name="status">
+                <option value="">Status</option>
+                <option th:each="stat : ${availableStatuses}"
+                        th:value="${stat.carStatusId}"
+                        th:text="${stat.statusName}"
+                        th:selected="${stat.carStatusId} == ${param.status}">
+                </option>
+            </select>
+        </div>
 
-    <tr th:unless="${#lists.isEmpty(cars)}" th:each="car : ${cars}">
-      <td th:text="${car.carId}">0</td>
-      <td th:text="${car.brandName}">N/A</td>
-      <td th:text="${car.modelName}">N/A</td>
-      <td th:text="${car.fuelTypeName}">N/A</td>
-      <td th:text="${car.transmissionTypeName}">N/A</td>
+        <div class="filter-button-group">
+            <button type="submit" class="btn-soeg-filter">Søg</button>
+            <a th:href="@{/fleet/overview}" class="btn btn-vis-alle">Vis Alle</a>
+        </div>
+    </form>
 
-      <td th:text="${statusNames[car.carStatusId]}">Ukendt</td>
-
-
-      <td>
-        <!-- Detaljer knap peger nu på FleetController -->
-        <button type="button" class="btn-detaljer"
-                th:attr="onclick=|location.href='@{/fleet/details/{id}(id=${car.carId})}'|">
-          Detaljer
-        </button>
-
-        <button type="button" class="btn-detaljer"
-                th:onclick="|location.href='@{/dataRegistration/car/edit/{id}(id=${car.carId})}'|">
-          Rediger
-        </button>
-
-      </td>
-    </tr>
-    </tbody>
-  </table>
+    <table class="car-table">
+        <thead>
+        <tr>
+            <th>ID nummer</th>
+            <th>Brand</th>
+            <th>Model</th>
+            <th>Fuel Type</th>
+            <th>Transmission</th>
+            <th>Status</th>
+            <th>Handlinger</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:if="${#lists.isEmpty(cars)}">
+            <td colspan="7" style="text-align: center;">Ingen biler fundet.</td>
+        </tr>
+        <tr th:unless="${#lists.isEmpty(cars)}" th:each="car : ${cars}">
+            <td th:text="${car.carId}">0</td>
+            <td th:text="${car.brandName}">N/A</td>
+            <td th:text="${car.modelName}">N/A</td>
+            <td th:text="${car.fuelTypeName}">N/A</td>
+            <td th:text="${car.transmissionTypeName}">N/A</td>
+            <td th:text="${statusNames[car.carStatusId]}">Ukendt</td>
+            <td>
+                <a type="button" class="btn-detaljer"
+                   th:onclick="|location.href='@{/fleet/details/{id}(id=${car.carId})}'|">
+                    Detaljer
+                </a>
+                <a type="button" class="btn-detaljer"
+                   th:onclick="|location.href='@{/dataRegistration/car/edit/{id}(id=${car.carId})}'|">
+                    Rediger
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
 </div>
 
 </body>

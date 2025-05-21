@@ -1,24 +1,38 @@
+/* Variables */
 :root {
     --main-color: #c13616;
     --hover-color: #811e0a;
+    --text-color: #333;
+    --text-light: #555;
+    --background-light: #f8f9fa;
+    --border-color: #ccc;
+    --shadow-color: rgba(0, 0, 0, 0.1);
 }
-.plus-jakarta {
-    font-family: "Plus Jakarta Sans", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 400;
-    font-style: normal;
-}
+
+/* Base Styles */
 body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-family: "Plus Jakarta Sans", sans-serif;
+    background-color: var(--background-light);
+    color: var(--text-color);
 }
 
+.container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px var(--shadow-color);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
 
-/*NAVIGATION */
-.header
-{
+/* Header & Navigation */
+.header {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -26,14 +40,9 @@ body {
     border-bottom: 1px solid #000;
 }
 
-.header-left {
-    display: flex;
-    align-items: center;
-}
-
 .logo {
     height: 80px;
-    margin-right:5px;
+    margin-right: 5px;
 }
 
 .header-nav {
@@ -53,36 +62,27 @@ body {
     color: black;
     position: relative;
 }
-.header-log-in {
-    line-height: 1;
-}
 
-.arrow
-{
-    margin-left: 10px;
-    margin-top: 2px;
+.nav-link.aktive {
     color: var(--main-color);
-    font-size: 1.6rem;
 }
 
-/*DROP-DOWN*/
-
+/* Dropdown Menu */
 .dropdown {
     position: relative;
-
 }
-.dropdown-content {
 
+.dropdown-content {
     display: none;
     position: absolute;
     top: 100%;
-    min-width:180px;
+    min-width: 180px;
     background-color: white;
     border: 1px solid #000;
     border-radius: 8px;
     padding: 10px 0;
     z-index: 999;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 8px var(--shadow-color);
 }
 
 .dropdown:hover .dropdown-content {
@@ -98,953 +98,160 @@ body {
 }
 
 .dropdown-content a:hover {
-    color: VAR(--main-color);
+    color: var(--main-color);
 }
-
 
 .arrow {
-    color: var(--main-color);
     margin-left: 6px;
-}
-
-.nav-link.aktive {
     color: var(--main-color);
+    font-size: 1.6rem;
 }
 
-
-
-.page-container {
-    padding: 1.3rem;
-}
-
-/*Navigation-page*/
-.section-columns {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2rem;
-    justify-items: center;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 2rem;
-}
-
-.section-group {
-    max-width: 300px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-}
-
-.section-card {
-    border: 1px solid var(--main-color);
-    color: var(--main-color);
-    padding: 2rem 2rem;
-    border-radius: 8px;
-    text-decoration: none;
-    font-weight: 600;
-    text-align: center;
-    width: 180px;
-    transition: 0.2s ease;
-}
-
-.section-card:hover {
-    background-color: #ff3c00;
-    color: white;
-}
-
-
-.card-container {
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 2rem;
-}
-
-
-/* ========== SIMPEL CSS FOR 'OPRET BIL' FORMULAR ========== */
-
-/* Container for selve formularen */
-.opret-bil-formular { /* Tilføj denne klasse til din <form> eller en omkransende div */
-    background-color: #ffffff;
-    padding: 25px;
-    border-radius: 5px;
-    max-width: 650px; /* Juster efter behov */
-    margin: 30px auto; /* Centrerer formularen og giver lidt plads */
-    border: 1px solid #e0e0e0; /* En let kant */
-}
-
-.opret-bil-form-content{
-    max-width: 600px;
-    margin: 0 auto;
-}
-
-.opret-bil-form-header {
-    padding: 0 0 0 0;
-}
-.opret-bil-knap {
-    background-color: var(--main-color); /* Bruger din CSS variabel */
-    color: white;
-    padding: 10px 18px;
-    border: none;
-    border-radius: 4px;
-    font-size: 0.95em;
-    font-weight: 400;
-    cursor: pointer;
-}
-
-
-/* Overskrift inde i formularen (hvis du har en der) */
-.opret-bil-formular h1,
-.opret-bil-formular h2 { /* Eller hvilken overskriftstype du bruger */
-    text-align: left; /* Eller center, hvis du foretrækker */
-    color: #333;
-    margin-bottom: 25px;
-    font-weight: 600; /* Bruger din Plus Jakarta Sans font-weight */
-}
-.opret-bil-formular p.form-description { /* En klasse for underteksten */
-    color: #555;
-    margin-bottom: 25px;
-    font-size: 0.95em;
-}
-
-
-/* Hver række i formularen (label + input/select) */
-.opret-bil-form-row { /* Tilføj denne klasse til hver div, der indeholder et label og et input */
-    display: flex; /* Arrangerer label og input ved siden af hinanden */
-    align-items: center; /* Vertikal centrering */
-    margin-bottom: 15px;
-}
-
-.opret-bil-form-row label {
-    flex-basis: 160px; /* Fast bredde for labels, juster efter behov */
-    flex-shrink: 0;
-    margin-right: 15px;
-    font-weight: 500;
-    color: #444;
-    font-size: 0.9em;
-}
-
-.opret-bil-form-row input[type="text"],
-.opret-bil-form-row input[type="number"],
-.opret-bil-form-row input[type="email"],
-.opret-bil-form-row input[type="tel"],
-.opret-bil-form-row select,
-.opret-bil-form-row textarea {
-    flex-grow: 1; /* Input-feltet tager resten af pladsen */
-    padding: 9px 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 0.9em;
-    font-family: "Plus Jakarta Sans", sans-serif; /* Sikrer din font bruges */
-    box-sizing: border-box;
-}
-
-.opret-bil-form-row input[type="text"]::placeholder,
-.opret-bil-form-row input[type="number"]::placeholder,
-.opret-bil-form-row textarea::placeholder {
-    color: #aaa; /* Lysere placeholder */
-}
-
-/* For at få "Vælg..." teksten i select til at have placeholder-farve */
-.opret-bil-form-row select:required:invalid {
-    color: #aaa;
-}
-.opret-bil-form-row select option {
-    color: #333;
-}
-.opret-bil-form-row select option[value=""][disabled] {
-    color: #aaa;
-}
-
-.opret-bil-form-row textarea {
-    min-height: 90px;
-    resize: vertical;
-}
-
-/* Submit knap */
-.opret-bil-submit-row { /* En div til at omkranse knappen */
-    text-align: center; /* Placerer knappen til højre */
-    margin-top: 25px;
-}
-
-/*center*/
-.opret-bil-center-row {
-    text-align: center;
-    margin-top: 15px;
-    margin-bottom: 15px;
-}
-
-.action-button {
-    background-color: var(--main-color); /* Bruger din CSS variabel */
-    color: white;
-    padding: 10px 18px;
-    border: none;
-    border-radius: 4px;
-    font-size: 0.95em;
-    font-weight: 400;
-    cursor: pointer;
-}
-
-.opret-bil-submit-btn:hover {
-    background-color: var(--hover-color); /* Bruger din CSS variabel */
-}
-
-/* Ny stil til sekundær (grå) knap */
-.button-secondary {
-    display: inline-block; /* Gør linket til et blok-element for at give det padding osv. */
-    background-color: #cccccc; /* Grå baggrundsfarve */
-    color: #333; /* Mørkere tekstfarve */
-    padding: 10px 18px; /* Samme padding som primære knap */
-    border: none; /* Ingen kant */
-    border-radius: 4px;
-    font-size: 0.95em;
-    font-weight: 400;
-    text-decoration: none;
-    cursor: pointer;
-    transition: background-color 0.3s ease; /* Jævn overgang ved hover */
-}
-
-.button-container {
-    text-align: center;
-    margin-bottom: 25px;
-    margin-top: 15px;
-}
-
-.button-secondary:hover {
-    background-color: #b3b3b3; /* Lidt mørkere grå ved hover */
-}
-
-/* View Car */
-
-.car-details-container {
-    display: flex;
-    flex-direction: row;
-    gap: 40px;
-}
-
-
-/* Meget simpel responsivitet: Stak elementer på små skærme */
-@media (max-width: 600px) {
-    .opret-bil-form-row {
-        flex-direction: column;
-        align-items: stretch;
-    }
-    .opret-bil-form-row label {
-        flex-basis: auto;
-        margin-bottom: 5px;
-        margin-right: 0;
-    }
-    .opret-bil-submit-row {
-        text-align: center; /* Centrer knappen */
-    }
-}
-
-/* Generel styling */
-body {
-    font-family: "Plus Jakarta Sans", sans-serif;
-    margin: 0;
-    background-color: #f8f9fa; /* Lys baggrundsfarve */
-    color: #333;
-}
-
-.container {
-    max-width: 1200px;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: #fff; /* Hvid baggrund for hovedindhold */
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-/* Header Styling (fra billede) */
-.site-header {
-    padding: 15px 30px;
-    background-color: #fff;
-    border-bottom: 1px solid #eee;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.logo-container {
-    display: flex;
-    align-items: center;
-}
-
-.logo-img {
-    height: 35px; /* Juster efter behov */
-    margin-right: 10px;
-}
-
-.site-title {
-    font-size: 1.5em;
-    font-weight: 700;
-    color: #333; /* Eller din brand farve */
-}
-
-.nav-links {
-    display: flex;
-    gap: 25px; /* Lidt mere plads */
-}
-
-.nav-links a {
-    text-decoration: none;
-    color: #e74c3c; /* Rød link farve */
-    font-weight: 600; /* Lidt tykkere font */
-    padding-bottom: 5px;
-    font-size: 1.1em;
-    transition: color 0.3s ease, border-color 0.3s ease;
-}
-
-.nav-links a:hover {
-    color: #c0392b; /* Mørkere rød ved hover */
-}
-
-.nav-links a.active {
-    border-bottom: 3px solid #e74c3c;
-    font-weight: 700;
-    color: #e74c3c;
-}
-
-.user-info-header {
-    font-size: 0.9em;
-    color: #555;
-    text-align: right;
-}
-.user-info-header span:first-child {
-    color: #777;
-}
-
-/* Side Specifik Styling */
+/* Page Headers */
 .header-flex {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px; /* Lidt mindre margin */
+    margin-bottom: 15px;
 }
 
 .header-flex h1 {
-    margin: 0;
-    color: #333;
-    font-size: 2em; /* Større overskrift */
+    margin-top: 0;
+    color: var(--text-color);
+    font-size: 2em;
 }
 
 .description-text {
     margin-bottom: 25px;
-    color: #555;
+    color: var(--text-light);
     font-size: 1.1em;
-    line-height: 1.6;
 }
 
-.create-car-section {
-    text-align: left;
-}
-
-.btn-opret {
-    background-color: #e74c3c;
-    color: white;
-    padding: 12px 22px; /* Lidt større knap */
-    border: none;
-    border-radius: 5px;
-    font-size: 1.05em; /* Lidt større tekst */
-    font-weight: 500;
-    cursor: pointer;
-    margin-bottom: 5px;
-    text-decoration: none;
-    transition: background-color 0.3s ease;
-}
-
-.create-car-section .btn-opret:hover {
-    background-color: #c0392b;
-}
-
-.create-car-section p {
-    font-size: 0.9em;
-    color: #777;
-    margin-top: 0;
-}
-
-.search-id-container {
-    display: flex;
-    flex-direction: column; /* Tekst under input/knap */
-    align-items: flex-start; /* Juster til venstre */
-}
-
-.search-id-section {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 5px; /* Plads til teksten under */
-}
-
-.search-id-section input[type="text"] {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    width: 280px; /* Lidt bredere */
-    font-size: 0.95em;
-}
-
-.search-id-section .btn-soeg {
-    background-color: #e74c3c;
-    color: white;
+/* Buttons */
+.btn {
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     font-size: 0.95em;
     font-weight: 500;
-    transition: background-color 0.3s ease;
-}
-
-.search-id-section .btn-soeg:hover {
-    background-color: #c0392b;
-}
-
-.search-id-container p {
-    font-size: 0.9em;
-    color: #777;
-    margin-top: 0;
-}
-
-.filter-section {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 15px;
-    align-items: end;
-}
-
-.filter-section select,
-
-.filter-section {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 15px;
-    align-items: end; /* Sørger for at elementer justeres til bunden */
-}
-
-/* Styling for knap-containeren */
-.filter-button-group {
-    display: flex; /* Placerer knapper side om side */
-    gap: 10px; /* Mellemrum mellem knapperne */
-    align-items: center;
-}
-
-/* Styling for "Vis Alle" knappen (baseret på btn-detaljer) */
-.btn-vis-alle {
-    display: inline-block; /* Nødvendigt for padding/height på <a> */
-    padding: 10px 15px; /* Juster padding efter behov */
-    background-color: #6c757d; /* Samme grå som detaljer */
-    color: white;
-    border: none; /* Fjern standard border */
-    border-radius: 5px; /* Match andre knapper */
-    text-decoration: none; /* Fjern link-understregning */
-    cursor: pointer;
-    font-size: 0.95em; /* Match søgeknap */
-    font-weight: 500;
-    text-align: center;
-    height: 40px; /* Match select/søgeknap højde */
-    line-height: 20px; /* Juster for vertikal centrering af tekst */
-    box-sizing: border-box;
-    transition: background-color 0.3s ease;
-}
-
-.btn-vis-alle:hover {
-    background-color: #5a6268; /* Mørkere grå ved hover */
-}
-
-/* Sørg for at din eksisterende søgeknap også har korrekt højde */
-.filter-section .btn-soeg-filter {
-    /* ... eksisterende styles ... */
-    height: 40px; /* Matcher select og vis-alle knap */
-    padding: 10px 20px; /* Sørg for ensartet padding */
-}
-.filter-section .btn-soeg-filter {
-    background-color: #e74c3c;
-    color: white;
-    cursor: pointer;
-    font-weight: 500;
-    transition: background-color 0.3s ease;
-}
-
-.filter-section .btn-soeg-filter:hover {
-    background-color: #c0392b;
-}
-
-.filter-group {
-    display: flex;
-    flex-direction: column;
-}
-
-/* Tabel Styling */
-.car-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    border-radius: 6px; /* Afrundede hjørner for tabellen */
-    overflow: hidden; /* Nødvendigt for border-radius på th/td */
-}
-
-.car-table th,
-.car-table td {
-    border: 1px solid #ddd;
-    padding: 12px 15px; /* Lidt mere padding */
-    text-align: left;
-    font-size: 0.95em;
-}
-
-.car-table th {
-    background-color: #e74c3c;
-    color: white;
-    font-weight: 600;
-    text-transform: uppercase; /* Store bogstaver for headers */
-    font-size: 0.85em; /* Lidt mindre tekst for headers */
-    letter-spacing: 0.5px;
-}
-
-.car-table tr:nth-child(even) td {
-    /* Kun td for at undgå at overskrive th */
-    background-color: #fdf1ef; /* Meget lys rødlig stribe */
-}
-
-.car-table tr:hover td {
-    /* Kun td for at undgå at overskrive th */
-    background-color: #fce5e1; /* Lidt mørkere hover */
-}
-
-.btn-detaljer {
-    background-color: #6c757d; /* Mørkegrå knap */
-    color: white;
-    padding: 8px 15px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.9em;
-    font-weight: 500;
-    transition: background-color 0.3s ease;
     text-decoration: none;
+    transition: background-color 0.3s ease;
 }
 
-.btn-detaljer:hover {
-    background-color: #5a6268;
+.btn-primary {
+    background-color: var(--main-color);
+    color: white;
 }
 
-body {
-    font-family: "Plus Jakarta Sans", sans-serif;
-    margin: 0;
-    background-color: #f8f9fa; /* Lys baggrundsfarve */
-    color: #333;
+.btn-primary:hover {
+    background-color: var(--hover-color);
 }
 
-.container {
-    max-width: 1200px;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: #fff; /* Hvid baggrund for hovedindhold */
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.btn-secondary {
+    background-color: #cccccc;
+    color: var(--text-color);
 }
 
-/* Header Styling (fra billede) */
-.site-header {
-    padding: 15px 30px;
-    background-color: #fff;
-    border-bottom: 1px solid #eee;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.btn-secondary:hover {
+    background-color: #bbbbbb;
 }
 
-.logo-container {
-    display: flex;
-    align-items: center;
-}
+/* Reuse existing button classes but make them extend the new base classes */
+.btn-opret { @extend .btn; @extend .btn-primary; }
+.btn-detaljer { @extend .btn; @extend .btn-secondary; }
+.btn-soeg { @extend .btn; @extend .btn-primary; }
+.btn-soeg-filter { @extend .btn; @extend .btn-primary; }
+.btn-vis-alle { @extend .btn; @extend .btn-secondary; }
+.action-button { @extend .btn; @extend .btn-primary; }
 
-.logo-img {
-    height: 35px; /* Juster efter behov */
-    margin-right: 10px;
-}
-
-.site-title {
-    font-size: 1.5em;
-    font-weight: 700;
-    color: #333; /* Eller din brand farve */
-}
-
-.nav-links {
-    display: flex;
-    gap: 25px; /* Lidt mere plads */
-}
-
-.nav-links a {
-    text-decoration: none;
-    color: #e74c3c; /* Rød link farve */
-    font-weight: 600; /* Lidt tykkere font */
-    padding-bottom: 5px;
-    font-size: 1.1em;
-    transition: color 0.3s ease, border-color 0.3s ease;
-}
-
-.nav-links a:hover {
-    color: #c0392b; /* Mørkere rød ved hover */
-}
-
-.nav-links a.active {
-    border-bottom: 3px solid #e74c3c;
-    font-weight: 700;
-    color: #e74c3c;
-}
-
-.user-info-header {
-    font-size: 0.9em;
-    color: #555;
-    text-align: right;
-}
-.user-info-header span:first-child {
-    color: #777;
-}
-
-/* Side Specifik Styling */
-.header-flex {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px; /* Lidt mindre margin */
-}
-
-.header-flex h1 {
-    margin: 0;
-    color: #333;
-    font-size: 2em; /* Større overskrift */
-}
-
-.description-text {
-    margin-bottom: 25px;
-    color: #555;
-    font-size: 1.1em;
-    line-height: 1.6;
-}
-
+/* Action Sections */
 .action-section {
     display: flex;
     justify-content: flex-start;
-    align-items: flex-start; /* Juster til toppen */
+    align-items: center;
     margin-bottom: 30px;
     gap: 20px;
-    flex-wrap: wrap; /* Tillad wrap på mindre skærme */
+    flex-wrap: wrap;
 }
 
-.create-car-section {
-    text-align: left;
-}
-
-.create-car-section .btn-opret {
-    background-color: #e74c3c;
-    color: white;
-    padding: 12px 22px; /* Lidt større knap */
-    border: none;
-    border-radius: 5px;
-    font-size: 1.05em; /* Lidt større tekst */
-    font-weight: 500;
-    cursor: pointer;
-    margin-bottom: 5px;
-    transition: background-color 0.3s ease;
-}
-
-.create-car-section .btn-opret:hover {
-    background-color: #c0392b;
-}
-
-.create-car-section p {
-    font-size: 0.9em;
-    color: #777;
-    margin-top: 0;
+.create-customer-section {
+    margin-right: 20px;
 }
 
 .search-id-container {
     display: flex;
-    flex-direction: column; /* Tekst under input/knap */
-    align-items: flex-start; /* Juster til venstre */
-}
-
-.search-id-section {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 5px; /* Plads til teksten under */
-}
-
-.search-id-section input[type="text"] {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    width: 280px; /* Lidt bredere */
-    font-size: 0.95em;
-}
-
-.search-id-section .btn-soeg {
-    background-color: #e74c3c;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 0.95em;
-    font-weight: 500;
-    transition: background-color 0.3s ease;
-}
-
-.search-id-section .btn-soeg:hover {
-    background-color: #c0392b;
-}
-
-.search-id-container p {
-    font-size: 0.9em;
-    color: #777;
-    margin-top: 0;
-}
-
-.filter-section {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 15px;
-    align-items: end;
-}
-
-.filter-section select,
-.filter-section .btn-soeg-filter {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 0.95em;
-    box-sizing: border-box;
-    background-color: #fff; /* Sørg for hvid baggrund */
-    height: 40px; /* Ens højde */
-}
-
-.filter-section .btn-soeg-filter {
-    background-color: #e74c3c;
-    color: white;
-    cursor: pointer;
-    font-weight: 500;
-    transition: background-color 0.3s ease;
-}
-
-.filter-section .btn-soeg-filter:hover {
-    background-color: #c0392b;
-}
-
-.filter-group {
-    display: flex;
     flex-direction: column;
+    align-items: flex-start;
+    margin-left: auto;
 }
 
-/* Tabel Styling */
-.car-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    border-radius: 6px; /* Afrundede hjørner for tabellen */
-    overflow: hidden; /* Nødvendigt for border-radius på th/td */
-}
-
-.car-table th,
-.car-table td {
-    border: 1px solid #ddd;
-    padding: 12px 15px; /* Lidt mere padding */
-    text-align: left;
-    font-size: 0.95em;
-}
-
-.car-table th {
-    background-color: #e74c3c;
-    color: white;
-    font-weight: 600;
-    text-transform: uppercase; /* Store bogstaver for headers */
-    font-size: 0.85em; /* Lidt mindre tekst for headers */
-    letter-spacing: 0.5px;
-}
-
-.car-table tr:nth-child(even) td {
-    /* Kun td for at undgå at overskrive th */
-    background-color: #fdf1ef; /* Meget lys rødlig stribe */
-}
-
-.car-table tr:hover td {
-    /* Kun td for at undgå at overskrive th */
-    background-color: #fce5e1; /* Lidt mørkere hover */
-}
-
-.btn-detaljer:hover {
-    background-color: #5a6268;
-}
-.status-update-form {
+/* Forms */
+.form-row {
     display: flex;
     align-items: center;
-    gap: 8px; /* Afstand mellem select og knap */
-    margin: 0;
+    margin-bottom: 15px;
 }
-.status-select {
-    padding: 5px 8px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
+
+.form-row label {
+    flex-basis: 160px;
+    flex-shrink: 0;
+    margin-right: 15px;
+    font-weight: 500;
+    color: var(--text-color);
     font-size: 0.9em;
-    flex-grow: 1; /* Giver select mere plads hvis nødvendigt */
 }
-.btn-gem-status {
-    padding: 6px 10px;
-    font-size: 0.85em;
-    background-color: #5cb85c; /* Grøn for gem */
-    color: white;
-    border: none;
+
+.form-row input[type="text"],
+.form-row input[type="number"],
+.form-row input[type="email"],
+.form-row input[type="tel"],
+.form-row select,
+.form-row textarea {
+    flex-grow: 1;
+    padding: 9px 10px;
+    border: 1px solid var(--border-color);
     border-radius: 4px;
-    cursor: pointer;
-    white-space: nowrap; /* Forhindrer knaptekst i at bryde */
+    font-size: 0.9em;
+    font-family: "Plus Jakarta Sans", sans-serif;
 }
-.btn-gem-status:hover {
-    background-color: #4cae4c;
+
+.form-row input::placeholder,
+.form-row textarea::placeholder {
+    color: #aaa;
 }
-.car-info-table {
-    width: 100%; /* Tabellen tager fuld bredde af sin .car-info-column container */
-    max-width: 700px; /* Sæt en max-bredde for tabellen for at undgå at den bliver for bred */
+
+/* Tables */
+.data-table {
+    width: 100%;
     border-collapse: collapse;
     margin-bottom: 20px;
-    /* Tilføj skygge og afrundede hjørner som i fleetoverview, hvis ønsket */
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    border-radius: 6px;
-    overflow: hidden; /* Vigtigt for at border-radius virker på celler med baggrundsfarve */
-    border: 1px solid #ddd; /* Ydre ramme om tabellen */
 }
 
-.car-info-table td {
-    border: 1px solid #ddd; /* Ramme om hver celle */
-    padding: 10px 15px;    /* Lidt mere padding som i fleetoverview */
-    font-size: 0.95em;
-    text-align: left;      /* Sikrer venstrejustering */
+.data-table th,
+.data-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
 }
 
-.car-info-table td:first-child {
-    font-weight: 600; /* Er allerede i <strong>, men kan forstærkes her */
-    color: #333;
-    background-color: #f9f9f9; /* En meget lys grå for label-kolonnen, hvis ønsket */
-    width: 200px; /* Fast bredde for label-kolonnen, juster efter behov */
-    white-space: nowrap;
+.data-table th {
+    background-color: var(--background-light);
+    font-weight: 600;
 }
 
-.car-info-table td:last-child {
-    color: #555;
+.data-table tr:nth-child(even) td {
+    background-color: var(--background-light);
 }
 
-.car-info-table tr:nth-child(even) td:last-child {
-    background-color: #fdf1ef;
+.data-table tr:hover td {
+    background-color: #f0f0f0;
 }
 
-.view-details-actions {
-    display: flex;         /* For at justere knapperne pænt ved siden af hinanden */
-    gap: 10px;             /* Mellemrum mellem knapperne, hvis der er flere */
-    margin-bottom: 20px;   /* **Dette skaber de 20px afstand ned til næste element** */
-}
-
-.image-section {
-    flex: 1.2;
-    flex-basis: 550px;
-    flex-shrink: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.main-image-container {
-    width: 100%;
-    max-width: 500px;
-    height: auto;
-    min-height: 300px;
-    margin-bottom: 25px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 6px;
-}
-
-.main-car-image {
-    max-width: 100%;
-    max-height: 350px;
-    height: auto;
-    object-fit: contain;
-    border-radius: 4px;
-}
-
-.main-image-placeholder {
-    width: 100%;
-    min-height: 300px;
-    background-color: #e9ecef;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    border-radius: 6px;
-    font-size: 1.1em;
-}
-
-/* For 3-column layout in editConditionReport.html details section */
-.details-columns-container {
-    display: flex;
-    flex-wrap: wrap; /* Allows columns to wrap on smaller screens */
-    justify-content: space-between; /* Distributes space, or use space-around */
-    gap: 20px; /* Consistent space between columns */
-    margin-bottom: 25px; /* Space before the next element (e.g., the form or hr) */
-}
-
-.details-column {
-    flex: 1; /* Allows columns to grow and shrink */
-    min-width: 280px; /* Minimum width before wrapping or shrinking too much; adjust as needed */
-    /* background-color: #ffffff; */ /* Optional: if you want each column to have a white background */
-    /* padding: 15px; */ /* Padding can be added here if not on the container */
-    /* border: 1px solid #e9ecef; */ /* Optional: if each column needs its own border */
-    /* border-radius: 6px; */
-}
-
-/* Styling for headings within the columns */
-.details-column h2 {
-    font-size: 1.25em; /* Adjust as needed */
-    margin-top: 0; /* Remove default top margin */
-    margin-bottom: 15px;
-    padding-bottom: 8px;
-    border-bottom: 2px solid var(--main-color); /* Accent color border */
-}
-
-/* Styling for paragraphs within the columns */
-.details-column p {
-    font-size: 0.9em; /* Slightly smaller text for details */
-    line-height: 1.6;
-    color: #495057;
-    margin-bottom: 8px;
-}
-
-.details-column p strong {
-    color: #212529; /* Darker text for the labels */
-    margin-right: 5px;
-}
-
-/* You might want to ensure that if a column has no content (e.g. report.car is null),
-   it doesn't take up unnecessary space or look broken. The th:if on the inner div
-   should prevent content from rendering, and flexbox should handle the empty space.
-   If one of the report.rentalAgreement, report.car, or report.customer is null,
-   its corresponding .details-column div will still be created, but the inner div with content won't.
-   Flexbox will distribute the remaining columns. If all are null, the parent container won't render.
-*/
-
-/* Dashboard metric cards */
+/* Metric Cards */
 .metric-card {
     background: #fff;
-    border: 1px solid #e0e0e0;
+    border: 1px solid var(--border-color);
     border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    box-shadow: 0 2px 8px var(--shadow-color);
     padding: 30px;
-    margin-bottom: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1053,106 +260,48 @@ body {
 }
 
 .metric-card h2 {
+    margin: 0.2em 0;
     color: var(--main-color);
+    font-size: 1.2em;
+    font-weight: 600;
 }
 
 .metric-card p {
     font-size: 2em;
     font-weight: bold;
     margin: 0;
-    color: #222;
+    color: var(--text-color);
     text-align: center;
 }
 
-.readonly-field-container {
-    display: flex;
-    align-items: center;
-    margin-bottom: 15px;
-}
-.readonly-field-container label {
-    flex-basis: 160px; /* Matcher .opret-bil-form-row label */
-    flex-shrink: 0;
-    margin-right: 15px;
-    font-weight: 500;
-    color: #444;
-    font-size: 0.9em;
-}
-.readonly-field-value {
-    flex-grow: 1;
-    padding: 9px 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    background-color: #e9ecef; /* Lys grå baggrund for at indikere read-only */
-    color: #495057;
-    font-size: 0.9em;
-    font-family: "Plus Jakarta Sans", sans-serif;
-    box-sizing: border-box;
-    min-height: 37px; /* Ca. samme højde som input/select */
-    display: flex;
-    align-items: center;
-}
-.form-info-text {
-    font-size: 0.9em;
-    color: #666;
-    margin-left: 175px; /* Juster for at flugte med input-felter */
-    margin-top: -10px;
-    margin-bottom: 15px;
-}
-
-
-.section-group-columns {
-    display: flex;
-    gap: 2rem;
-    justify-content: center;
-    width: auto;
-    max-width: 300px;
-}
-.section-group-columns > div {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
+/* Responsive Design */
 @media (max-width: 900px) {
-    .section-group-columns {
-        flex-direction: column;
-        gap: 1.5rem;
-        align-items: center;
-        max-width: 100%;
+    .section-columns {
+        grid-template-columns: repeat(2, 1fr);
     }
-    .section-group-columns > div {
-        width: 100%;
-        align-items: center;
+    
+    .form-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .form-row label {
+        margin-bottom: 5px;
     }
 }
 
-.wide-section-group {
-    max-width: 100%;
-    width: 100%;
-    align-items: stretch;
-}
-.wide-section-group .section-group-columns {
-    width: 100%;
-    display: flex;
-    gap: 2rem;
-    justify-content: center;
-}
-.wide-section-group .section-group-columns > div {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    align-items: center;
-}
-
-@media (max-width: 900px) {
-    .wide-section-group .section-group-columns {
-        flex-direction: column;
-        gap: 1.5rem;
-        align-items: center;
+@media (max-width: 600px) {
+    .section-columns {
+        grid-template-columns: 1fr;
     }
-    .wide-section-group .section-group-columns > div {
+    
+    .action-section {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .search-id-container {
+        margin-left: 0;
         width: 100%;
-        align-items: center;
     }
 }
