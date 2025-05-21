@@ -14,8 +14,38 @@
 
 <div th:replace="~{fragments/header :: header('index')}"></div>
 
-
-<h1>Forside</h1>
+<div class="page-container">
+    <h1>Velkommen til Bilabonnement</h1>
+    <div class="page-container">
+        <div class="section-columns">
+            <!-- Data Registrering -->
+            <div class="section-group">
+                <h3>Data Registrering</h3>
+                <a th:href="@{/fleet/overview}" class="section-card">Fleet</a>
+                <a th:href="@{/dataRegistration/customers}" class="section-card">Kunder</a>
+                <a th:href="@{/dataRegistration/rental-agreements}" class="section-card">Lejeaftaler</a>
+                <a th:href="@{/dataRegistration/createCar}" class="section-card">Opret bil</a>
+                <a th:href="@{/customers/create/private}" class="section-card">Opret privatkunde</a>
+                <a th:href="@{/customers/create/business}" class="section-card">Opret erhvervskunde</a>
+                <a th:href="@{/dataRegistration/rental-agreements/create}" class="section-card">Opret lejeaftale</a>
+            </div>
+            <!-- Skade Registrering -->
+            <div class="section-group">
+                <h3>Skade Registrering</h3>
+                <a th:href="@{/conditionReport/list}" class="section-card">Tilstandsrapporter</a>
+                <a th:href="@{/conditionReport/create}" class="section-card">Opret tilstandsrapport</a>
+                <a th:href="@{/conditionReport/reparationStatus}" class="section-card">Reparation Status</a>
+            </div>
+            <!-- Forretningsdata -->
+            <div class="section-group">
+                <h3>Forretningsdata</h3>
+                <a th:href="@{/businessData/revenue}" class="section-card">Omsætning</a>
+                <a th:href="@{/businessData/fleetStatistics}" class="section-card">Fleetstatistik</a>
+                <a th:href="@{/businessData/paymentStatistics}" class="section-card">Betalingsstatistik</a>
+            </div>
+        </div>
+    </div>
+</div>
 
 </body>
 </html>
