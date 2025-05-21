@@ -1037,6 +1037,31 @@ body {
    Flexbox will distribute the remaining columns. If all are null, the parent container won't render.
 */
 
+.action-buttons {
+    display: flex; /* Gør containeren til en flex container */
+    align-items: center; /* Juster elementerne vertikalt i midten */
+    /* Tilføj eventuelt space-between eller lignende hvis du vil have afstand */
+    /* justify-content: space-between; */
+}
+
+.condition-report-action {
+    margin-left: auto; /* Dette skubber dette element (og dets indhold) så langt til højre som muligt */
+    /* Tilføj eventuelt lidt padding eller margin hvis nødvendigt */
+    /* padding-left: 20px; */
+}
+
+.no-condition-report-text {
+    /* Du kan style teksten her, f.eks. gøre den mindre synlig */
+    font-size: 0.9em;
+    color: #666; /* En grålig farve */
+    /* Tilføj eventuelt andre stilarter */
+}
+
+.btn-detaljer {
+    /* Sørg for at denne klasse har passende styling for en knap */
+    /* f.eks. padding, border, background-color, text-decoration: none; */
+}
+
 /* Dashboard metric cards */
 .metric-card {
     background: #fff;

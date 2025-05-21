@@ -19,6 +19,7 @@ import java.util.List;
 public class ConditionReportRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
     private final BeanPropertyRowMapper<ConditionReport> rowMapper = new BeanPropertyRowMapper<>(ConditionReport.class);
 
     public ConditionReport create(ConditionReport report) {
