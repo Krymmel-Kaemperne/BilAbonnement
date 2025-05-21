@@ -17,12 +17,10 @@
   <!-- Side titel -->
   <div class="header-flex">
     <h1>Tilstandsrapporter</h1>
-    <a href="/conditionReport/create" class="btn-opret">Opret ny rapport</a>
+    <p class="description-text">
+      Her kan du se alle tilstandsrapporter og oprette nye.
+    </p>
   </div>
-  <!-- Kort beskrivelse af siden -->
-  <p class="description-text">
-    Her kan du se alle tilstandsrapporter og oprette nye.
-  </p>
 
   <!-- Error and success messages -->
   <div th:if="${errorMessage}" class="alert alert-error" role="alert">
@@ -32,19 +30,22 @@
     <p th:text="${successMessage}">Success message here</p>
   </div>
 
-  <!-- Search by ID section -->
-  <div class="search-id-container">
-    <div class="search-id-section">
-      <form class="search-id-section" th:action="@{/conditionReport/list}" method="get">
-        <input type="text" id="searchReportId" name="searchReportId" placeholder="Indtast rapport ID" th:value="${param.searchReportId}" />
-        <button type="submit" class="btn-soeg">Søg</button>
-      </form>
+  <div class="action-section">
+    <div class="create-customer-section">
+      <a class="btn-opret" th:href="@{/conditionReport/create}">Opret ny rapport</a>
     </div>
-    <p>Find en rapport med dens ID nummer</p>
+    <div class="search-id-container">
+      <div class="search-id-section">
+        <form class="search-id-section" th:action="@{/conditionReport/list}" method="get">
+          <input type="text" id="searchReportId" name="searchReportId" placeholder="Søg på rapport ID" th:value="${param.searchReportId}" />
+          <button type="submit" class="btn-soeg">Søg</button>
+        </form>
+      </div>
+    </div>
   </div>
 
   <!-- Filter section -->
-  <form class="filter-section" th:action="@{/conditionReport/list}" method="get">
+  <form class="filter-section" style="justify-content: flex-end" th:action="@{/conditionReport/list}" method="get">
     <!-- Customer Filter -->
     <div class="filter-group">
       <select id="customerFilter" name="customerId">
@@ -57,9 +58,9 @@
       </select>
     </div>
 
-    <!-- Rental Agreement Filter as dropdown -->
+    <!-- Rental Agreement Filter -->
     <div class="filter-group">
-      <select id="rentalAgreementId" name="rentalAgreementId" class="filter-input">
+      <select id="rentalAgreementId" name="rentalAgreementId">
         <option value="">Lejeaftale ID</option>
         <option th:each="rental : ${availableRentals}"
                 th:value="${rental.rentalAgreementId}"

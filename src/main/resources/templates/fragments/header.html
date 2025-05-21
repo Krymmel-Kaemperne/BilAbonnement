@@ -47,16 +47,16 @@
 
         <!-- Forretningsdata (can be made a dropdown later) -->
         <div class="dropdown">
-            <a th:href="@{/businessData}"
-               th:classappend="${currentPage == 'businessData' or currentPage == 'fleetStatistics' or currentPage == 'paymentStatistics' or currentPage == 'revenue'} ? 'aktive' : ''"
+            <a th:href="@{/forretningsdata/omsætning}"
+               th:classappend="${currentPage == 'businessData'} ? 'aktive' : ''"
                class="nav-link">
                 Forretningsdata <span class="arrow">&#x25BE;</span>
             </a>
 
             <div class="dropdown-content">
-                <a th:href="@{/businessData/revenue}">Omsætning</a>
-                <a th:href="@{/businessData/fleetStatistics}">Fleetstatistik</a>
-                <a th:href="@{/businessData/paymentStatistics}">Betalingsstatistik</a>
+                <a th:href="@{/forretningsdata/omsætning}">Omsætning</a>
+                <a th:href="@{/forretningsdata/fleet}">Fleet</a>
+                <a th:href="@{/forretningsdata/andre}">Andre nøgletal</a>
             </div>
         </div>
 

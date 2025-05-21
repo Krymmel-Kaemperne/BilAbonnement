@@ -1,134 +1,105 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="da" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-
-    <meta charset="UTF-8"/>
+    <meta charset="UTF-8" />
     <title>Lejeaftaler</title>
-    <link rel="stylesheet" href="/stylesheet.css"/> <!-- Sørg for stien er korrekt -->
-    <!-- Font links -->
-    <link rel="preconnect" href="https://fonts.googleapis.com"/>
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link rel="stylesheet" href="/stylesheet.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap"
-          rel="stylesheet"
-    />
+          rel="stylesheet" />
+</head>
 <body>
 
-<!-- 😃 Updateret -->
 <div th:replace="~{fragments/header :: header('dataRegistration')}"></div>
 
 <div class="container">
     <div class="header-flex">
         <h1>Lejeaftale Oversigt</h1>
+        <p class="description-text">
+            Her kan du tilføje, redigere eller se oversigten over lejeaftalerne
+        </p>
     </div>
 
-    <p class="description-text">
-        Her kan du tilføje, redigere eller se oversigten over lejeaftalerne
-    </p>
+    <!-- Viser succes- eller fejlmeddelelser fra RedirectAttributes -->
+    <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}" style="color: green; margin-bottom: 15px;"></div>
+    <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}" style="color: red; margin-bottom: 15px;"></div>
 
     <div class="action-section">
-        <div class="create-car-section">
-
-            <!-- 😃 OPDATERET - RentalAgreementController's createRentalAgreement mapping -->
-            <button type="button" class="btn-opret"
-                    th:onclick="|location.href='@{/dataRegistration/rental-agreements/create}'|">
+        <div class="create-customer-section">
+            <a class="btn-opret" th:onclick="|location.href='@{/dataRegistration/rental-agreements/create}'|">
                 Opret lejeaftale
-            </button>
-            <p>Klik her for at oprette ny lejeaftale</p>
+            </a>
         </div>
-
-        <!-- 😃 OPDATERET - Søg på lejeaftale id -->
         <div class="search-id-container">
             <div class="search-id-section">
                 <form class="search-id-section" th:action="@{/dataRegistration/rental-agreements}" method="get">
                     <input type="text" id="searchAgreementId"
                            name="searchRentalAgreementId"
-                           placeholder="Indtast lejeaftalens ID nummer"
+                           placeholder="Søg på lejeaftale ID"
                            th:value="${param.searchRentalAgreementId}" />
                     <button type="submit" class="btn-soeg">Søg</button>
                 </form>
             </div>
-            <p>Find en lejeaftale med dens ID nummer</p>
+        </div>
+    </div>
+
+    <!-- Filter section -->
+    <form class="filter-section" style="justify-content: flex-end" th:action="@{/dataRegistration/rental-agreements}" method="get">
+        <!-- Status Filter -->
+        <div class="filter-group">
+            <select id="statusFilter" name="statusFilter">
+                <option value="">Status</option>
+                <option value="upcoming" th:selected="${param.statusFilter == 'upcoming'}">Ikke påbegyndt</option>
+                <option value="active" th:selected="${param.statusFilter == 'active'}">Aktiv</option>
+                <option value="completed" th:selected="${param.statusFilter == 'completed'}">Afsluttet</option>
+            </select>
         </div>
 
-    </div>
-
-
-  <!-- 😡 IKKE OPDATERET Filter Formular peger nu på FleetController -->
-  <form class="filter-section" th:action="@{/dataRegistration/rental-agreements}" method="get">
-
-
-
-    <!-- Status Filter  -->
-      <div class="filter-group">
-          <select name="statusFilter">
-              <option value="">Status</option>
-              <option value="upcoming" th:selected="${param.statusFilter == 'upcoming'}">Ikke påbegyndt</option>
-              <option value="active" th:selected="${param.statusFilter == 'active'}">Aktiv</option>
-              <option value="completed" th:selected="${param.statusFilter == 'completed'}">Afsluttet</option>
-          </select>
-      </div>
-
-    <div class="filter-button-group">
-      <button type="submit" class="btn-soeg-filter">Søg</button>
-      <!-- Vis Alle peger nu på rentalAgreementController -->
-      <a th:href="@{/dataRegistration/rental-agreements}" class="btn btn-vis-alle">Vis Alle</a>
-    </div>
-  </form>
-
-
-
+        <div class="filter-button-group">
+            <button type="submit" class="btn-soeg-filter">Søg</button>
+            <a th:href="@{/dataRegistration/rental-agreements}" class="btn btn-vis-alle">Vis Alle</a>
+        </div>
+    </form>
 
     <table class="car-table">
         <thead>
-        <th>ID</th>
-        <th>Bil</th>
-        <th>Kunde</th>
-        <th>Start dato</th>
-        <th>Slut dato</th>
-        <th>Måneds Pris</th>
-        <th>Inkl. km</th>
-        <th>Handlinger</th>
+        <tr>
+            <th>ID</th>
+            <th>Bil</th>
+            <th>Kunde</th>
+            <th>Start dato</th>
+            <th>Slut dato</th>
+            <th>Måneds Pris</th>
+            <th>Inkl. km</th>
+            <th>Handlinger</th>
+        </tr>
         </thead>
-
-      <tbody>
-      <tr th:if="${#lists.isEmpty(agreements)}">
-        <td colspan="8" style="text-align: center">Ingen lejeaftaler fundet</td>
-      </tr>
-
-      <tr th:unless="${#lists.isEmpty(agreements)}" th:each="agreement : ${agreements}">
-        <td th:text="${agreement.rentalAgreementId}">0</td>
-        <td th:text="${carNames[agreement.carId]}">Ukendt bil</td>
-        <td th:text="${customerNames[agreement.customerId]}">N/A</td>
-        <td th:text="${agreement.startDate}">N/A</td>
-        <td th:text="${agreement.endDate}">N/A</td>
-          <td th:text="${agreement.monthlyPrice}">N/A</td>
-        <td th:text="${agreement.kilometersIncluded}">N/A</td>
-        <td>
-
-
-
-          <!-- Detaljer -->
-
-
-          <button type="button" class="btn-detaljer"
-                  th:onclick="|location.href='@{/dataRegistration/rental-agreements/{id}(id=${agreement.rentalAgreementId})}'|">
-            Detaljer
-          </button>
-
-          <!-- Rediger -->
-          <button type="button" class="btn-detaljer"
-                  th:onclick="|location.href='@{/dataRegistration/rental-agreements/edit/{id}(id=${agreement.rentalAgreementId})}'|">
-            Rediger
-          </button>
-
-        </td>
-      </tr>
-      </tbody>
-
+        <tbody>
+        <tr th:if="${#lists.isEmpty(agreements)}">
+            <td colspan="8" style="text-align: center;">Ingen lejeaftaler fundet.</td>
+        </tr>
+        <tr th:unless="${#lists.isEmpty(agreements)}" th:each="agreement : ${agreements}">
+            <td th:text="${agreement.rentalAgreementId}">0</td>
+            <td th:text="${carNames[agreement.carId]}">Ukendt bil</td>
+            <td th:text="${customerNames[agreement.customerId]}">N/A</td>
+            <td th:text="${agreement.startDate}">N/A</td>
+            <td th:text="${agreement.endDate}">N/A</td>
+            <td th:text="${agreement.monthlyPrice}">N/A</td>
+            <td th:text="${agreement.kilometersIncluded}">N/A</td>
+            <td>
+                <a type="button" class="btn-detaljer"
+                   th:onclick="|location.href='@{/dataRegistration/rental-agreements/{id}(id=${agreement.rentalAgreementId})}'|">
+                    Detaljer
+                </a>
+                <a type="button" class="btn-detaljer"
+                   th:onclick="|location.href='@{/dataRegistration/rental-agreements/edit/{id}(id=${agreement.rentalAgreementId})}'|">
+                    Rediger
+                </a>
+            </td>
+        </tr>
+        </tbody>
     </table>
-
-
 </div>
 </body>
 </html>

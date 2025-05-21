@@ -27,13 +27,12 @@
     </div>
     <!-- Knap til at tilføje en skade -->
     <div class="action-section">
-        <button type="button" class="btn-opret" onclick="window.location.href='/conditionReport/list'">
-            Tilbage
-        </button>
-        <button type="button" class="btn-opret"
-                th:onclick="|location.href='@{/conditionReport/damage/create?conditionReportId={id}(id=${report.conditionReportId})}'|">
-            Tilføj skade
-        </button>
+        <a type="button" class="btn-opret" href="/conditionReport/list">
+            Gå til rapporter
+        </a>
+        <a type="button" class="btn-opret" href="/conditionReport/create">
+            Opret ny rapport
+        </a>
     </div>
     <!-- Tabel med skader -->
     <h2>Skader</h2>
@@ -58,10 +57,10 @@
             <td th:text="${damage.damagePrice}">500</td>
             <td>
                 <!-- Knap til at redigere skade -->
-                <button type="button" class="btn-detaljer"
-                        th:onclick="|location.href='@{/conditionReport/damage/edit/{id}(id=${damage.damageId})}'|">
+                <a type="button" class="btn-detaljer"
+                        th:href="@{/conditionReport/damage/edit/{id}(id=${damage.damageId})}" href="#">
                     Rediger
-                </button>
+                </a>
                 <!-- Knap til at slette skade -->
                 <form th:action="@{/conditionReport/damage/delete/{id}(id=${damage.damageId})}" method="post" style="display:inline;">
                     <button type="submit" class="btn-detaljer" onclick="return confirm('Er du sikker på, at du vil slette denne skade?');">Slet</button>

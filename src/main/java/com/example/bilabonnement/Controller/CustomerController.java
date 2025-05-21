@@ -28,9 +28,16 @@ public class CustomerController {
     private ZipcodeService zipcodeService;
 
     @GetMapping("/dataRegistration/customers")
-    public String showCustomerOverview(Model model) {
-        List<Customer> customers = customerService.findAllCustomers();
+    public String showCustomerOverview(
+            @RequestParam(required = false) String searchCustomerId,
+            @RequestParam(required = false) String customerType,
+            @RequestParam(required = false) Integer cityId,
+            @RequestParam(required = false) Boolean hasActiveRental,
+            Model model) {
+        
+        List<Customer> customers = customerService.findFilteredCustomers(searchCustomerId, customerType, cityId, hasActiveRental);
         model.addAttribute("customers", customers);
+        model.addAttribute("availableZipcodes", zipcodeService.findAllZipcodes());
 
         return "dataRegistration/customers";
     }

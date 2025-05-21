@@ -1,46 +1,42 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="da" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <title>Data Registrering</title>
+    <link rel="stylesheet" href="/stylesheet.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap"
           rel="stylesheet">
-    <link rel="stylesheet" href="/stylesheet.css">
-    <title>Data registrering</title>
 </head>
 <body>
-
-<!-- This loads the header fragment -->
 <div th:replace="~{fragments/header :: header('dataRegistration')}"></div>
 
-<div class="page-container">
+<div class="container">
+    <div class="header-flex">
+        <h1>Velkommen til Data Registrering</h1>
+        <p class="description-text">
+            Her kan du administrere biler, kunder og lejeaftaler i systemet.
+        </p>
+    </div>
 
-    <h1>Velkomme til Data Registrering</h1>
+    <div class="section-columns">
+        <div class="section-group">
+            <h3>Biler</h3>
+            <a th:href="@{/fleet/overview}" class="section-card">Se fleet oversigt</a>
+            <a th:href="@{/dataRegistration/createCar}" class="section-card">Opret bil</a>
+        </div>
 
-    <div class="page-container">
-        <div class="section-columns">
+        <div class="section-group">
+            <h3>Kunder</h3>
+            <a th:href="@{/dataRegistration/customers}" class="section-card">Se kunde oversigt</a>
+            <a th:href="@{/customers/create/private}" class="section-card">Opret kunde</a>
+        </div>
 
-            <div class="section-group">
-                <h3>Biler</h3>
-                <a th:href="@{/fleet/overview}" class="section-card">Se fleet oversigt</a>
-                <a th:href="@{/dataRegistration/createCar}" class="section-card">Opret bil</a>
-            </div>
-
-            <div class="section-group">
-                <h3>Kunder</h3>
-                <a th:href="@{/dataRegistration/customers}" class="section-card">Se kunde oversigt</a>
-                <a th:href="@{/customers/create/private}" class="section-card">Opret kunde</a>
-            </div>
-
-            <div class="section-group">
-                <h3>Lejeaftaler</h3>
-                <a th:href="@{/dataRegistration/rental-agreements}" class="section-card">Se lejeaftaler</a>
-                <a th:href="@{/dataRegistration/rental-agreements/create}" class="section-card">Opret lejeaftale</a>
-
-            </div>
-
-
+        <div class="section-group">
+            <h3>Lejeaftaler</h3>
+            <a th:href="@{/dataRegistration/rental-agreements}" class="section-card">Se lejeaftaler</a>
+            <a th:href="@{/dataRegistration/rental-agreements/create}" class="section-card">Opret lejeaftale</a>
         </div>
     </div>
 </div>

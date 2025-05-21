@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/stylesheet.css">
+    <title>Forretnings Omsætning</title>
+</head>
+<body>
+<div th:replace="~{fragments/header :: header('businessData')}"></div>
+
+<div class="container">
+    <div class="header-flex">
+        <h1>Omsætning</h1>
+    </div>
+    <p class="description-text">
+        Nøgletal for omsætning og indtjening.
+    </p>
+    <div class="action-section">
+        <div class="metric-card">
+            <h2>Total omsætning (historisk)</h2>
+            <p th:text="${#numbers.formatDecimal(metrics.totalRevenue, 0, 'COMMA', 2, 'POINT') + ' kr.'}">0 kr.</p>
+        </div>
+        <div class="metric-card">
+            <h2>Omsætning denne måned</h2>
+            <p th:text="${#numbers.formatDecimal(metrics.currentMonthRevenue, 0, 'COMMA', 2, 'POINT') + ' kr.'}">0 kr.</p>
+        </div>
+        <div class="metric-card">
+            <h2>Gennemsnitlig lejeindtægt</h2>
+            <p th:text="${#numbers.formatDecimal(metrics.averageRentalIncome, 0, 'COMMA', 2, 'POINT') + ' kr.'}">0 kr.</p>
+        </div>
+        <div class="metric-card">
+            <h2>Gennemsnitlig omsætning pr. kunde</h2>
+            <p th:text="${#numbers.formatDecimal(metrics.avgRevenuePerCustomer, 0, 'COMMA', 2, 'POINT') + ' kr.'}">0 kr.</p>
+        </div>
+    </div>
+</div>
+
+</body>
+</html> 

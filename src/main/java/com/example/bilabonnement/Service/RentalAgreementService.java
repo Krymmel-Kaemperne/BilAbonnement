@@ -86,6 +86,13 @@ public class RentalAgreementService {
                 .orElse(0) + 1;
     }
 
-
+    public boolean hasActiveRental(int customerId) {
+        return rentalAgreementRepository.findAll().stream()
+                .filter(ra -> ra.getCustomerId() == customerId)
+                .anyMatch(ra -> {
+                    LocalDate now = LocalDate.now();
+                    return !now.isBefore(ra.getStartDate()) && !now.isAfter(ra.getEndDate());
+                });
+    }
 
 }
