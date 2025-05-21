@@ -23,6 +23,19 @@
         <a th:href="@{/dataRegistration/rental-agreements}" class="btn-opret">Tilbage til oversigt</a>
         <a th:href="@{/dataRegistration/rental-agreements/edit/{id}(id=${rentalAgreement.rentalAgreementId})}"
            class="btn-opret">Rediger Lejeaftale</a>
+
+        <div class="condition-report-action">
+            <span class="condition-report-label"><strong>Tilknyttet Tilstandsrapport:</strong></span>
+            <span th:if="${conditionReportId != null and conditionReportId > 0}">
+            <a th:href="@{/conditionReport/view/{id}(id=${conditionReportId})}" class="btn-detaljer">
+                Se tilstandsrapport #<span th:text="${conditionReportId}"></span>
+            </a>
+        </span>
+            <span th:unless="${conditionReportId != null and conditionReportId > 0}">
+            <span class="no-condition-report-text">Ingen tilstandsrapport tilknyttet</span>
+        </span>
+        </div>
+
     </div>
 
     <div class="details-columns-container">
@@ -213,6 +226,7 @@
                         N/A
                     </td>
                 </tr>
+
                 </tbody>
             </table>
         </div>

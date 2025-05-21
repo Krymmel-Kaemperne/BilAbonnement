@@ -1,13 +1,7 @@
 package com.example.bilabonnement.Controller;
 
-import com.example.bilabonnement.Model.Car;
-import com.example.bilabonnement.Model.Customer;
-import com.example.bilabonnement.Model.Location;
-import com.example.bilabonnement.Model.RentalAgreement;
-import com.example.bilabonnement.Service.CarService;
-import com.example.bilabonnement.Service.CustomerService;
-import com.example.bilabonnement.Service.LocationService;
-import com.example.bilabonnement.Service.RentalAgreementService;
+import com.example.bilabonnement.Model.*;
+import com.example.bilabonnement.Service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,6 +28,9 @@ public class RentalAgreementController {
 
     @Autowired
     private LocationService locationService;
+
+    @Autowired
+    private ConditionReportService conditionReportService;
 
     // OVERVIEW
     @GetMapping("/rental-agreements")
@@ -312,6 +309,13 @@ public class RentalAgreementController {
         } else
         {
             model.addAttribute("returnLocationDetails", null);
+        }
+        List<ConditionReport> conditionReports = conditionReportService.findByRentalAgreementId(rentalAgreementId);
+
+        if (conditionReports != null && !conditionReports.isEmpty()) {
+            model.addAttribute("conditionReportId", conditionReports.getFirst().getConditionReportId());
+        } else {
+            model.addAttribute("conditionReportId", null); // Eller 0, alt efter hvad der giver mest mening i din implementering
         }
         return "dataRegistration/rental/view-rental-details";
     }

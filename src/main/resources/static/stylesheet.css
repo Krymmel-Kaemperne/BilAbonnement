@@ -225,7 +225,7 @@ body {
 
 .nav-links a {
     text-decoration: none;
-    color: #e74c3c; /* Consider using your main color variable here */
+    color: #e74c3c; 
     font-weight: 600;
     padding-bottom: 5px;
     font-size: 1.1em;
@@ -233,13 +233,13 @@ body {
 }
 
 .nav-links a:hover {
-    color: #c0392b; /* Consider using your hover color variable here */
+    color: #c0392b;
 }
 
 .nav-links a.active {
-    border-bottom: 3px solid #e74c3c; /* Consider using your main color variable here */
+    border-bottom: 3px solid #e74c3c;
     font-weight: 700;
-    color: #e74c3c; /* Consider using your main color variable here */
+    color: #e74c3c; 
 }
 
 .user-info-header {
@@ -510,9 +510,9 @@ body {
 .btn-opret:hover,
 .search-id-section .btn-soeg:hover,
 .filter-section .btn-soeg-filter:hover,
-.opret-bil-submit-btn:hover, /* Keep both opret-bil-knap and opret-bil-submit-btn for compatibility */
+.opret-bil-submit-btn:hover,
 .action-button:hover {
-    background-color: var(--hover-color); /* Using hover color variable */
+    background-color: var(--hover-color);
 }
 
 
@@ -543,7 +543,7 @@ body {
     border-radius: 4px;
     cursor: pointer;
     white-space: nowrap;
-    transition: background-color 0.3s ease; /* Added transition */
+    transition: background-color 0.3s ease;
 }
 
 .btn-gem-status:hover {
@@ -618,7 +618,7 @@ body {
 }
 
 .car-table th {
-    background-color: #e74c3c; /* Consider using your main color variable here */
+    background-color: #e74c3c;
     color: white;
     font-weight: 600;
     text-transform: uppercase;
@@ -685,7 +685,7 @@ body {
 }
 
 .section-card:hover {
-    background-color: #ff3c00; /* Consider using your hover color variable here */
+    background-color: #ff3c00;
     color: white;
 }
 
@@ -818,58 +818,8 @@ body {
     margin-right: 5px;
 }
 
-/* ==========================================================================
-   Utility Classes
-   ========================================================================== */
-/* Center content */
 .opret-bil-center-row {
     text-align: center;
     margin-top: 15px;
     margin-bottom: 15px;
-}
-
-
-/* ==========================================================================
-   Responsive Design
-   ========================================================================== */
-@media (max-width: 900px) {
-    .section-group-columns {
-        flex-direction: column;
-        gap: 1.5rem;
-        align-items: center;
-        max-width: 100%; /* Added to ensure responsiveness */
-    }
-
-    .section-group-columns > div {
-        width: 100%;
-        align-items: center;
-    }
-
-    .wide-section-group .section-group-columns {
-        flex-direction: column;
-        gap: 1.5rem;
-        align-items: center;
-    }
-
-    .wide-section-group .section-group-columns > div {
-        width: 100%;
-        align-items: center;
-    }
-}
-
-@media (max-width: 600px) {
-    .opret-bil-form-row {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .opret-bil-form-row label {
-        flex-basis: auto;
-        margin-bottom: 5px;
-        margin-right: 0;
-    }
-
-    .opret-bil-submit-row {
-        text-align: center;
-    }
 }
