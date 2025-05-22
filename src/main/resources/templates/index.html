@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="da" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8"/>
     <title>BilAbonnement - Administration</title>
-    <link rel="stylesheet" href="/stylesheet.css" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/stylesheet.css"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap"
+          rel="stylesheet"/>
 </head>
 <body>
 <div th:replace="~{fragments/header :: header('home')}"></div>
@@ -15,8 +16,10 @@
     <div class="header-flex">
         <h1>Velkommen til BilAbonnement Administration</h1>
         <p class="description-text">
-            Her kan du administrere alle aspekter af bilabonnement systemet. Vælg en sektion nedenfor for at komme i gang.
+            Her kan du administrere alle aspekter af bilabonnement systemet. Vælg en sektion nedenfor for at komme i
+            gang.
         </p>
+
     </div>
 
     <div class="section-columns">
@@ -42,5 +45,13 @@
         </div>
     </div>
 </div>
+
+<div class="container">
+    <h4>Årlig omsætning</h4>
+    <img src="/img/graphs/graphs_01-06.png" alt="BilAbonnement Banner" class="graph-center"/>
+    <p style="color:gray; font-size: 12px;">Placeholder</p>
+</div>
+
+
 </body>
 </html>

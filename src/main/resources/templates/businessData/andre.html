@@ -6,14 +6,14 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/stylesheet.css">
-    <title>Forretnings Andre Nøgletal</title>
+    <title>Nøgletal</title>
 </head>
 <body>
 <div th:replace="~{fragments/header :: header('businessData')}"></div>
 
 <div class="container">
     <div class="header-flex">
-        <h1>Andre Nøgletal</h1>
+        <h1>Nøgletal</h1>
     </div>
     <p class="description-text">
         Øvrige nøgletal for kunder og lejeaftaler.
@@ -40,6 +40,22 @@
             <p th:text="${#numbers.formatDecimal(metrics.avgRevenuePerCustomer, 0, 'COMMA', 2, 'POINT') + ' kr.'}">0 kr.</p>
         </div>
     </div>
+</div>
+
+<div class="container">
+    <h4>Prognose for indtægter for 2025</h4>
+    <div class="graph-row">
+        <img src="/img/graphs/graphs_01.png" alt="Graf 5" class="graph-center"/>
+    </div>
+    <p style="color:gray; font-size: 12px;">Placeholder</p>
+</div>
+
+<div class="container">
+    <h4>Månedlig oprettelser af lejeaftaler</h4>
+    <div class="graph-row">
+        <img src="/img/graphs/graphs_01-03.png" alt="Graf 3" class="graph-center"/>
+    </div>
+    <p style="color:gray; font-size: 12px;">Placeholder</p>
 </div>
 
 </body>
