@@ -29,24 +29,30 @@ public class CarService {
         this.carRepository = carRepository;
     }
 
+    /**
+     * Finder alle biler i systemet.
+     */
     public List<Car> findAllCars() {
         return carRepository.findAll();
     }
 
 
-    // Finder en specifik bil ud fra dens ID.
+    /**
+     * Finder en specifik bil ud fra dens ID.
+     */
     public Car findById(int carId) {
-        // Her kunne man tilføje logik, f.eks. hvis bilen ikke findes,
-        // kunne man kaste en custom exception i stedet for bare at returnere null.
         return carRepository.findById(carId);
     }
 
 
+    /**
+     * Opretter en ny bil efter validering.
+     */
     public Car create(Car car) {
+        // Validerer input Car objektet og dets felter.
         if (car == null) {
             throw new IllegalArgumentException("Car object cannot be null.");
         }
-        // Simpel validering - dette bør udvides baseret på forretningsregler
         if (!StringUtils.hasText(car.getRegistrationNumber())) {
             throw new IllegalArgumentException("Registreringsnummer er påkrævet.");
         }
@@ -63,28 +69,18 @@ public class CarService {
         if (car.getTransmissionTypeId() == null || car.getTransmissionTypeId() <= 0) {
             throw new IllegalArgumentException("Et gyldigt Transmissionstype ID er påkrævet.");
         }
-        // Yderligere validering kan omfatte:
-        // - Tjek at stålpris er positiv
-        // - Tjek format på registreringsnummer, chassisnummer etc.
-        // - Tjek at de angivne ID'er (modelId, carStatusId etc.) rent faktisk findes i deres respektive tabeller.
 
         return carRepository.create(car);
     }
 
     /*
-     * Opdaterer en eksisterende bil.
-     * @param car Bilen med opdaterede data (skal have et gyldigt carId).
-     * @return Den opdaterede bil.
-     * @throws IllegalArgumentException hvis carId er ugyldigt eller car objektet er null.
+     * Opdaterer en eksisterende bil efter validering.
      */
     public Car update(Car car) {
         if (car == null || car.getCarId() <= 0) {
             throw new IllegalArgumentException("Et gyldigt Car objekt med ID er påkrævet for opdatering.");
         }
-        // Tilføj lignende validering som i create, hvis nødvendigt,
-        // f.eks. at de nye ID'er (modelId, statusId etc.) er gyldige.
 
-        // Tjek om bilen overhovedet eksisterer før opdatering (valgfrit, men god praksis)
         Car existingCar = carRepository.findById(car.getCarId());
         if (existingCar == null) {
             throw new IllegalArgumentException("Bil med ID " + car.getCarId() + " blev ikke fundet og kan ikke opdateres.");
@@ -93,12 +89,19 @@ public class CarService {
         return carRepository.update(car);
     }
 
-    public List<Car> findCarsByFilters(Integer brand, Integer status, Integer model, Integer fuelType, Integer transmissionType) {
-        return carRepository.findByFilters(brand, status, model, fuelType, transmissionType);
+    /**
+     * Finder biler baseret på de angivne filterkriterier.
+     */
+    public List<Car> findCarsByFilters(Integer brand, Integer status, Integer model, Integer fuelType, Integer TransmissionType) {
+        return carRepository.findByFilters(brand, status, model, fuelType, TransmissionType);
     }
 
 
 
+    /**
+     * Tjekker om en bil aktuelt er udlejet.
+     * Sammenligner dagens dato med slutdatoen for lejeaftaler tilknyttet bilen.
+     */
     public boolean isCarCurrentlyRentedOut(int carId) {
         List<RentalAgreement> agreements = rentalAgreementRepository.findAgreementsByCarId(carId);
         LocalDate today = LocalDate.now();
@@ -119,4 +122,3 @@ public class CarService {
         return result;
     }
 }
-

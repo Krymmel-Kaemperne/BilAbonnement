@@ -19,14 +19,14 @@ public class ForretningsService {
         int availableCars = forretningsRepository.countAvailableCars();
         int carsWithDamages = forretningsRepository.countCarsWithDamages();
         int totalCustomers = forretningsRepository.countTotalCustomers();
-        int newCustomersThisMonth = forretningsRepository.countNewCustomersThisMonth();
+        int newRentalsThisMonth = forretningsRepository.countNewRentalsThisMonth();
         int completedRentalAgreements = forretningsRepository.countCompletedRentalAgreements();
         java.math.BigDecimal avgRentalPeriodMonths = forretningsRepository.avgRentalPeriodMonths();
         java.math.BigDecimal currentMonthRevenue = forretningsRepository.sumCurrentMonthRevenue();
         java.math.BigDecimal avgRevenuePerCustomer = forretningsRepository.avgRevenuePerCustomer();
         return new ForretningsModel(
             activeRentals, currentRevenue, totalRevenue, averageRentalIncome,
-            totalCars, availableCars, carsWithDamages, totalCustomers, newCustomersThisMonth,
+            totalCars, availableCars, carsWithDamages, totalCustomers, newRentalsThisMonth,
             completedRentalAgreements, avgRentalPeriodMonths, currentMonthRevenue, avgRevenuePerCustomer
         );
     }

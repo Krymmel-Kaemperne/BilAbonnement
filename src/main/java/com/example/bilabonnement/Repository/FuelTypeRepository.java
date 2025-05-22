@@ -16,8 +16,12 @@ public class FuelTypeRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    /**
+     * Finder alle brændstoftyper i databasen.
+     */
     public List<FuelType> findAllFuelTypes() {
         String sql = "SELECT fuel_type_id, fuel_type_name FROM fueltype ORDER BY fuel_type_name";
+        // Udfører forespørgslen og mapper resultatrækkerne til FuelType-objekter.
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(FuelType.class));
     }
 }

@@ -9,14 +9,14 @@ import com.example.bilabonnement.Service.CustomerService;
 import com.example.bilabonnement.Service.CarService;
 import com.example.bilabonnement.Model.Customer;
 import com.example.bilabonnement.Model.Car;
-import com.example.bilabonnement.Model.RentalAgreement; // Sørg for denne er importeret
+import com.example.bilabonnement.Model.RentalAgreement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.time.LocalDate; // Importer LocalDate
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.time.format.DateTimeFormatter;
@@ -26,7 +26,6 @@ import java.time.format.DateTimeFormatter;
 @RequestMapping("/conditionReport")
 public class ConditionReportController {
 
-    // BRUG KONSTRUKTØR-INJEKTION I STEDET FOR FELT-INJEKTION
     private final ConditionReportService conditionReportService;
     private final DamageService damageService;
     private final RentalAgreementService rentalAgreementService;
@@ -55,11 +54,10 @@ public class ConditionReportController {
             @RequestParam(required = false) String endDate,
             Model model) {
 
-        // Parse dates if provided
         LocalDate startDateParsed = null;
         LocalDate endDateParsed = null;
         DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        
+
         if (startDate != null && !startDate.isEmpty()) {
             startDateParsed = LocalDate.parse(startDate, inputFormatter);
         }
@@ -67,37 +65,38 @@ public class ConditionReportController {
             endDateParsed = LocalDate.parse(endDate, inputFormatter);
         }
 
-        // Get filtered reports
+        // Filtreret rapporter baseret på søgekriterier
         List<ConditionReport> filteredReports = conditionReportService.findByFilters(
-            searchReportId, customerId, rentalAgreementId, startDateParsed, endDateParsed
+                searchReportId, customerId, rentalAgreementId, startDateParsed, endDateParsed
         );
 
-        // Format dates for display
+        // Formater datoer til dd-mm-yyyy for visning
         conditionReportService.formatReportDates(filteredReports);
 
-        // Add filter options to the model
+        // Tilføj filtermuligheder til modellen
         model.addAttribute("availableCustomers", customerService.findAllCustomers());
         model.addAttribute("availableRentals", rentalAgreementService.findAll());
-        
-        // Add the filtered reports to the model
+
+        // Tilføj de filtrerede rapporter til modellen
         model.addAttribute("reports", filteredReports);
         return "damageRegistration/rapports";
     }
 
     @GetMapping("/view/{id}")
     public String viewReport(@PathVariable int id, Model model) {
+        // Hent rapport med tilknyttede skader
         ConditionReport reportWithDetails = conditionReportService.getConditionReportWithDetails(id);
         if (reportWithDetails == null) {
             // Håndter hvis rapport ikke findes
             return "redirect:/conditionReport/list?error=notFound";
         }
-        
-        // Format the date if it exists
+
+        // Formater datoen hvis den findes
         if (reportWithDetails.getReportDate() != null) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
             reportWithDetails.setFormattedDate(reportWithDetails.getReportDate().format(formatter));
         }
-        
+
         model.addAttribute("report", reportWithDetails);
         model.addAttribute("damages", reportWithDetails.getDamages() != null ? reportWithDetails.getDamages() : new ArrayList<>());
         model.addAttribute("totalDamagePrice", reportWithDetails.getTotalPrice() != null ? reportWithDetails.getTotalPrice() : java.math.BigDecimal.ZERO);
@@ -111,10 +110,10 @@ public class ConditionReportController {
         if (rentalAgreementId != null) {
             report.setRentalAgreementId(rentalAgreementId);
         }
-        // Hent lejeaftaler (overvej en metode som findAllActiveOrRelevant() i din service)
+        // Hent lejeaftaler der er afsluttet og klar til rapportoprettelse
         List<RentalAgreement> rentalAgreements = conditionReportService.getFinishedRentalAgreementsForReportCreation();
 
-        // Kald den nye private hjælpemetode
+        // Kald den nye private hjælpemetode til formatering
         model.addAttribute("rentalAgreementOptions", formatRentalAgreementsForDropdown(rentalAgreements));
 
         model.addAttribute("report", report);
@@ -123,23 +122,24 @@ public class ConditionReportController {
 
     @PostMapping("/create")
     public String create(@ModelAttribute ConditionReport report, RedirectAttributes redirectAttributes) {
-        // Validate that rentalAgreementId is not null
+        // Valider at rentalAgreementId ikke er null
         if (report.getRentalAgreementId() == null) {
             redirectAttributes.addFlashAttribute("errorMessage", "Fejl: Du skal vælge en lejeaftale.");
             return "redirect:/conditionReport/create";
         }
 
-        // Set date to today if not provided
+        // Sæt dato til i dag hvis ikke angivet
         if (report.getReportDate() == null) {
             report.setReportDate(LocalDate.now());
         }
 
-        // Format the date as dd-MM-yyyy
+        // Formater datoen som dd-MM-yyyy
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         if (report.getReportDate() != null) {
             report.setFormattedDate(report.getReportDate().format(formatter));
         }
 
+        // Opret rapporten i databasen
         ConditionReport created = conditionReportService.create(report);
         if (created == null || created.getConditionReportId() == 0) {
             redirectAttributes.addFlashAttribute("errorMessage", "Fejl: Kunne ikke oprette tilstandsrapport.");
@@ -151,6 +151,7 @@ public class ConditionReportController {
 
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable int id, Model model) {
+        // Hent rapporten med detaljer for redigering
         ConditionReport reportWithDetails = conditionReportService.getConditionReportWithDetails(id);
         if (reportWithDetails == null) {
             return "redirect:/conditionReport/list?error=notFound";
@@ -168,6 +169,7 @@ public class ConditionReportController {
             report.setReportDate(LocalDate.now());
         }
 
+        // Opdater rapporten i databasen
         int rowsAffected = conditionReportService.update(report); // Modtag int
 
         if (rowsAffected > 0) { // Tjek om mindst én række blev opdateret
@@ -175,14 +177,13 @@ public class ConditionReportController {
         } else {
             redirectAttributes.addFlashAttribute("errorMessage", "Fejl: Kunne ikke opdatere tilstandsrapport (rapport ikke fundet eller ingen ændringer).");
             //redirecte tilbage til edit-siden med fejlen og de indtastede data,
-             redirectAttributes.addFlashAttribute("report", report); // Send rapporten tilbage
-             return "redirect:/conditionReport/edit/" + report.getConditionReportId();
+            redirectAttributes.addFlashAttribute("report", report); // Send rapporten tilbage
+            return "redirect:/conditionReport/edit/" + report.getConditionReportId();
         }
         return "redirect:/conditionReport/list"; // Eller redirect til view-siden for den opdaterede rapport
     }
 
 
-    // Damage endpoints (forbliver som de var, med mindre du også vil refaktorere dem)
     @GetMapping("/damage/create")
     public String showCreateDamageForm(@RequestParam int conditionReportId, Model model) {
         Damage damage = new Damage();
@@ -194,6 +195,7 @@ public class ConditionReportController {
 
     @PostMapping("/damage/create")
     public String createDamage(@ModelAttribute Damage damage, RedirectAttributes redirectAttributes) {
+        // Opret skaden i databasen
         damageService.create(damage);
         redirectAttributes.addFlashAttribute("successMessage", "Skade oprettet!");
         return "redirect:/conditionReport/view/" + damage.getConditionReportId();
@@ -201,6 +203,7 @@ public class ConditionReportController {
 
     @GetMapping("/damage/edit/{id}") // Ændret til {id} for at matche path variable navnet
     public String showEditDamageForm(@PathVariable int id, Model model) { // Ændret parameter til id
+        // Hent skaden til redigering
         Damage damage = damageService.findById(id);
         if (damage == null) {
             return "redirect:/conditionReport/list?error=damageNotFound";
@@ -212,6 +215,7 @@ public class ConditionReportController {
 
     @PostMapping("/damage/edit")
     public String editDamage(@ModelAttribute Damage damage, RedirectAttributes redirectAttributes) {
+        // Opdater skaden i databasen
         damageService.update(damage);
         redirectAttributes.addFlashAttribute("successMessage", "Skade opdateret!");
         return "redirect:/conditionReport/view/" + damage.getConditionReportId();
@@ -219,6 +223,7 @@ public class ConditionReportController {
 
     @PostMapping("/damage/delete/{id}")
     public String deleteDamage(@PathVariable int id, RedirectAttributes redirectAttributes) {
+        // Slet skaden fra databasen
         Damage damage = damageService.findById(id);
         if (damage != null) {
             int conditionReportId = damage.getConditionReportId();
@@ -233,6 +238,7 @@ public class ConditionReportController {
 
     @GetMapping("/reparationStatus")
     public String showReparationStatus(Model model) {
+        // Hent statistikker for reparationer
         double averageDamagesPerReport = conditionReportService.getAverageDamagesPerReport();
         double averageDamagePrice = conditionReportService.getAverageDamagePrice();
         model.addAttribute("averageDamagesPerReport", averageDamagesPerReport);
@@ -240,6 +246,7 @@ public class ConditionReportController {
         return "damageRegistration/reparationStatus";
     }
 
+    // Hjælpemetode til formatering af lejeaftaler for dropdown-liste
     private List<String[]> formatRentalAgreementsForDropdown(List<RentalAgreement> agreements) {
         if (agreements == null) {
             return new ArrayList<>();

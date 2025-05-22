@@ -21,21 +21,20 @@ public class ZipcodeRepository {
     private JdbcTemplate jdbcTemplate;
 
 
-    // Gemmer et nyt postnummer. Returnerer det gemte postnummer med id
+    /**
+     * Gemmer et nyt postnummer i databasen. Hvis et postnummer med samme kode allerede
+     * eksisterer, returneres det eksisterende postnummer.
+     */
     public Zipcode save(Zipcode zipcode) {
-        // Først tjek om postnummeret eksisterer baseret på zip_code streng
         Zipcode existingZipcode = findByZipcodeString(zipcode.getZipcode());
         if(existingZipcode != null) {
             return existingZipcode;
         }
 
-        // Hvis ikke, opret nyt
         String sql = "INSERT INTO zipcode (zip_code, city_name) VALUES (?, ?)";
-        // KeyHolder (i Spring JDBC): Er et værktøj til at fange og hente det auto-genererede
-        // ID tilbage til din Java-kode i samme ombæring som INSERT-operationen,
-        // så du kan opdatere dit Java-objekt med det korrekte ID.
         KeyHolder keyholder = new GeneratedKeyHolder();
 
+        // Udfører INSERT-forespørgslen og henter den genererede nøgle.
         jdbcTemplate.update(con -> {
             PreparedStatement ps = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
             ps.setString(1, zipcode.getZipcode());
@@ -52,7 +51,9 @@ public class ZipcodeRepository {
         return zipcode;
     }
 
-    // Find et postnummer baseret på dets Id
+    /**
+     * Finder et postnummer baseret på dets ID.
+     */
     public Zipcode findById(int id) {
         String sql = "SELECT zipcode_id, zip_code AS zipcode, city_name FROM zipcode WHERE zipcode_id = ?";
         try {
@@ -62,18 +63,23 @@ public class ZipcodeRepository {
         }
     }
 
-    // Finder postnummer baseret på postnummer streng
+    /**
+     * Finder et postnummer baseret på postnummer strengen (f.eks. "4000").
+     */
     public Zipcode findByZipcodeString(String zipcode) {
-        String sql = "SELECT zipcode_id, zipcode AS zipcode, city_name FROM zipcode WHERE zip_code = ?";
+        String sql = "SELECT zipcode_id, zip_code AS zipcode, city_name FROM zipcode WHERE zip_code = ?";
         try {
             return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(Zipcode.class), zipcode);
         } catch (EmptyResultDataAccessException e) {
-            return null; // returnerer null hvis intet fundet
+            return null;
         }
     }
 
-    // Hent alle zipcodes
+    /**
+     * Finder alle postnumre i databasen.
+     */
     public List<Zipcode> findAll() {
+        // SQL forespørgsel til at vælge alle postnumre og sortere dem.
         String sql = "SELECT zipcode_id, zip_code AS zipcode, city_name FROM zipcode ORDER BY zip_code";
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Zipcode.class));
     }

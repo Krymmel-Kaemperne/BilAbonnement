@@ -12,11 +12,17 @@ public class CarStatusService {
     @Autowired
     private CarStatusRepository carStatusRepository;
 
+    /**
+     * Finder alle bilstatusser.
+     */
     public List<CarStatus> findAllStatuses() {
         return carStatusRepository.findAllStatuses();
     }
 
+    /**
+     * Finder en specifik bilstatus baseret på ID.
+     */
     public CarStatus findCarStatusById(int statusId) {
         return carStatusRepository.findCarStatusById(statusId);
     }
-} 
+}

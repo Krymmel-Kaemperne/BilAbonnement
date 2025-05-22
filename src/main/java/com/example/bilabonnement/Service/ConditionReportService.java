@@ -1,10 +1,9 @@
 package com.example.bilabonnement.Service;
 
 import com.example.bilabonnement.Model.ConditionReport;
-import com.example.bilabonnement.Model.Damage; 
+import com.example.bilabonnement.Model.Damage;
 import com.example.bilabonnement.Repository.ConditionReportRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -12,89 +11,256 @@ import java.util.List;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.time.format.DateTimeFormatter;
+import java.util.stream.Collectors;
 
 import com.example.bilabonnement.Model.Car;
 import com.example.bilabonnement.Model.Customer;
 import com.example.bilabonnement.Model.RentalAgreement;
-import com.example.bilabonnement.Service.RentalAgreementService;
-import com.example.bilabonnement.Service.CarService;
-import com.example.bilabonnement.Service.CustomerService;
-import com.example.bilabonnement.Service.DamageService;
 
 // Serviceklasse for forretningslogik vedrørende tilstandsrapporter
 @Service
 public class ConditionReportService {
-    @Autowired
-    private ConditionReportRepository conditionReportRepository;
-
-    @Autowired
-    private RentalAgreementService rentalAgreementService;
-    @Autowired
-    private CarService carService;
-    @Autowired
-    private CustomerService customerService;
-    @Autowired
-    private DamageService damageService;
+    private final ConditionReportRepository conditionReportRepository;
+    private final RentalAgreementService rentalAgreementService;
+    private final CarService carService;
+    private final CustomerService customerService;
+    private final DamageService damageService;
 
     private final DateTimeFormatter displayFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
+    @Autowired
+    public ConditionReportService(ConditionReportRepository conditionReportRepository,
+                                  RentalAgreementService rentalAgreementService,
+                                  CarService carService,
+                                  CustomerService customerService,
+                                  DamageService damageService) {
+        this.conditionReportRepository = conditionReportRepository;
+        this.rentalAgreementService = rentalAgreementService;
+        this.carService = carService;
+        this.customerService = customerService;
+        this.damageService = damageService;
+    }
+
+    /**
+     * Opretter en ny tilstandsrapport, håndterer dato og formatering.
+     */
     public ConditionReport create(ConditionReport report) {
-        // Set date to today if not provided
-        if (report.getReportDate() == null) {
-            report.setReportDate(LocalDate.now());
+        if (report == null) {
+            throw new IllegalArgumentException("ConditionReport object cannot be null.");
         }
 
-        // Parse the date in dd-MM-yyyy format if it's a string
+        LocalDate reportDate = LocalDate.now();
         if (report.getFormattedDate() != null && !report.getFormattedDate().isEmpty()) {
             try {
-                report.setReportDate(LocalDate.parse(report.getFormattedDate(), displayFormatter));
+                reportDate = LocalDate.parse(report.getFormattedDate(), displayFormatter);
             } catch (Exception e) {
-                // If parsing fails, keep the existing date or today's date
-                if (report.getReportDate() == null) {
-                    report.setReportDate(LocalDate.now());
-                }
+                System.err.println("Error parsing date '" + report.getFormattedDate() + "'. Using default date: " + reportDate);
             }
+        } else if (report.getReportDate() != null) {
+            reportDate = report.getReportDate();
         }
+        report.setReportDate(reportDate);
 
-        // Format the date for display
+        // Formatér datoen for visning.
         formatReportDate(report);
 
         return conditionReportRepository.create(report);
     }
 
+    /**
+     * Finder en tilstandsrapport baseret på dens ID.
+     */
     public ConditionReport findById(int id) {
         return conditionReportRepository.findById(id);
     }
 
+    /**
+     * Finder tilstandsrapporter tilknyttet en specifik lejeaftale.
+     */
     public List<ConditionReport> findByRentalAgreementId(int rentalAgreementId) {
         return conditionReportRepository.findByRentalAgreementId(rentalAgreementId);
     }
 
+    /**
+     * Finder alle tilstandsrapporter.
+     */
     public List<ConditionReport> findAll() {
         return conditionReportRepository.findAll();
     }
 
+    /**
+     * Opdaterer en eksisterende tilstandsrapport.
+     */
     public int update(ConditionReport report) {
+        if (report == null || report.getConditionReportId() <= 0) {
+            throw new IllegalArgumentException("Valid ConditionReport object with ID is required for update.");
+        }
         return conditionReportRepository.update(report);
     }
 
+    /**
+     * Sletter en tilstandsrapport baseret på dens ID.
+     */
     public int delete(int id) {
         return conditionReportRepository.delete(id);
     }
 
-    // Beregn totalpris for alle skader tilknyttet en tilstandsrapport
+    /**
+     * Beregner den totale pris for en liste af skader.
+     */
     public BigDecimal calculateTotalDamagePrice(List<Damage> damages) {
-        BigDecimal total =  BigDecimal.ZERO;
-        for (Damage damage : damages) {
-            if (damage.getDamagePrice() != null) {
-                total = total.add(damage.getDamagePrice());
-            }
+        if (damages == null || damages.isEmpty()) {
+            return BigDecimal.ZERO;
         }
-        return total;
+        // Bruger Stream til at beregne totalen.
+        return damages.stream()
+                .filter(damage -> damage != null && damage.getDamagePrice() != null)
+                .map(Damage::getDamagePrice)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
+    /**
+     * Henter en tilstandsrapport med alle tilknyttede detaljer.
+     */
     public ConditionReport getConditionReportWithDetails(int conditionReportId) {
-        ConditionReport report = conditionReportRepository.findById(conditionReportId);
+        // Finder selve rapporten og beriger den.
+        ConditionReport report = findById(conditionReportId);
+        if (report == null) {
+            return null;
+        }
+        return enrichConditionReport(report);
+    }
+
+    /**
+     * Beregner gennemsnitligt antal skader pr. lejeaftale.
+     */
+    public double getAverageDamagesPerRental() {
+        int totalDamages = damageService.countAllDamages();
+        int totalRentals = rentalAgreementService.countAllRentalAgreements();
+        if (totalRentals == 0) return 0.0;
+        return (double) totalDamages / totalRentals;
+    }
+
+    /**
+     * Henter det totale antal skader.
+     */
+    public int getTotalDamages() {
+        return damageService.countAllDamages();
+    }
+
+    /**
+     * Henter det totale antal lejeaftaler.
+     */
+    public int getTotalRentals() {
+        return rentalAgreementService.countAllRentalAgreements();
+    }
+
+    /**
+     * Beregner den gennemsnitlige pris pr. skade.
+     */
+    public double getAverageDamagePrice() {
+        List<Damage> damages = damageService.findAll();
+        if (damages == null || damages.isEmpty()) return 0.0;
+
+        // Bruger Java Streams til at filtrere null priser og beregne gennemsnit.
+        List<BigDecimal> validPrices = damages.stream()
+                .filter(d -> d != null && d.getDamagePrice() != null)
+                .map(Damage::getDamagePrice)
+                .collect(Collectors.toList());
+
+        if (validPrices.isEmpty()) return 0.0;
+
+        BigDecimal total = validPrices.stream().reduce(BigDecimal.ZERO, BigDecimal::add);
+        return total.doubleValue() / validPrices.size();
+    }
+
+    /**
+     * Finder og filtrerer tilstandsrapporter. Mindre effektivt for mange rapporter.
+     */
+    public List<ConditionReport> findByFilters(String searchReportId, Integer customerId,
+                                               Integer rentalAgreementId, LocalDate startDate,
+                                               LocalDate endDate) {
+        List<ConditionReport> allReports = findAll();
+        if (allReports == null) {
+            return new ArrayList<>();
+        }
+
+        List<ConditionReport> detailedReports = allReports.stream()
+                .map(report -> enrichConditionReport(report))
+                .filter(report -> report != null)
+                .collect(Collectors.toList());
+
+        // Filtrer de berigede rapporter ved hjælp af Streams.
+        return detailedReports.stream()
+                .filter(report -> {
+                    boolean matches = true;
+
+                    // Filtrer efter rapport ID.
+                    if (searchReportId != null && !searchReportId.isEmpty()) {
+                        matches = String.valueOf(report.getConditionReportId()).equals(searchReportId);
+                    }
+
+                    // Filtrer efter kunde ID.
+                    if (matches && customerId != null) {
+                        matches = report.getCustomer() != null && report.getCustomer().getCustomerId() == customerId;
+                    }
+
+                    // Filtrer efter lejeaftale ID.
+                    if (matches && rentalAgreementId != null) {
+                        matches = report.getRentalAgreementId() != null &&
+                                report.getRentalAgreementId().equals(rentalAgreementId);
+                    }
+
+                    // Filtrer efter datointerval.
+                    if (matches && startDate != null) {
+                        matches = report.getReportDate() != null && !report.getReportDate().isBefore(startDate);
+                    }
+                    if (matches && endDate != null) {
+                        matches = report.getReportDate() != null && !report.getReportDate().isAfter(endDate);
+                    }
+
+                    return matches;
+                })
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Formaterer rapportdatoen til en streng.
+     */
+    public void formatReportDate(ConditionReport report) {
+        if (report != null && report.getReportDate() != null) {
+            report.setFormattedDate(report.getReportDate().format(displayFormatter));
+        } else if (report != null) {
+            report.setFormattedDate("");
+        }
+    }
+
+    /**
+     * Formaterer datoen for alle rapporter i en liste.
+     */
+    public void formatReportDates(List<ConditionReport> reports) {
+        if (reports == null) return;
+        reports.forEach(this::formatReportDate);
+    }
+
+    /**
+     * Beregner gennemsnitligt antal skader pr. tilstandsrapport.
+     */
+    public double getAverageDamagesPerReport() {
+        int totalDamages = damageService.countAllDamages();
+        int totalReports = findAll().size();
+        if (totalReports == 0) return 0.0;
+        return (double) totalDamages / totalReports;
+    }
+
+    /**
+     * Henter afsluttede lejeaftaler til rapportoprettelse.
+     */
+    public List<RentalAgreement> getFinishedRentalAgreementsForReportCreation() {
+        return rentalAgreementService.findFinishedRentalAgreements();
+    }
+
+    private ConditionReport enrichConditionReport(ConditionReport report) {
         if (report == null) {
             return null;
         }
@@ -112,116 +278,11 @@ public class ConditionReportService {
             }
         }
 
-        // Populate damages associated with this report
-        List<Damage> damages = damageService.findByConditionReportId(conditionReportId);
+        List<Damage> damages = damageService.findByConditionReportId(report.getConditionReportId());
         report.setDamages(damages);
-        
-        // Always recalculate total price based on current damages
-        if (damages != null && !damages.isEmpty()) {
-            report.setTotalPrice(calculateTotalDamagePrice(damages));
-        } else {
-            report.setTotalPrice(BigDecimal.ZERO);
-        }
+
+        report.setTotalPrice(calculateTotalDamagePrice(damages));
 
         return report;
     }
-
-    public double getAverageDamagesPerRental() {
-        int totalDamages = damageService.countAllDamages();
-        int totalRentals = rentalAgreementService.countAllRentalAgreements();
-        if (totalRentals == 0) return 0.0;
-        return (double) totalDamages / totalRentals;
-    }
-
-    public int getTotalDamages() {
-        return damageService.countAllDamages();
-    }
-
-    public int getTotalRentals() {
-        return rentalAgreementService.countAllRentalAgreements();
-    }
-
-    public double getAverageDamagePrice() {
-        List<Damage> damages = damageService.findAll();
-        if (damages.isEmpty()) return 0.0;
-        double total = damages.stream()
-            .filter(d -> d.getDamagePrice() != null)
-            .mapToDouble(d -> d.getDamagePrice().doubleValue())
-            .sum();
-        return total / damages.size();
-    }
-
-    public List<ConditionReport> findByFilters(String searchReportId, Integer customerId, 
-                                             Integer rentalAgreementId, LocalDate startDate, 
-                                             LocalDate endDate) {
-        List<ConditionReport> allReports = findAll();
-        List<ConditionReport> filteredReports = new ArrayList<>();
-
-        for (ConditionReport basicReport : allReports) {
-            ConditionReport detailedReport = getConditionReportWithDetails(basicReport.getConditionReportId());
-            if (detailedReport == null) continue;
-
-            // Apply filters
-            boolean includeReport = true;
-
-            // Search by report ID
-            if (searchReportId != null && !searchReportId.isEmpty()) {
-                includeReport = String.valueOf(detailedReport.getConditionReportId()).equals(searchReportId);
-            }
-
-            // Filter by customer
-            if (includeReport && customerId != null && detailedReport.getCustomer() != null) {
-                includeReport = detailedReport.getCustomer().getCustomerId() == customerId;
-            }
-
-            // Filter by rental agreement
-            if (includeReport && rentalAgreementId != null) {
-                includeReport = detailedReport.getRentalAgreementId() != null && 
-                              detailedReport.getRentalAgreementId().equals(rentalAgreementId);
-            }
-
-            // Filter by date range
-            if (includeReport && startDate != null && detailedReport.getReportDate() != null) {
-                includeReport = !detailedReport.getReportDate().isBefore(startDate);
-            }
-            if (includeReport && endDate != null && detailedReport.getReportDate() != null) {
-                includeReport = !detailedReport.getReportDate().isAfter(endDate);
-            }
-
-            if (includeReport) {
-                filteredReports.add(detailedReport);
-            }
-        }
-
-        return filteredReports;
-    }
-
-    // Format a single report's date
-    public void formatReportDate(ConditionReport report) {
-        if (report != null && report.getReportDate() != null) {
-            report.setFormattedDate(report.getReportDate().format(displayFormatter));
-        }
-    }
-
-    // Format dates for a list of reports
-    public void formatReportDates(List<ConditionReport> reports) {
-        if (reports == null) return;
-        
-        for (ConditionReport report : reports) {
-            formatReportDate(report);
-        }
-    }
-
-    // Beregn gennemsnitlige antal skader pr. tilstandsrapport
-    public double getAverageDamagesPerReport() {
-        int totalDamages = damageService.countAllDamages();
-        int totalReports = findAll().size();
-        if (totalReports == 0) return 0.0;
-        return (double) totalDamages / totalReports;
-    }
-
-    // Get finished rental agreements for condition report creation
-    public List<RentalAgreement> getFinishedRentalAgreementsForReportCreation() {
-        return rentalAgreementService.findFinishedRentalAgreements();
-    }
-} 
+}

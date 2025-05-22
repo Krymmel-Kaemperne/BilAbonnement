@@ -26,7 +26,7 @@ body {
 }
 
 /* ==========================================================================
-   Layout
+   Layout template til alle sider.
    ========================================================================== */
 .container {
     max-width: 1200px;
@@ -294,7 +294,7 @@ body {
     margin-bottom: 15px;
 }
 
-/* Create Car Form */
+/* opret bil form */
 .opret-bil-formular {
     background-color: #ffffff;
     padding: 25px;
@@ -380,7 +380,7 @@ body {
     resize: vertical;
 }
 
-/* Filter and Search */
+/* Filtrering og søgning */
 .action-section {
     display: flex;
     justify-content: flex-start;
@@ -488,7 +488,7 @@ body {
 
 
 /* ==========================================================================
-   Buttons
+   Knapper
    ========================================================================== */
 .btn-opret,
 .search-id-section .btn-soeg,
@@ -618,7 +618,7 @@ body {
 }
 
 .car-table th {
-    background-color: #e74c3c;
+    background-color: var(--main-color);
     color: white;
     font-weight: 600;
     text-transform: uppercase;
@@ -668,10 +668,6 @@ body {
     background-color: #fdf1ef;
 }
 
-
-/* ==========================================================================
-   Cards and Metrics
-   ========================================================================== */
 .section-card {
     border: 1px solid var(--main-color);
     color: var(--main-color);
@@ -696,7 +692,7 @@ body {
     padding: 2rem;
 }
 
-/* Dashboard metric cards */
+/* Forretningsdata tal kort */
 .metric-card {
     background: #fff;
     border: 1px solid #e0e0e0;
@@ -729,7 +725,7 @@ body {
 
 
 /* ==========================================================================
-   View Car Details
+   Bil detaljer
    ========================================================================== */
 .car-details-container {
     display: flex;
@@ -784,7 +780,7 @@ body {
     font-size: 1.1em;
 }
 
-/* Details section (for editConditionReport.html) */
+/* Custom layout til redigerer tilstandsrapport */
 .details-columns-container {
     display: flex;
     flex-wrap: wrap;

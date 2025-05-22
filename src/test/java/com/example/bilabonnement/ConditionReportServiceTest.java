@@ -1,10 +1,12 @@
 package com.example.bilabonnement;
 
 import com.example.bilabonnement.Model.Damage;
-import com.example.bilabonnement.Service.ConditionReportService;
+import com.example.bilabonnement.Repository.ConditionReportRepository;
+import com.example.bilabonnement.Service.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -18,8 +20,20 @@ public class ConditionReportServiceTest {
 
     @BeforeEach
     void setUp() {
-        // Service klasse initialiseres før hver testmetode køres.
-        conditionReportService = new ConditionReportService();
+        // Mock dependencies
+        ConditionReportRepository conditionReportRepository = Mockito.mock(ConditionReportRepository.class);
+        RentalAgreementService rentalAgreementService = Mockito.mock(RentalAgreementService.class);
+        CarService carService = Mockito.mock(CarService.class);
+        CustomerService customerService = Mockito.mock(CustomerService.class);
+        DamageService damageService = Mockito.mock(DamageService.class);
+        // Pass mocks to service
+        conditionReportService = new ConditionReportService(
+                conditionReportRepository,
+                rentalAgreementService,
+                carService,
+                customerService,
+                damageService
+        );
     }
 
     @Test
@@ -37,11 +51,11 @@ public class ConditionReportServiceTest {
     @DisplayName("Test af calculateTotalDamagePrice med skader med gyldige priser")
     void calculateTotalDamagePrice_withValidPrices_returnsCorrectTotal() {
         List<Damage> damages = new ArrayList<>();
-        damages.add(new Damage(1, "Skade 1", new BigDecimal("100.50"))); // Opret Damage objekter
+        damages.add(new Damage(1, "Skade 1", new BigDecimal("100.50")));
         damages.add(new Damage(2, "Skade 2", new BigDecimal("250.00")));
         damages.add(new Damage(3, "Skade 3", new BigDecimal("50.25")));
 
-        BigDecimal expectedTotal = new BigDecimal("400.75"); // Forventet sum
+        BigDecimal expectedTotal = new BigDecimal("400.75");
 
         BigDecimal actualTotal = conditionReportService.calculateTotalDamagePrice(damages);
 

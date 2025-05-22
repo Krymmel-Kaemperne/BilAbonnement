@@ -19,12 +19,16 @@ public class CarRepository {
 
     @Autowired
     private final JdbcTemplate jdbcTemplate;
+    // Opretter en RowMapper til automatisk at mappe databasens resultater til Car-objekter.
     private final BeanPropertyRowMapper<Car> carRowMapper = new BeanPropertyRowMapper<>(Car.class);
 
     public CarRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    /**
+     * Opretter en ny bil i databasen og sætter den genererede ID på Car-objektet.
+     */
     public Car create(Car car) {
         String sqlInsert = "INSERT INTO car (registration_number, chassis_number, steel_price, color, " +
                 "co2_emission, vehicle_number, model_id, car_status_id, fuel_type_id, " +
@@ -60,8 +64,6 @@ public class CarRepository {
 
     /**
      * Opdaterer en eksisterende bil i databasen.
-     * @param car Car objektet med de opdaterede informationer.
-     * @return Det opdaterede Car objekt, eller null hvis ingen rækker blev påvirket.
      */
     public Car update(Car car) {
         if (car.getCarId() <= 0) {
@@ -93,14 +95,11 @@ public class CarRepository {
         }
     }
 
+    /**
+     * Finder alle biler i databasen med relaterede informationer fra andre tabeller
+     */
     public List<Car> findAll() {
-        String sql = "SELECT c.car_id, c.registration_number, c.chassis_number, c.steel_price, " +
-                "c.color, c.co2_emission, c.vehicle_number, c.model_id, c.car_status_id, " +
-                "c.fuel_type_id, c.transmission_type_id, c.current_odometer, c.irk_code, " +
-                "m.model_name AS modelName, b.brand_id AS brandId, b.brand_name AS brandName, " +
-                "cs.status_name AS carStatusName, " +
-                "ft.fuel_type_name AS fuelTypeName, " +
-                "tt.transmission_type_name AS transmissionTypeName " +
+        String sql = "SELECT * " +
                 "FROM car c " +
                 "JOIN model m ON c.model_id = m.model_id " +
                 "JOIN brand b ON m.brand_id = b.brand_id " +
@@ -111,14 +110,11 @@ public class CarRepository {
         return jdbcTemplate.query(sql, carRowMapper);
     }
 
+    /**
+     * Finder en specifik bil baseret på dens ID med relaterede informationer
+     */
     public Car findById(int carId) {
-        String sql = "SELECT c.car_id, c.registration_number, c.chassis_number, c.steel_price, " +
-                "c.color, c.co2_emission, c.vehicle_number, c.model_id, c.car_status_id, " +
-                "c.fuel_type_id, c.transmission_type_id, c.current_odometer, c.irk_code, " +
-                "m.model_name AS modelName, b.brand_id AS brandId, b.brand_name AS brandName, " +
-                "cs.status_name AS carStatusName, " +
-                "ft.fuel_type_name AS fuelTypeName, " +
-                "tt.transmission_type_name AS transmissionTypeName " +
+        String sql = "SELECT * " +
                 "FROM car c " +
                 "JOIN model m ON c.model_id = m.model_id " +
                 "JOIN brand b ON m.brand_id = b.brand_id " +
@@ -134,15 +130,12 @@ public class CarRepository {
         }
     }
 
+    /**
+     * Finder biler baseret på forskellige filterkriterier ved at bruge SELECT *.
+     */
     public List<Car> findByFilters(Integer brand, Integer status, Integer model, Integer fuelType, Integer transmissionType) {
         StringBuilder sql = new StringBuilder(
-                "SELECT c.car_id, c.registration_number, c.chassis_number, c.steel_price, " +
-                        "c.color, c.co2_emission, c.vehicle_number, c.model_id, c.car_status_id, " +
-                        "c.fuel_type_id, c.transmission_type_id, c.current_odometer, c.irk_code, " +
-                        "m.model_name AS modelName, b.brand_id AS brandId, b.brand_name AS brandName, " +
-                        "cs.status_name AS carStatusName, " +
-                        "ft.fuel_type_name AS fuelTypeName, " +
-                        "tt.transmission_type_name AS transmissionTypeName " +
+                "SELECT * " +
                         "FROM car c " +
                         "JOIN model m ON c.model_id = m.model_id " +
                         "JOIN brand b ON m.brand_id = b.brand_id " +

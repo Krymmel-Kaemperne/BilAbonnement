@@ -81,10 +81,10 @@ public class CarController {
     @PostMapping("/car/update")
     public String updateCar(@ModelAttribute Car car, RedirectAttributes redirectAttributes) {
 
-        // Get existing car from DB
+        // Find biler i databasen
         Car existingCar = carService.findById(car.getCarId());
 
-        // Get old and new status names
+        // Status før og efter.
         String oldStatus = carStatusService.findCarStatusById(existingCar.getCarStatusId()).getStatusName();
         String newStatus = carStatusService.findCarStatusById(car.getCarStatusId()).getStatusName();
 
@@ -112,6 +112,6 @@ public class CarController {
         } else {
             redirectAttributes.addFlashAttribute("errorMessage", "Fejl: Kunne ikke oprette eller finde bilmodel under opdatering.");
         }
-        return "redirect:/fleet/overview"; // OPDATERET REDIRECT
+        return "redirect:/fleet/overview";
     }
 }

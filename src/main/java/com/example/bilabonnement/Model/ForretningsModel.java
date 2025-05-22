@@ -11,14 +11,14 @@ public class ForretningsModel {
     private int availableCars;
     private int carsWithDamages;
     private int totalCustomers;
-    private int newCustomersThisMonth;
+    private int newRentalsThisMonth;
     private int completedRentalAgreements;
     private BigDecimal avgRentalPeriodMonths;
     private BigDecimal currentMonthRevenue;
     private BigDecimal avgRevenuePerCustomer;
 
     public ForretningsModel(int activeRentals, BigDecimal currentRevenue, BigDecimal totalRevenue, BigDecimal averageRentalIncome,
-                            int totalCars, int availableCars, int carsWithDamages, int totalCustomers, int newCustomersThisMonth,
+                            int totalCars, int availableCars, int carsWithDamages, int totalCustomers, int newRentalsThisMonth,
                             int completedRentalAgreements, BigDecimal avgRentalPeriodMonths, BigDecimal currentMonthRevenue, BigDecimal avgRevenuePerCustomer) {
         this.activeRentals = activeRentals;
         this.currentRevenue = currentRevenue;
@@ -28,7 +28,7 @@ public class ForretningsModel {
         this.availableCars = availableCars;
         this.carsWithDamages = carsWithDamages;
         this.totalCustomers = totalCustomers;
-        this.newCustomersThisMonth = newCustomersThisMonth;
+        this.newRentalsThisMonth = newRentalsThisMonth;
         this.completedRentalAgreements = completedRentalAgreements;
         this.avgRentalPeriodMonths = avgRentalPeriodMonths;
         this.currentMonthRevenue = currentMonthRevenue;
@@ -99,12 +99,12 @@ public class ForretningsModel {
         this.totalCustomers = totalCustomers;
     }
 
-    public int getNewCustomersThisMonth() {
-        return newCustomersThisMonth;
+    public int getNewRentalsThisMonth() {
+        return newRentalsThisMonth;
     }
 
-    public void setNewCustomersThisMonth(int newCustomersThisMonth) {
-        this.newCustomersThisMonth = newCustomersThisMonth;
+    public void setNewRentalsThisMonth(int newRentalsThisMonth) {
+        this.newRentalsThisMonth = newRentalsThisMonth;
     }
 
     public int getCompletedRentalAgreements() {
