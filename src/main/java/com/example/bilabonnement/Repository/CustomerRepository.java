@@ -6,11 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 @Repository
@@ -153,56 +156,15 @@ public class CustomerRepository {
      * Bruger JOINs til at hente data fra alle relevante tabeller i én forespørgsel.
      */
     public List<Customer> findAll() {
-        // SQL forespørgsel der joiner customer, zipcode, private_customer og business_customer.
         String sql = "SELECT c.*, z.zip_code, z.city_name, " +
                 "pc.cpr_number, bc.cvr_number, bc.company_name FROM customer c " +
                 "LEFT JOIN zipcode z ON c.zipcode_id = z.zipcode_id " +
                 "LEFT JOIN private_customer pc ON c.customer_id = pc.customer_id AND c.customer_type = 'PRIVATE' " +
                 "LEFT JOIN business_customer bc ON c.customer_id = bc.customer_id AND c.customer_type = 'BUSINESS'";
 
-        // Bruger en custom RowMapper til at mappe hver række til enten PrivateCustomer eller BusinessCustomer.
-        return jdbcTemplate.query(sql, (rs, rowNum) -> {
-            Customer customer = null;
-            CustomerType type = CustomerType.valueOf(rs.getString("customer_type"));
-
-            int customerId = rs.getInt("customer_id");
-            String fName = rs.getString("fname");
-            String lName = rs.getString("lname");
-            String email = rs.getString("email");
-            String phone = rs.getString("phone");
-            String address = rs.getString("address");
-            int zipcodeId = rs.getInt("zipcode_id");
-
-            Zipcode zipcode = new Zipcode(); // Opretter Zipcode objekt.
-            zipcode.setZipcodeId(zipcodeId);
-            zipcode.setZipcode(rs.getString("zip_code"));
-            zipcode.setCityName(rs.getString("city_name"));
-
-            // Opretter den korrekte subklasse baseret på kundetypen.
-            if (type == CustomerType.PRIVATE) {
-                PrivateCustomer pc = new PrivateCustomer(
-                        customerId, fName, lName, email, phone, address, zipcodeId, zipcode,
-                        rs.getString("cpr_number") // Henter CPR nummer fra private_customer (kan være null pga LEFT JOIN)
-                );
-                customer = pc;
-            } else if (type == CustomerType.BUSINESS) {
-                BusinessCustomer bc = new BusinessCustomer(
-                        customerId, fName, lName, email, phone, address, zipcodeId, zipcode,
-                        rs.getString("cvr_number"), // Henter CVR nummer fra business_customer (kan være null)
-                        rs.getString("company_name") // Henter firmanavn fra business_customer (kan være null)
-                );
-                customer = bc;
-            }
-
-            // Fejlhåndtering for uventede kundetyper (skulle ikke ske hvis data er konsistente).
-            if (customer == null) {
-                System.err.println("Critical Error: Could not map row for customer_id: " + customerId + " " +
-                        "with type: " + type + ". This should not happen.");
-                throw new IllegalStateException("Failed to map customer with ID: " + customerId + " and type: " + type);
-            }
-            return customer; // Returnerer det mappede kundeobjekt.
-        });
+        return jdbcTemplate.query(sql, new CustomerRowMapper());
     }
+
 
     /**
      * Opdaterer en eksisterende kunde (både base kundedata og type-specifikke data) i databasen.
@@ -275,5 +237,43 @@ public class CustomerRepository {
             throw new IllegalArgumentException("Customer object is not an instance of PrivateCustomer or BusinessCustomer.");
         }
         return customer; // Returnerer det opdaterede kundeobjekt.
+    }
+
+    public class CustomerRowMapper implements RowMapper<Customer>
+    {
+
+        @Override
+        public Customer mapRow(ResultSet rs, int rowNum) throws SQLException
+        {
+            CustomerType type = CustomerType.valueOf(rs.getString("customer_type"));
+
+            int customerId = rs.getInt("customer_id");
+            String fName = rs.getString("fname");
+            String lName = rs.getString("lname");
+            String email = rs.getString("email");
+            String phone = rs.getString("phone");
+            String address = rs.getString("address");
+            int zipcodeId = rs.getInt("zipcode_id");
+
+            Zipcode zipcode = new Zipcode();
+            zipcode.setZipcodeId(zipcodeId);
+            zipcode.setZipcode(rs.getString("zip_code"));
+            zipcode.setCityName(rs.getString("city_name"));
+
+            if (type == CustomerType.PRIVATE) {
+                return new PrivateCustomer(
+                        customerId, fName, lName, email, phone, address, zipcodeId, zipcode,
+                        rs.getString("cpr_number")
+                );
+            } else if (type == CustomerType.BUSINESS) {
+                return new BusinessCustomer(
+                        customerId, fName, lName, email, phone, address, zipcodeId, zipcode,
+                        rs.getString("cvr_number"),
+                        rs.getString("company_name")
+                );
+            } else {
+                throw new IllegalStateException("Unknown customer type: " + type);
+            }
+        }
     }
 }

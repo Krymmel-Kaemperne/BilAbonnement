@@ -17,7 +17,6 @@ public class TransmissionTypeRepository {
      */
     public List<TransmissionType> findAllTransmissionTypes() {
         String sql = "SELECT transmission_type_id, transmission_type_name FROM transmissiontype";
-        // Udfører forespørgslen og bruger en custom RowMapper til at mappe resultaterne.
         return jdbcTemplate.query(sql, (rs, rowNum) -> {
             TransmissionType type = new TransmissionType();
             type.setTransmissionTypeId(rs.getInt("transmission_type_id"));

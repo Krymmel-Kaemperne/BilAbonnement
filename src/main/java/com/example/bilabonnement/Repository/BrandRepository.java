@@ -20,9 +20,7 @@ public class BrandRepository {
 
     // Finder alle bilmærker i databasen og returnerer dem som en liste.
     public List<Brand> findAllBrands() {
-        // SQL-forespørgsel for at vælge alle mærker og sortere dem efter navn.
         String sql = "SELECT brand_id, brand_name FROM brand ORDER BY brand_name";
-        // Udfører forespørgslen og mapper resultatrækkerne til Brand-objekter.
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Brand.class));
     }
 }
