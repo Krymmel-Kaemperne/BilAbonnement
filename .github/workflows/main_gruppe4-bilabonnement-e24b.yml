@@ -1,6 +1,3 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
-
 name: Build and deploy JAR app to Azure Web App - gruppe4-bilabonnement-E24B
 
 on:
@@ -25,7 +22,27 @@ jobs:
           distribution: 'microsoft'
 
       - name: Build with Maven
-        run: mvn clean install
+        run: |
+          echo "--- DEBUG INFO ---"
+          echo "SPRING_DATASOURCE_URL_IS_SET: ${{ env.SPRING_DATASOURCE_URL != '' }}"
+          echo "First 4 chars of SPRING_DATASOURCE_URL: $(echo "$SPRING_DATASOURCE_URL" | cut -c 1-4)"
+          echo "SPRING_DATASOURCE_USERNAME_IS_SET: ${{ env.SPRING_DATASOURCE_USERNAME != '' }}"
+          echo "--- END DEBUG INFO ---"
+          mvn clean install
+        env:
+          # Her gør du dine GitHub Secrets tilgængelige som miljøvariabler
+          # for 'mvn clean install' steppet.
+          # Spring Boot vil automatisk forsøge at mappe disse til dine properties.
+          # Sørg for, at navnene på dine secrets i GitHub er DB_URL, DB_USERNAME, DB_PASSWORD
+          SPRING_DATASOURCE_URL: ${{ secrets.DB_URL }}
+          SPRING_DATASOURCE_USERNAME: ${{ secrets.DB_USERNAME }}
+          SPRING_DATASOURCE_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          # Hvis dine placeholders i application.properties er ${DB_URL}, ${USERNAME}, ${PASSWORD}
+          # kan du også tilføje dem direkte for en sikkerheds skyld, selvom Spring ofte er smart nok:
+          # DB_URL: ${{ secrets.DB_URL }}
+          # USERNAME: ${{ secrets.DB_USERNAME }}
+          # PASSWORD: ${{ secrets.DB_PASSWORD }}
+
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
@@ -63,4 +80,11 @@ jobs:
           app-name: 'gruppe4-bilabonnement-E24B'
           slot-name: 'Production'
           package: '*.jar'
-          
+          # HER SKAL DINE MILJØVARIABLER SÆTTES FOR DEN KØRENDE APP I AZURE
+          app-settings: |
+            [
+              { "name": "SPRING_DATASOURCE_URL", "value": "${{ secrets.DB_URL }}", "slotSetting": false },
+              { "name": "SPRING_DATASOURCE_USERNAME", "value": "${{ secrets.DB_USERNAME }}", "slotSetting": false },
+              { "name": "SPRING_DATASOURCE_PASSWORD", "value": "${{ secrets.DB_PASSWORD }}", "slotSetting": false },
+              { "name": "JAVA_OPTS", "value": "-Dserver.port=8080", "slotSetting": false } # Eksempel, hvis du vil sætte porten
+            ]
