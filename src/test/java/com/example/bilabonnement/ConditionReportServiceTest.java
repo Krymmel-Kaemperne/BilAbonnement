@@ -60,5 +60,8 @@ public class ConditionReportServiceTest {
         BigDecimal actualTotal = conditionReportService.calculateTotalDamagePrice(damages);
 
         assertEquals(expectedTotal, actualTotal, "Den samlede pris skal være summen af gyldige priser.");
+
+        System.out.println("✅ Test lykkedes: Skadepriser er korrekt - 400.75.");
+
     }
 }
