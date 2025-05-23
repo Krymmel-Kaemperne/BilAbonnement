@@ -35,7 +35,7 @@
         <!-- Skade-registrering Dropdown -->
         <div class="dropdown">
             <a th:href="@{/conditionReport/list}"
-               th:classappend="${currentPage == 'damageRegistration' or currentPage == 'rapports' or currentPage == 'registerDamage' or currentPage == 'reparationStatus'} ? 'aktive' : ''"
+               th:classappend="${currentPage == 'damageRegistration' or currentPage == 'rapports' or currentPage == 'rapports' or currentPage == 'registerDamage' or currentPage == 'reparationStatus'} ? 'aktive' : ''"
                class="nav-link">
                 Skade Registrering <span class="arrow">&#x25BE;</span>
             </a>
@@ -63,8 +63,7 @@
     </div>
 
     <div class="header-log-in">
-        <p style="font-style: italic; font-size: 0.9rem; padding: 4px; margin: 0;">Logget ind som:</p>
-        <span style="font-style: italic; font-weight: 500; font-size: 1.1rem; color: var(--main-color);">Frederik Wendelbo</span>
+        <span style="font-style: italic; font-weight: 500; font-size: 1.1rem; color: var(--main-color); margin-right: 2px;">Admin</span>
     </div>
 
 </div>
