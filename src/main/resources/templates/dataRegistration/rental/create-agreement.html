@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta charset="UTF-8"/>
+    <title>Opret lejeaftale</title>
+    <link rel="stylesheet" href="/stylesheet.css"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap"
+          rel="stylesheet"
+    />
+<body>
+<div th:replace="~{fragments/header :: header('dataRegistration')}"></div>
+
+<div class="page-container">
+    <div class="opret-bil-page-container">
+
+        <header class="opret-bil-form-header">
+            <h1>Opret Lejeaftale</h1>
+            <p>Indtast info for at oprette ny lejeaftale</p>
+        </header>
+
+        <div class="opret-bil-form-content">
+
+            <form th:action="@{/dataRegistration/rental-agreements/create}" th:object="${rentalAgreement}"
+                  method="post">
+
+                <div class="opret-bil-form-row">
+                    <label for="carId">Vælg tilgængelig bil:</label>
+
+                    <select id="carId" th:field="*{carId}" required>
+                        <option value="">-- Vælg tilgængelig bil --</option>
+                        <option th:each="car : ${cars}"
+                                th:value="${car.carId}"
+                                th:text="|${car.brandName} ${car.modelName} - ${car.registrationNumber} (ID: ${car.carId})|">
+                        </option>
+                    </select>
+                </div>
+
+                <div class="opret-bil-form-row">
+                    <label for="customerId">Vælg kunde:</label>
+                    <select id="customerId" th:field="*{customerId}" required>
+                        <option value="">-- Vælg kunde --</option>
+                        <option th:each="customer : ${customers}"
+                                th:value="${customer.customerId}"
+                                th:text="|${customer.fname} ${customer.lname} (${customer.customerId})|">
+                        </option>
+                    </select>
+                </div>
+
+                <div class="opret-bil-form-row">
+                    <label for="startDate">Startdato:</label>
+                    <input type="date" id="startDate" th:field="*{startDate}" required>
+                </div>
+
+                <div class="opret-bil-form-row">
+                    <label for="endDate">Slutdato:</label>
+                    <input type="date" id="endDate" th:field="*{endDate}" required>
+                </div>
+
+                <div class="opret-bil-form-row">
+
+                    <div style="color: red; font-style: italic; font-size: 15px;" th:if="${errorMessage}" class="error-message">
+                        <p th:text="${errorMessage}"></p>
+                    </div>
+                </div>
+
+                <div class="opret-bil-form-row">
+                    <label for="monthlyPrice">Månedelig Pris:</label>
+                    <input type="number" step="0.01" min="0" id="monthlyPrice" th:field="*{monthlyPrice}" required>
+                </div>
+
+                <div class="opret-bil-form-row">
+                    <label for="kilometersIncluded">Inkl. kilometer:</label>
+                    <input type="number" min="1000" id="kilometersIncluded" th:field="*{kilometersIncluded}" required>
+                </div>
+
+                <div class="opret-bil-form-row">
+                    <label for="pickupLocationId">Afhentningssted:</label>
+                    <select id="pickupLocationId" th:field="*{pickupLocationId}" required>
+                        <option value="">-- Vælg afhentningssted --</option>
+                        <option th:each="location : ${locations}"
+                                th:value="${location.locationId}"
+                                th:text="|${location.address} ( By: ${location.zipcode.cityName})|">
+                        </option>
+                    </select>
+                </div>
+
+                <div class="opret-bil-form-row">
+                    <label for="returnLocationId">Returneringssted:</label>
+                    <select id="returnLocationId" th:field="*{returnLocationId}" required>
+                        <option value="" style="color: #b3b3b3;">-- Vælg returneringssted--</option>
+                        <option th:each="location : ${locations}"
+                                th:value="${location.locationId}"
+                                th:text="|${location.address} (By: ${location.zipcode.cityName})|">
+                        </option>
+                    </select>
+                </div>
+
+                <div class="opret-bil-form-row">
+                    <label for="leasingCode">Leasingkode:</label>
+                    <input style="color: gray;" type="text" id="leasingCode" th:field="*{leasingCode}" readonly/>
+                </div>
+
+
+
+                <div class="opret-bil-submit-row">
+                    <button class="opret-bil-knap" type="submit">Opret Lejeaftale</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>
+

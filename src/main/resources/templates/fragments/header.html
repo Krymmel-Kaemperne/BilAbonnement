@@ -13,7 +13,7 @@
 <div th:fragment="header(currentPage)" class="header">
 
     <a th:href="@{/}">
-        <img src="/img/Bil_Abodonnemt_logo01.png" alt="Bil Abonnement Logo" class="logo">
+        <img src="/img/Bil_Abodonnemt_animation 4.gif" alt="Bil Abonnement Logo" class="logo">
     </a>
 
     <div class="header-nav">
@@ -28,44 +28,43 @@
             <div class="dropdown-content">
                 <a th:href="@{/fleet/overview}">Fleet</a>
                 <a th:href="@{/dataRegistration/customers}">Kunder</a>
-                <a th:href="@{/dataRegistration/rentalAgreements}">Lejeaftaler</a>
+                <a th:href="@{/dataRegistration/rental-agreements}">Lejeaftaler</a>
             </div>
         </div>
 
         <!-- Skade-registrering Dropdown -->
         <div class="dropdown">
-            <a th:href="@{/damageRegistration}"
-               th:classappend="${currentPage == 'damageRegistration' or currentPage == 'rapports' or currentPage == 'registerDamage' or currentPage == 'reparationStatus'} ? 'aktive' : ''"
+            <a th:href="@{/conditionReport/list}"
+               th:classappend="${currentPage == 'damageRegistration' or currentPage == 'rapports' or currentPage == 'rapports' or currentPage == 'registerDamage' or currentPage == 'reparationStatus'} ? 'aktive' : ''"
                class="nav-link">
                 Skade Registrering <span class="arrow">&#x25BE;</span>
             </a>
             <div class="dropdown-content">
-                <a th:href="@{/damageRegistration/registerDamage}">Registrer Skade</a>
-                <a th:href="@{/damageRegistration/reparationStatus}">Reparation Status</a>
-                <a th:href="@{/damageRegistration/rapports}">Rapporter</a>
+                <a th:href="@{/conditionReport/list}">Tilstandsrapport</a>
+                <a th:href="@{/conditionReport/create}">Opret tilstandsrapport</a>
+                <a th:href="@{/conditionReport/reparationStatus}">Reparations nøgletal</a>
             </div>
         </div>
 
         <!-- Forretningsdata (can be made a dropdown later) -->
         <div class="dropdown">
-            <a th:href="@{/businessData}"
-               th:classappend="${currentPage == 'businessData' or currentPage == 'fleetStatistics' or currentPage == 'paymentStatistics' or currentPage == 'revenue'} ? 'aktive' : ''"
+            <a th:href="@{/forretningsdata/omsætning}"
+               th:classappend="${currentPage == 'businessData'} ? 'aktive' : ''"
                class="nav-link">
                 Forretningsdata <span class="arrow">&#x25BE;</span>
             </a>
 
             <div class="dropdown-content">
-                <a th:href="@{/businessData/revenue}">Omsætning</a>
-                <a th:href="@{/businessData/fleetStatistics}">Fleetstatistik</a>
-                <a th:href="@{/businessData/paymentStatistics}">Betalingsstatistik</a>
+                <a th:href="@{/forretningsdata/omsætning}">Omsætning</a>
+                <a th:href="@{/forretningsdata/fleet}">Fleet</a>
+                <a th:href="@{/forretningsdata/andre}">Nøgletal</a>
             </div>
         </div>
 
     </div>
 
     <div class="header-log-in">
-        <p style="font-style: italic; font-size: 0.9rem; padding: 4px; margin: 0;">Logget ind som:</p>
-        <span style="font-style: italic; font-weight: 500; font-size: 1.1rem; color: var(--main-color);">Frederik Wendelbo</span>
+        <span class="log-ind">Admin</span>
     </div>
 
 </div>

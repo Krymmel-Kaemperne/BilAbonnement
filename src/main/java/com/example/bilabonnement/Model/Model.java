@@ -8,13 +8,15 @@ public class Model {
 
     public Model() {}
 
-    public Model(Integer modelId, String modelName, Integer brandId) {
+    public Model(Integer modelId, String modelName, Integer brandId)
+    {
         this.modelId = modelId;
         this.modelName = modelName;
         this.brandId = brandId;
     }
 
-    public Model(String modelName, Integer brandId) {
+    public Model(String modelName, Integer brandId)
+    {
         this.modelName = modelName;
         this.brandId = brandId;
     }
@@ -43,8 +45,12 @@ public class Model {
         this.brandId = brandId;
     }
 
-    public String getBrandName() { return brandName; }
-    public void setBrandName(String brandName) { this.brandName = brandName; }
+    public String getBrandName() {
+            return brandName; }
+
+    public void setBrandName(String brandName) {
+        this.brandName = brandName; }
+
 
     @Override
     public String toString() {

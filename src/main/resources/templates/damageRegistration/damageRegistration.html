@@ -1,21 +1,69 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="da" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap"
-          rel="stylesheet">
-    <link rel="stylesheet" href="/stylesheet.css">
-    <title>Lejeaftaler</title>
+    <meta charset="UTF-8" />
+    <title>Tilstandsrapport Detaljer</title>
+    <link rel="stylesheet" href="/stylesheet.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet" />
 </head>
 <body>
-<div th:replace="fragments/header :: header('damageRegistration')"></div>
-
-
-
-
-
+<div th:replace="~{fragments/header :: header('damageRegistration')}"></div>
+<div class="container">
+    <div class="header-flex">
+        <h1>Tilstandsrapport Detaljer</h1>
+    </div>
+    <div class="description-text">
+        <p><strong>ID:</strong> <span th:text="${report.conditionReportId}">1</span></p>
+        <p><strong>Lejeaftale ID:</strong> <span th:text="${report.rentalAgreementId}">1</span></p>
+        <p><strong>Rapportdato:</strong> <span th:text="${report.formattedDate}">01-01-2024</span></p>
+        <p><strong>Noter:</strong> <span th:text="${report.conditionNotes}">Ingen noter</span></p>
+        <p><strong>Total pris:</strong> <span th:text="${totalDamagePrice}">0</span></p>
+    </div>
+    <div class="action-section">
+        <a type="button" class="btn-opret" href="/conditionReport/list">
+            Gå til rapporter
+        </a>
+        <a type="button" class="btn-opret" href="/conditionReport/create">
+            Opret ny rapport
+        </a>
+    </div>
+    <!-- Tabel med skader -->
+    <h2>Skader</h2>
+    <table class="car-table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Beskrivelse</th>
+            <th>Pris</th>
+            <th>Handling</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Hvis der ikke er nogen skader -->
+        <tr th:if="${#lists.isEmpty(damages)}">
+            <td colspan="4" style="text-align: center;">Ingen skader fundet.</td>
+        </tr>
+        <!-- Gennemløb alle skader og vis dem i tabellen -->
+        <tr th:each="damage : ${damages}">
+            <td th:text="${damage.damageId}">1</td>
+            <td th:text="${damage.damageDescription}">Rids i dør</td>
+            <td th:text="${damage.damagePrice}">500</td>
+            <td>
+                <!-- Knap til at redigere skade -->
+                <a type="button" class="btn-detaljer"
+                        th:href="@{/conditionReport/damage/edit/{id}(id=${damage.damageId})}" href="#">
+                    Rediger
+                </a>
+                <!-- Knap til at slette skade -->
+                <form th:action="@{/conditionReport/damage/delete/{id}(id=${damage.damageId})}" method="post" style="display:inline;">
+                    <a type="submit" class="btn-detaljer" onclick="return confirm('Er du sikker på, at du vil slette denne skade?');">Slet</a>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
 </body>
 </html>

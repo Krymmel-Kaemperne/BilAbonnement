@@ -114,4 +114,11 @@ public abstract class Customer {
     public void setCustomerType(CustomerType customerType) {
         this.customerType = customerType;
     }
+
+    public String getDisplayName() {
+        String firstNamePart = (getFname() != null) ? getFname() : "";
+        String lastNamePart = (getLname() != null) ? getLname() : "";
+        String fullName = (firstNamePart + " " + lastNamePart).trim();
+        return fullName.isEmpty() ? "Ukendt Kunde (ID: " + customerId + ")" : fullName;
+    }
 }

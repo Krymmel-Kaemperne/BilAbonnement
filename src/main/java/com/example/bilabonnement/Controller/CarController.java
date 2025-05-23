@@ -1,30 +1,19 @@
-    package com.example.bilabonnement.Controller;
-
+package com.example.bilabonnement.Controller;
 import com.example.bilabonnement.Model.Car;
 import com.example.bilabonnement.Model.Brand;
+import com.example.bilabonnement.Model.CarStatus;
 import com.example.bilabonnement.Model.FuelType;
-
-
-// Importer CarStatus, TransmissionType modeller/DTO'er
-
 import org.springframework.ui.Model;
-
 import com.example.bilabonnement.Service.BrandService;
 import com.example.bilabonnement.Service.CarService;
 import com.example.bilabonnement.Service.FuelTypeService;
 import com.example.bilabonnement.Service.ModelService;
 import com.example.bilabonnement.Service.CarStatusService;
 import com.example.bilabonnement.Service.TransmissionTypeService;
-// Importer CarStatusService, TransmissionTypeService
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-
-import java.util.Collections;
 import java.util.List;
 
 @Controller
@@ -43,8 +32,6 @@ public class CarController {
     private CarStatusService carStatusService;
     @Autowired
     private TransmissionTypeService transmissionTypeService;
-
-    // TODO: Injicer CarStatusService og TransmissionTypeService
 
 
     @GetMapping("/createCar")
@@ -93,6 +80,23 @@ public class CarController {
 
     @PostMapping("/car/update")
     public String updateCar(@ModelAttribute Car car, RedirectAttributes redirectAttributes) {
+
+        // Find biler i databasen
+        Car existingCar = carService.findById(car.getCarId());
+
+        // Status før og efter.
+        String oldStatus = carStatusService.findCarStatusById(existingCar.getCarStatusId()).getStatusName();
+        String newStatus = carStatusService.findCarStatusById(car.getCarStatusId()).getStatusName();
+
+        // 🔒 STOP 'Udlejet' from going to 'Tilgængelig' or Solgt
+        if ("Udlejet".equalsIgnoreCase(oldStatus)
+                && ("Tilgængelig".equalsIgnoreCase(newStatus) || "Solgt".equalsIgnoreCase(newStatus))) {
+
+            redirectAttributes.addFlashAttribute("errorMessage",
+                    "Bilen har status 'Udlejet' og kan ikke ændres til 'Tilgængelig' eller 'Solgt'.");
+            return "redirect:/dataRegistration/car/edit/" + car.getCarId();
+        }
+
         com.example.bilabonnement.Model.Model carModelEntity = modelService.findByBrandIdAndModelName(car.getBrandId(), car.getModelName());
         if (carModelEntity == null) {
             carModelEntity = modelService.create(new com.example.bilabonnement.Model.Model(car.getModelName(), car.getBrandId()));
@@ -108,18 +112,6 @@ public class CarController {
         } else {
             redirectAttributes.addFlashAttribute("errorMessage", "Fejl: Kunne ikke oprette eller finde bilmodel under opdatering.");
         }
-        return "redirect:/fleet/overview"; // OPDATERET REDIRECT
+        return "redirect:/fleet/overview";
     }
-
-    @GetMapping ("/car/{id}")
-    public String viewCar(@PathVariable("id") int carId, org.springframework.ui.Model model){
-        Car car = carService.findById(carId);
-        if (car == null)
-        {
-            return "redirect:/dataRegistration/fleet";
-        }
-        model.addAttribute("car", car);
-        return "dataRegistration/viewCar";
-    }
-
 }

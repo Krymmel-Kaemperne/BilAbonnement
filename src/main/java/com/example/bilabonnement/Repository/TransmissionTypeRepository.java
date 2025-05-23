@@ -12,6 +12,9 @@ public class TransmissionTypeRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    /**
+     * Finder alle transmissionstyper i databasen.
+     */
     public List<TransmissionType> findAllTransmissionTypes() {
         String sql = "SELECT transmission_type_id, transmission_type_name FROM transmissiontype";
         return jdbcTemplate.query(sql, (rs, rowNum) -> {
@@ -21,4 +24,4 @@ public class TransmissionTypeRepository {
             return type;
         });
     }
-} 
+}

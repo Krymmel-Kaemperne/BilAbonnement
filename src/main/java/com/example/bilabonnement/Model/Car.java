@@ -9,6 +9,8 @@ public class Car {
     private Double co2Emission; // Kan være null
     private String vehicleNumber;
     private String comment;
+    private int current_odometer;
+    private String irkCode;
 
     // ID'er til databaselagring og relationer
     private Integer modelId;
@@ -27,7 +29,6 @@ public class Car {
     public Car() {
     }
 
-    // Getters and Setters for alle felter (som du havde, men konsekvent)
 
     public int getCarId() { return carId; }
     public void setCarId(int carId) { this.carId = carId; }
@@ -82,6 +83,19 @@ public class Car {
 
     public String getTransmissionTypeName() { return transmissionTypeName; }
     public void setTransmissionTypeName(String transmissionTypeName) { this.transmissionTypeName = transmissionTypeName; }
+    public int getCurrent_odometer() {
+        return current_odometer;
+    }
+
+    public void setCurrent_odometer(int current_odometer) {
+        this.current_odometer = current_odometer;
+    }
+
+    public String getIrkCode() { return irkCode; }
+    public void setIrkCode(String irkCode) { this.irkCode = irkCode; }
+
+    public int getCurrentOdometer() { return current_odometer; }
+    public void setCurrentOdometer(int currentOdometer) { this.current_odometer = currentOdometer; }
 
     @Override
     public String toString() {

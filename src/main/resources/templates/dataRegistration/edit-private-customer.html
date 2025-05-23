@@ -23,13 +23,10 @@
 
             <div th:if="${successMessage}" class="message success-message" th:text="${successMessage}"></div>
             <div th:if="${errorMessage}" class="message error-message" th:text="${errorMessage}"></div>
-            <!-- Form action skal pege på din POST edit metode og inkludere ID -->
             <form th:action="@{/customers/edit/private/{id}(id=${customer.customerId})}" method="post">
 
-                <!-- SKJUL ID-felt - VIGTIGT! -->
                 <input type="hidden" name="customerId" th:value="${customer.customerId}">
 
-                <!-- Fælles felter - Forudfyld med th:value -->
                 <div class="opret-bil-form-row">
                     <label for="fName">First Name:</label>
                     <input type="text" id="fName" name="fName" th:value="${customer.fname}" required>
@@ -61,7 +58,6 @@
                     </select>
                 </div>
 
-                <!-- Privat-specifikt felt - Forudfyld med th:value -->
                 <th:block th:if="${customer instanceof T(com.example.bilabonnement.Model.PrivateCustomer)}">
                     <div class="opret-bil-form-row">
                         <label for="cprNumber">CPR Number:</label>

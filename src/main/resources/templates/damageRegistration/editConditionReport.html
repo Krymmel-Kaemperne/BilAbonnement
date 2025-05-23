@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="da" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Rediger Tilstandsrapport</title>
+    <link rel="stylesheet" href="/stylesheet.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet" />
+</head>
+<body>
+<div th:replace="~{fragments/header :: header('rapports')}"></div>
+<div class="container">
+    <div class="header-flex">
+        <h1>Rediger Tilstandsrapport</h1>
+    </div>
+
+    <!-- Information om rapporten (lejeaftale, bil, kunde) -->
+    <div class="details-columns-container" th:if="${report != null}">
+        <!-- Lejeaftale info -->
+        <div class="details-column">
+            <h2>Lejeaftale</h2>
+            <p><strong>ID:</strong> <span th:text="${report.rentalAgreement?.rentalAgreementId}">1</span></p>
+            <p><strong>Start:</strong> <span th:text="${report.rentalAgreement?.startDate}">01-01-2024</span></p>
+            <p><strong>Slut:</strong> <span th:text="${report.rentalAgreement?.endDate}">31-01-2024</span></p>
+        </div>
+        <!-- Bil info -->
+        <div class="details-column">
+            <h2>Bil</h2>
+            <p><strong>ID:</strong> <span th:text="${report.car?.carId}">1</span></p>
+            <p><strong>Registreringsnr.:</strong> <span th:text="${report.car?.registrationNumber}">AB12345</span></p>
+            <p><strong>Model:</strong> <span th:text="${report.car?.modelName}">Model X</span></p>
+        </div>
+        <!-- Kunde info -->
+        <div class="details-column">
+            <h2>Kunde</h2>
+            <p><strong>ID:</strong> <span th:text="${report.customer?.customerId}">1</span></p>
+            <p><strong>Navn:</strong> <span th:text="${report.customer?.fname + ' ' + report.customer?.lname}">Navn</span></p>
+            <p><strong>Email:</strong> <span th:text="${report.customer?.email}">mail@mail.dk</span></p>
+        </div>
+    </div>
+    <hr />
+
+    <!-- Formular til at redigere rapporten -->
+    <form th:action="@{/conditionReport/edit}" method="post">
+        <!-- Skjulte felter til ID'er -->
+        <input type="hidden" name="conditionReportId" th:value="${report.conditionReportId}" />
+        <input type="hidden" name="rentalAgreementId" th:value="${report.rentalAgreementId}" />
+
+        <!-- Noter felt -->
+        <div class="opret-bil-form-row">
+            <label for="conditionNotes">Noter:</label>
+            <textarea id="conditionNotes" name="conditionNotes" th:text="${report.conditionNotes}"></textarea>
+        </div>
+        <!-- Rapportdato felt -->
+        <div class="opret-bil-form-row">
+            <label for="reportDate">Rapportdato:</label>
+            <input type="date" id="reportDate"
+                   name="reportDate"
+                   th:value="${report.reportDate}" required />
+        </div>
+        <!-- Total pris felt -->
+        <div class="opret-bil-form-row">
+            <label for="totalPrice">Total pris (DKK):</label>
+            <input type="number" id="totalPrice" name="totalPrice"
+                   th:value="${report.totalPrice}" step="0.01" />
+        </div>
+
+        <!-- Tabel med skader (kun visning) -->
+        <div th:if="${report.damages != null and !#lists.isEmpty(report.damages)}" class="details-section">
+            <h2>Registrerede Skader</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Beskrivelse</th>
+                        <th>Pris (DKK)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="damage : ${report.damages}">
+                        <td><span th:text="${damage.damageDescription}">Rids i dør</span></td>
+                        <td th:text="${damage.damagePrice}">500</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Knapper til at opdatere eller administrere skader -->
+        <div class="opret-bil-submit-row">
+            <button class="opret-bil-knap" type="submit">Opdater Rapport</button>
+            <a th:href="@{/conditionReport/view/{id}(id=${report.conditionReportId})}" class="opret-bil-knap" style="margin-left: 10px;">Administrer Skader</a>
+        </div>
+    </form>
+</div>
+</body>
+</html> 

@@ -1,54 +1,109 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap"
           rel="stylesheet">
-    <link rel="stylesheet" href="/stylesheet.css">
+    <link rel="stylesheet" type="text/css" th:href="@{/stylesheet.css}">
 
     <title>Se Bil</title>
 </head>
 <body>
 
-<div th:replace="~{fragments/header :: header('dataRegistration')}"></div>
 
-<div class="page-container">
+ <div th:replace="~{fragments/header :: header('dataRegistration')}"></div>
 
-    <h1>Bilens detaljer</h1>
+ <div class="container">
+
+    <h1 class="page-title main-content-title">
+        <span th:text="${car.brandName != null ? car.brandName : ''}"></span>
+        <span th:text="${car.modelName != null ? car.modelName : ''}"></span>
+        (<span th:text="${car.registrationNumber != null ? car.registrationNumber : ''}"></span>)
+    </h1>
 
 
-    <div class="car-details-container">
-        <!-- Remove the old car-info <p> fields, keep only the new list -->
-        <div class="car-extra-info" style="margin-top: 0;">
-            <ul style="list-style: none; padding: 0;">
-                <li><strong>ID nummer:</strong> <span th:text="${car.carId}"></span></li>
-                <li><strong>Registreringsnummer:</strong> <span th:text="${car.registrationNumber}"></span></li>
-                <li><strong>Stelnummer:</strong> <span th:text="${car.chassisNumber}"></span></li>
-                <li><strong>Stålpris:</strong> <span th:text="${car.steelPrice}"></span> kr.</li>
-                <li><strong>Farve:</strong> <span th:text="${car.color}"></span></li>
-                <li><strong>CO2-udledning:</strong> <span th:text="${car.co2Emission}"></span> g/km</li>
-                <li><strong>Køretøjsnummer:</strong> <span th:text="${car.vehicleNumber}"></span></li>
-                <li><strong>Kommentar:</strong> <span th:text="${car.comment}"></span></li>
-                <li><strong>Model:</strong> <span th:text="${car.modelName}"></span></li>
-                <li><strong>Mærke:</strong> <span th:text="${car.brandName}"></span></li>
-                <li><strong>Status:</strong> <span th:text="${car.carStatusName}"></span></li>
-                <li><strong>Brændstoftype:</strong> <span th:text="${car.fuelTypeName}"></span></li>
-                <li><strong>Transmission:</strong> <span th:text="${car.transmissionTypeName}"></span></li>
-            </ul>
-            <div style="margin-top: 20px;">
-                <button type="button"
-                        class="btn-detaljer"
-                        th:onclick="|location.href='@{/dataRegistration/car/edit/{id}(id=${car.carId})}'|">
-                    Rediger
-                </button>
-            </div>
-        </div>
+    <div class="action-buttons view-details-actions">
+        <a th:href="@{/fleet/overview}" class="btn-opret">Tilbage til oversigt</a>
+        <a th:href="@{/dataRegistration/car/edit/{id}(id=${car.carId})}" class="btn-opret">Rediger bil</a>
     </div>
 
+    <div class="car-details-container">
+
+        <div class="car-info-column">
+            <table class="car-info-table">
+                <tbody>
+                <tr>
+                    <td><strong>Registreringsnummer:</strong></td>
+                    <td th:text="${car.registrationNumber != null ? car.registrationNumber : 'N/A'}"></td>
+                </tr>
+                <tr>
+                    <td><strong>Vognnummer:</strong></td>
+                    <td th:text="${car.vehicleNumber != null ? car.vehicleNumber : 'N/A'}"></td>
+                </tr>
+                <tr>
+                    <td><strong>Stelnummer:</strong></td>
+                    <td th:text="${car.chassisNumber != null ? car.chassisNumber : 'N/A'}"></td>
+                </tr>
+                <tr>
+                    <td><strong>Mærke:</strong></td>
+                    <td th:text="${car.brandName != null ? car.brandName : 'N/A'}"></td>
+                </tr>
+                <tr>
+                    <td><strong>Model:</strong></td>
+                    <td th:text="${car.modelName != null ? car.modelName : 'N/A'}">Explorer</td>
+                </tr>
+                <tr>
+                    <td><strong>Farve:</strong></td>
+                    <td th:text="${car.color != null ? car.color : 'N/A'}">Sort</td>
+                </tr>
+                <tr>
+                    <td><strong>Status:</strong></td>
+                    <td th:text="${car.carStatusName != null ? car.carStatusName : 'N/A'}">Lejet ud</td>
+                </tr>
+                <tr>
+                    <td><strong>Brændstoftype:</strong></td>
+                    <td th:text="${car.fuelTypeName != null ? car.fuelTypeName : 'N/A'}">Benzin</td>
+                </tr>
+                <tr>
+                    <td><strong>Transmission:</strong></td>
+                    <td th:text="${car.transmissionTypeName != null ? car.transmissionTypeName : 'N/A'}">Automatisk</td>
+                </tr>
+                <tr>
+                    <td><strong>Stålpris:</strong></td>
+                    <td th:text="${car.steelPrice > 0 ? #numbers.formatDecimal(car.steelPrice, 1, 'POINT', 2, 'COMMA') + ' kr.' : 'N/A'}">500.000,00 kr.</td>
+                </tr>
+                <tr>
+                    <td><strong>CO2 Udledning:</strong></td>
+                    <td th:text="${car.co2Emission != null ? car.co2Emission + ' g/km' : 'N/A'}">150 g/km</td>
+                </tr>
+                <tr>
+                    <td><strong>Odometer:</strong></td>
+                    <td th:text="${car.current_odometer >= 0 ? #numbers.formatInteger(car.current_odometer, 0, 'POINT') + ' km' : 'N/A'}">25.000 km</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="image-section">
+            <div class="main-image-container">
+                    <!-- Tjek om modelName er sat -->
+                    <th:block th:if="${car.modelName != null && !car.modelName.trim().isEmpty()}">
+                        <!-- Konstruer billedstien dynamisk -->
+                        <img th:src="@{/img/cars/{imageFileName}(imageFileName=${car.modelName} + '.png')}"
+                             th:alt="'Billede af ' + ${car.brandName} + ' ' + ${car.modelName}"
+                             class="main-car-image"
+                             onerror="this.style.display='none'; document.getElementById('imagePlaceholder').style.display='flex';" />
+                        <!-- Placeholder, der kun vises hvis billedet ikke kan loades (via onerror) -->
+                        <div id="imagePlaceholder" class="main-image-placeholder" style="display:none;">
+                            <span>Billede for <th:block th:text="${car.brandName + ' ' +  car.modelName}"></th:block> ikke fundet. <br> Kontakt Service Desk</span>
+                        </div>
+                    </th:block>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
 </div>
-
-
 </body>
 </html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="da" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Opret Tilstandsrapport</title>
+    <link rel="stylesheet" href="/stylesheet.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet" />
+</head>
+<body>
+<div th:replace="~{fragments/header :: header('damageRegistration')}"></div>
+<div class="container">
+    <div class="header-flex">
+        <h1>Opret Tilstandsrapport</h1>
+    </div>
+
+    <!-- Error message display -->
+    <div th:if="${errorMessage}" class="alert alert-error" role="alert">
+        <p th:text="${errorMessage}">Error message here</p>
+    </div>
+
+    <!-- Success message display -->
+    <div th:if="${successMessage}" class="alert alert-success" role="alert">
+        <p th:text="${successMessage}">Success message here</p>
+    </div>
+
+    <!-- Formular til at oprette en ny tilstandsrapport -->
+    <form th:action="@{/conditionReport/create}" th:object="${report}" method="post">
+        <!-- Vælg lejeaftale -->
+        <div class="opret-bil-form-row">
+            <label for="rentalAgreementId">Lejeaftale:</label>
+            <select id="rentalAgreementId" name="rentalAgreementId" th:field="*{rentalAgreementId}" required>
+                <option value="">Vælg lejeaftale</option>
+                <option th:each="option : ${rentalAgreementOptions}"
+                        th:value="${option[0]}"
+                        th:text="${option[1]}"></option>
+            </select>
+        </div>
+
+        <!-- Noter felt -->
+        <div class="opret-bil-form-row">
+            <label for="conditionNotes">Noter:</label>
+            <textarea id="conditionNotes" th:field="*{conditionNotes}"></textarea>
+        </div>
+        <!-- Rapportdato felt -->
+        <div class="opret-bil-form-row">
+            <label for="formattedDate">Rapportdato:</label>
+            <input type="text" id="formattedDate" th:field="*{formattedDate}" required placeholder="dd-MM-yyyy" />
+        </div>
+        
+        <!-- Knap til at oprette rapport -->
+        <div class="opret-bil-submit-row">
+            <button class="opret-bil-knap" type="submit">Opret Rapport</button>
+        </div>
+    </form>
+</div>
+</body>
+</html> 

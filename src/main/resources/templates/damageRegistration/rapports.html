@@ -1,17 +1,111 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="da" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/stylesheet.css">
-  <title>Rapporter</title>
+  <meta charset="UTF-8" />
+  <title>Tilstandsrapporter</title>
+  <link rel="stylesheet" href="/stylesheet.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet" />
 </head>
 <body>
-<div th:replace="fragments/header :: header('rapports')"></div>
+<div th:replace="~{fragments/header :: header('damageRegistration')}"></div>
 
-<h1>Rapporter</h1>
+<div class="container">
+  <div class="header-flex">
+    <h1>Tilstandsrapporter</h1>
+    <p class="description-text">
+      Her kan du se alle tilstandsrapporter og oprette nye.
+    </p>
+  </div>
+
+  <!-- Error and success messages -->
+  <div th:if="${errorMessage}" class="alert alert-error" role="alert">
+    <p th:text="${errorMessage}">Error message here</p>
+  </div>
+  <div th:if="${successMessage}" class="alert alert-success" role="alert">
+    <p th:text="${successMessage}">Success message here</p>
+  </div>
+
+  <div class="action-section">
+    <div class="create-customer-section">
+      <a class="btn-opret" th:href="@{/conditionReport/create}">Opret ny rapport</a>
+    </div>
+    <div class="search-id-container">
+      <div class="search-id-section">
+        <form class="search-id-section" th:action="@{/conditionReport/list}" method="get">
+          <input type="text" id="searchReportId" name="searchReportId" placeholder="Søg på rapport ID" th:value="${param.searchReportId}" />
+          <button type="submit" class="btn-soeg">Søg</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filter section -->
+  <form class="filter-section" style="justify-content: flex-end" th:action="@{/conditionReport/list}" method="get">
+    <!-- Customer Filter -->
+    <div class="filter-group">
+      <select id="customerFilter" name="customerId">
+        <option value="">Kunde</option>
+        <option th:each="customer : ${availableCustomers}"
+                th:value="${customer.customerId}"
+                th:text="${customer.fname + ' ' + customer.lname}"
+                th:selected="${customer.customerId} == ${param.customerId}">
+        </option>
+      </select>
+    </div>
+
+    <!-- Rental Agreement Filter -->
+    <div class="filter-group">
+      <select id="rentalAgreementId" name="rentalAgreementId">
+        <option value="">Lejeaftale ID</option>
+        <option th:each="rental : ${availableRentals}"
+                th:value="${rental.rentalAgreementId}"
+                th:text="${'Aftale ' + rental.rentalAgreementId}"
+                th:selected="${rental.rentalAgreementId} == ${param.rentalAgreementId}">
+        </option>
+      </select>
+    </div>
+
+    <div class="filter-button-group">
+      <button type="submit" class="btn-soeg-filter">Søg</button>
+      <a th:href="@{/conditionReport/list}" class="btn btn-vis-alle">Vis Alle</a>
+    </div>
+  </form>
+
+  <!-- Tabel med alle rapporter -->
+  <table class="car-table">
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>Lejeaftale ID</th>
+      <th>Dato</th>
+      <th>Noter</th>
+      <th>Total Pris</th>
+      <th>Handling</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- Hvis der ikke er nogen rapporter -->
+    <tr th:if="${#lists.isEmpty(reports)}">
+      <td colspan="6" style="text-align: center;">Ingen rapporter fundet.</td>
+    </tr>
+    <!-- Gennemløb alle rapporter og vis dem i tabellen -->
+    <tr th:each="report : ${reports}">
+      <td th:text="${report.conditionReportId}">1</td>
+      <td th:text="${report.rentalAgreementId}">1</td>
+      <td th:text="${report.formattedDate}">01-01-2024</td>
+      <td th:text="${report.conditionNotes}">Noter</td>
+      <td th:text="${report.totalPrice}">0</td>
+      <td>
+        <!-- Knap til detaljer -->
+        <a th:href="@{/conditionReport/view/{id}(id=${report.conditionReportId})}" class="btn-detaljer">Se detaljer</a>
+        <!-- Knap til redigering -->
+        <a th:href="@{/conditionReport/edit/{id}(id=${report.conditionReportId})}" class="btn-detaljer">Rediger</a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
 </body>
 </html>

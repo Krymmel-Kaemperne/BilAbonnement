@@ -12,7 +12,7 @@
 <div th:replace="~{fragments/header :: header('dataRegistration')}"></div>
 <div class="page-container">
   <div class="form-container">
-    <header class="opret-bil-form-header"> <!-- Bruger samme header klasse -->
+    <header class="opret-bil-form-header">
       <h1>Opret Privatkunde</h1>
     </header>
 
@@ -58,7 +58,6 @@
         </select>
       </div>
 
-      <!-- Privat-specifikt felt -->
       <div class="opret-bil-form-row">
         <label for="cprNumber">CPR Number:</label>
         <input type="text" id="cprNumber" name="cprNumber" th:value="${cprNumber}" required>
