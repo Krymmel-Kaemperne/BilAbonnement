@@ -163,11 +163,17 @@ public class RentalAgreementController {
         Car selectedCar = carService.findById(rentalAgreement.getCarId());
         if (selectedCar != null)
         {
-            rentalAgreement.setStartOdometer(selectedCar.getCurrentOdometer());
 
+            if (selectedCar.getCarStatusId() != 1) {
+                redirectAttributes.addFlashAttribute("errorMessage", "Bilen er ikke tilgængelig og kan ikke udlejes.");
+                return "redirect:/dataRegistration/rental-agreements";
+            }
+            rentalAgreement.setStartOdometer(selectedCar.getCurrentOdometer());
             selectedCar.setCarStatusId(2);
             carService.update(selectedCar);
         }
+
+
 
         try
         {
@@ -179,7 +185,6 @@ public class RentalAgreementController {
             redirectAttributes.addFlashAttribute("errorMessage", "Fejl ved oprettelse!");
         }
         return "redirect:/dataRegistration/rental-agreements";
-
     }
 
 
@@ -328,4 +333,20 @@ public class RentalAgreementController {
         redirectAttributes.addFlashAttribute("successMessage", "Lejeaftale slettet.");
         return "redirect:/dataRegistration/rental-agreements";
     }
+
+
+    // Konstruktør af controlleren, så den kan anvendes i Test klassen
+    public RentalAgreementController(RentalAgreementService rentalAgreementService,
+                                     CarService carService,
+                                     CustomerService customerService,
+                                     LocationService locationService,
+                                     ConditionReportService conditionReportService) {
+        this.rentalAgreementService = rentalAgreementService;
+        this.carService = carService;
+        this.customerService = customerService;
+        this.locationService = locationService;
+        this.conditionReportService = conditionReportService;
+    }
+
+
 }
