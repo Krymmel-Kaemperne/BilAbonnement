@@ -32,7 +32,7 @@
                 <input type="hidden" th:field="*{startOdometer}"/>
                 <input type="hidden" th:field="*{endOdometer}"/>
 
-                <!-- Kunde (Redigerbar) -->
+                <!-- Kunde -->
                 <div class="opret-bil-form-row">
                     <label for="customerId">Kunde:</label>
                     <select id="customerId" th:field="*{customerId}" required>
@@ -40,16 +40,16 @@
                         <option th:each="custOpt : ${allCustomers}"
                                 th:if="${custOpt != null}"
                                 th:value="${custOpt.customerId}"
-                                th:text="${custOpt.displayName}"> <!-- ÆNDRET HER -->
+                                th:text="${custOpt.displayName}">
                         </option>
                     </select>
                 </div>
 
-                <!-- Bil (Redigerbar) -->
+                <!-- Bil  -->
                 <div class="opret-bil-form-row">
                     <label for="carId">Bil:</label>
                     <select id="carId" th:field="*{carId}" required>
-                        <option value="">Vælg bil</option> <!-- Tom værdi for "ikke valgt" -->
+                        <option value="">Vælg bil</option>
                         <option th:each="carOpt : ${availableCars}"
                                 th:value="${carOpt.carId}"
                                 th:text="${carOpt.registrationNumber + ' (' + carOpt.brandName + ' ' + carOpt.modelName + ')'}">
@@ -57,20 +57,20 @@
                     </select>
                 </div>
 
-                <!-- Afhentningssted (Redigerbar) -->
+                <!-- Afhentningssted -->
                 <div class="opret-bil-form-row">
                     <label for="pickupLocation">Afhentningssted:</label>
                     <select id="pickupLocation" th:field="*{pickupLocationId}" required>
-                        <option value="">Vælg afhentningssted</option> <!-- Tom værdi for "ikke valgt" -->
+                        <option value="">Vælg afhentningssted</option>
                         <option th:each="locOpt : ${allLocations}"
                                 th:if="${locOpt != null}"
                                 th:value="${locOpt.locationId}"
-                                th:text="${locOpt.displayName}"> <!-- Bruger displayName fra Location model -->
+                                th:text="${locOpt.displayName}">
                         </option>
                     </select>
                 </div>
 
-                <!-- Returneringssted (Redigerbar) -->
+                <!-- Returneringssted -->
                 <div class="opret-bil-form-row">
                     <label for="returnLocation">Returneringssted:</label>
                     <select id="returnLocation" th:field="*{returnLocationId}">
@@ -83,19 +83,19 @@
                     </select>
                 </div>
 
-                <!-- Inkluderede Kilometer (Redigerbar) -->
+                <!-- Inkluderede Kilometer -->
                 <div class="opret-bil-form-row">
                     <label for="kilometersIncluded">Kilometer Inkluderet:</label>
                     <input type="number" id="kilometersIncluded" th:field="*{kilometersIncluded}" required min="0">
                 </div>
 
-                <!-- Månedlig Pris (Redigerbar) -->
+                <!-- Månedlig Pris -->
                 <div class="opret-bil-form-row">
                     <label for="monthlyPrice">Månedlig Pris (kr.):</label>
                     <input type="number" id="monthlyPrice" th:field="*{monthlyPrice}" step="0.01" required min="0">
                 </div>
 
-                <!-- Leasingkode (Redigerbar) -->
+                <!-- Leasingkode -->
                 <div class="readonly-field-container">
                     <label>Leasingkode:</label>
                     <span class="readonly-field-value" th:text="*{leasingCode}"></span>

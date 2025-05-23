@@ -22,13 +22,10 @@
 
             <div th:if="${successMessage}" class="message success-message" th:text="${successMessage}"></div>
             <div th:if="${errorMessage}" class="message error-message" th:text="${errorMessage}"></div>
-            <!-- Form action skal pege på din POST edit metode og inkludere ID -->
             <form th:action="@{/customers/edit/business/{id}(id=${customer.customerId})}" method="post">
 
-                <!-- SKJUL ID-felt - VIGTIGT! -->
                 <input type="hidden" name="customerId" th:value="${customer.customerId}">
 
-                <!-- Fælles felter - Forudfyld med th:value -->
                 <div class="opret-bil-form-row">
                     <label for="companyName">Firmanavn:</label>
                     <input type="text" id="companyName" name="companyName" th:value="${customer.companyName}" required>

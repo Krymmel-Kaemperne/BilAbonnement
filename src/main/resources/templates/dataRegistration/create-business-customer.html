@@ -11,9 +11,9 @@
 <body>
 <div th:replace="~{fragments/header :: header('dataRegistration')}"></div>
 
-<div class="page-container"> <!-- Bruger samme container klasse som opret-bil -->
+<div class="page-container">
     <div class="form-container">
-    <header class="opret-bil-form-header"> <!-- Bruger samme header klasse -->
+    <header class="opret-bil-form-header">
         <h1>Opret Erhvervskunde</h1>
     </header>
 
@@ -21,15 +21,14 @@
         <a th:href="@{/customers/create/private}" class="button-secondary">Opret Privatkunde i stedet</a>
     </div>
 
-    <div class="opret-bil-form-content"> <!-- Bruger samme content wrapper klasse -->
+    <div class="opret-bil-form-content">
 
         <!-- Viser succes- og fejlbeskeder -->
         <div th:if="${successMessage}" class="message success-message" th:text="${successMessage}" style="margin-bottom: 20px;"></div>
         <div th:if="${errorMessage}" class="message error-message" th:text="${errorMessage}" style="margin-bottom: 20px;"></div>
 
         <form th:action="@{/customers/create/business}" method="post">
-            <!-- Fælles felter -->
-            <div class="opret-bil-form-row"> <!-- Bruger samme række klasse -->
+            <div class="opret-bil-form-row">
                 <label for="companyName">Firmanavn:</label>
                 <input type="text" id="companyName" name="companyName" th:value="${companyName}" required>
             </div>
@@ -75,8 +74,8 @@
                 </select>
             </div>
 
-            <div class="opret-bil-center-row"> <!-- Bruger samme submit række klasse -->
-                <button class="opret-bil-knap" type="submit">Opret Erhvervskunde</button> <!-- Bruger samme knap klasse -->
+            <div class="opret-bil-center-row">
+                <button class="opret-bil-knap" type="submit">Opret Erhvervskunde</button>
             </div>
         </form>
     </div>

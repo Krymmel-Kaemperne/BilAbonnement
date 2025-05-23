@@ -27,10 +27,7 @@
     <div th:if="${errorMessage}" class="message error-message" th:text="${errorMessage}" style="margin-bottom: 20px;"></div>
 
     <form th:if="${car != null}" th:action="@{/dataRegistration/car/update}" th:object="${car}" method="post">
-      <!-- Skjult felt til at sende carId med -->
       <input type="hidden" th:field="*{carId}" />
-      <!-- Skjult felt til at sende modelId med, hvis det er sat og ikke skal ændres via brand/modelnavn her -->
-      <!-- <input type="hidden" th:field="*{modelId}" /> -->
 
 
       <div class="opret-bil-form-row">
@@ -76,11 +73,6 @@
 
       <div class="opret-bil-form-row">
         <label for="modelName">Model:</label>
-        <!-- modelName er ikke direkte en del af Car-objektet i din CarRepository.findById, men hentes via join.
-             Sørg for at Car-objektet, der sendes til denne form, har modelName sat.
-             Hvis din Car-klasse har et modelName felt, vil th:field="*{modelName}" virke.
-             Hvis ikke, skal du måske have et separat input og håndtere det i controlleren.
-             Baseret på din CarRepository.findById, ser det ud til at modelName sættes. -->
         <input type="text" id="modelName" th:field="*{modelName}" placeholder="Indtast modelnavn" required>
       </div>
 
