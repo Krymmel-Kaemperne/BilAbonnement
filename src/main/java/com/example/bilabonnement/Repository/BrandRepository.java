@@ -11,12 +11,8 @@ import java.util.List;
 @Repository
 public class BrandRepository {
 
-    private final JdbcTemplate jdbcTemplate;
-
     @Autowired
-    public BrandRepository(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
+    private JdbcTemplate jdbcTemplate;
 
     // Finder alle bilmærker i databasen og returnerer dem som en liste.
     public List<Brand> findAllBrands() {

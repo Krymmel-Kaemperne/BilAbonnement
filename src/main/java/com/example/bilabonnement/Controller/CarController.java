@@ -97,6 +97,20 @@ public class CarController {
             return "redirect:/dataRegistration/car/edit/" + car.getCarId();
         }
 
+        com.example.bilabonnement.Model.Model currentModel = modelService.findById(existingCar.getModelId());
+
+        if(currentModel != null) {
+            if(!currentModel.getModelName().equals(car.getModelName())) {
+                currentModel.setModelName(car.getModelName());
+
+                boolean modelUpdated = modelService.update(currentModel) != null;
+                if (!modelUpdated) {
+                    redirectAttributes.addFlashAttribute("errorMessage", "Fejl ved opdatering af modelnavn for bil med ID " + car.getCarId() + ".");
+                    return "redirect:/dataRegistration/car/edit/" + car.getCarId();
+                }
+            }
+        }
+
         com.example.bilabonnement.Model.Model carModelEntity = modelService.findByBrandIdAndModelName(car.getBrandId(), car.getModelName());
         if (carModelEntity == null) {
             carModelEntity = modelService.create(new com.example.bilabonnement.Model.Model(car.getModelName(), car.getBrandId()));

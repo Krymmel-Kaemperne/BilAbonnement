@@ -9,12 +9,9 @@ import java.util.List;
 
 @Repository
 public class FuelTypeRepository {
-    private final JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public FuelTypeRepository(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
+    private JdbcTemplate jdbcTemplate;
 
     /**
      * Finder alle brændstoftyper i databasen.

@@ -14,20 +14,11 @@ import java.util.List;
 @Service
 public class CarService {
 
-
-
     @Autowired
     RentalAgreementRepository rentalAgreementRepository;
 
-
-    private CarRepository carRepository;
-
-
-
     @Autowired
-    public CarService(CarRepository carRepository) {
-        this.carRepository = carRepository;
-    }
+    private CarRepository carRepository;
 
     /**
      * Finder alle biler i systemet.

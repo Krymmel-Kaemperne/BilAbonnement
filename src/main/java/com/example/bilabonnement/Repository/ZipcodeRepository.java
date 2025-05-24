@@ -20,7 +20,6 @@ public class ZipcodeRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-
     /**
      * Gemmer et nyt postnummer i databasen. Hvis et postnummer med samme kode allerede
      * eksisterer, returneres det eksisterende postnummer.
