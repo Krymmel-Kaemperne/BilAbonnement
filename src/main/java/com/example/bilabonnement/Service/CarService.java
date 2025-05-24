@@ -14,11 +14,15 @@ import java.util.List;
 @Service
 public class CarService {
 
-    @Autowired
-    private RentalAgreementRepository rentalAgreementRepository;
+
+    private final RentalAgreementRepository rentalAgreementRepository;
+    private final CarRepository carRepository;
 
     @Autowired
-    private CarRepository carRepository;
+    public CarService(RentalAgreementRepository rentalAgreementRepository, CarRepository carRepository) {
+        this.rentalAgreementRepository = rentalAgreementRepository;
+        this.carRepository = carRepository;
+    }
 
     /**
      * Finder alle biler i systemet.
@@ -26,7 +30,6 @@ public class CarService {
     public List<Car> findAllCars() {
         return carRepository.findAll();
     }
-
 
     /**
      * Finder en specifik bil ud fra dens ID.
