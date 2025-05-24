@@ -15,7 +15,7 @@ import java.util.List;
 public class CarService {
 
     @Autowired
-    RentalAgreementRepository rentalAgreementRepository;
+    private RentalAgreementRepository rentalAgreementRepository;
 
     @Autowired
     private CarRepository carRepository;
