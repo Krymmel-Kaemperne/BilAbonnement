@@ -21,7 +21,15 @@ public class ModelService {
         return modelRepository.create(model);
     }
 
+    public Model update(Model model) {
+        return modelRepository.update(model);
+    }
+
     public List<Model> findAllModels() {
         return modelRepository.findAllModels();
+    }
+
+    public Model findById(int id) {
+        return modelRepository.findById(id);
     }
 }

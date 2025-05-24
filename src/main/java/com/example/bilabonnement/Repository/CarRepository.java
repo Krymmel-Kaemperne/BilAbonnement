@@ -18,13 +18,9 @@ import org.springframework.dao.EmptyResultDataAccessException;
 public class CarRepository {
 
     @Autowired
-    private final JdbcTemplate jdbcTemplate;
+    private JdbcTemplate jdbcTemplate;
     // Opretter en RowMapper til automatisk at mappe databasens resultater til Car-objekter.
     private final BeanPropertyRowMapper<Car> carRowMapper = new BeanPropertyRowMapper<>(Car.class);
-
-    public CarRepository(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
 
     /**
      * Opretter en ny bil i databasen og sætter den genererede ID på Car-objektet.

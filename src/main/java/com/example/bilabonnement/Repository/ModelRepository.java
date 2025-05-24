@@ -2,6 +2,7 @@ package com.example.bilabonnement.Repository;
 
 import com.example.bilabonnement.Model.Model;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -14,12 +15,9 @@ import java.util.List;
 
 @Repository
 public class ModelRepository {
-    private final JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public ModelRepository(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
+    private JdbcTemplate jdbcTemplate;
 
     /**
      * Finder en model baseret på dens mærke ID og modelnavn.
@@ -79,5 +77,15 @@ public class ModelRepository {
             model.setBrandName(rs.getString("brand_name"));
             return model;
         });
+    }
+
+    public Model findById(int modelId) {
+        String sql = "SELECT model_id, model_name, brand_id FROM model WHERE model_id = ?";
+
+        try {
+            return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(Model.class), modelId);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
     }
 }

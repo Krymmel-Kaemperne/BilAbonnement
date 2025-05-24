@@ -26,24 +26,17 @@ import java.time.format.DateTimeFormatter;
 @RequestMapping("/conditionReport")
 public class ConditionReportController {
 
-    private final ConditionReportService conditionReportService;
-    private final DamageService damageService;
-    private final RentalAgreementService rentalAgreementService;
-    private final CustomerService customerService;
-    private final CarService carService;
-
     @Autowired
-    public ConditionReportController(ConditionReportService conditionReportService,
-                                     DamageService damageService,
-                                     RentalAgreementService rentalAgreementService,
-                                     CustomerService customerService,
-                                     CarService carService) {
-        this.conditionReportService = conditionReportService;
-        this.damageService = damageService;
-        this.rentalAgreementService = rentalAgreementService;
-        this.customerService = customerService;
-        this.carService = carService;
-    }
+    private ConditionReportService conditionReportService;
+    @Autowired
+    private DamageService damageService;
+    @Autowired
+    private RentalAgreementService rentalAgreementService;
+    @Autowired
+    private CustomerService customerService;
+    @Autowired
+    private CarService carService;
+
 
     @GetMapping("/list")
     public String listAll(

@@ -9,6 +9,7 @@ import java.util.List;
 
 @Repository
 public class TransmissionTypeRepository {
+
     @Autowired
     private JdbcTemplate jdbcTemplate;
 

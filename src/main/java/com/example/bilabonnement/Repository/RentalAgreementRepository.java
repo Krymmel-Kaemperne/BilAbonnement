@@ -15,16 +15,15 @@ import java.sql.PreparedStatement; // Behold denne til create for generated key
 @Repository
 public class RentalAgreementRepository {
 
-    private final JdbcTemplate jdbcTemplate;
-    private final CarRepository carRepository; // Beholder denne, selvom den ikke bruges direkte i dette repo's metoder
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    private CarRepository carRepository; // Beholder denne, selvom den ikke bruges direkte i dette repo's metoder
 
     private final BeanPropertyRowMapper<RentalAgreement> rentalAgreementRowMapper = new BeanPropertyRowMapper<>(RentalAgreement.class);
 
-    @Autowired
-    public RentalAgreementRepository(JdbcTemplate jdbcTemplate, CarRepository carRepository) {
-        this.jdbcTemplate = jdbcTemplate;
-        this.carRepository = carRepository;
-    }
+
 
     /**
      * Opretter en ny lejeaftale i databasen og henter den genererede ID.

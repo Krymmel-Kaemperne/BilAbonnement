@@ -9,12 +9,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class ForretningsController {
-    private final ForretningsService forretningsService;
 
     @Autowired
-    public ForretningsController(ForretningsService forretningsService) {
-        this.forretningsService = forretningsService;
-    }
+    private ForretningsService forretningsService;
 
     @GetMapping("/forretningsdata/omsætning")
     public String showOmsaetningDashboard(Model model) {

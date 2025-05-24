@@ -11,6 +11,7 @@ import java.util.List;
 
 @Repository
 public class CarStatusRepository {
+
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
