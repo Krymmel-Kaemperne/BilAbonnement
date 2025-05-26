@@ -25,9 +25,10 @@
         <a type="button" class="btn-opret" href="/conditionReport/list">
             Gå til rapporter
         </a>
-        <a type="button" class="btn-opret" href="/conditionReport/create">
-            Opret ny rapport
+        <a type="button" class="btn-opret" th:href="@{/conditionReport/damage/create(conditionReportId=${report.conditionReportId})}">
+            Opret ny skade
         </a>
+
     </div>
     <!-- Tabel med skader -->
     <h2>Skader</h2>
