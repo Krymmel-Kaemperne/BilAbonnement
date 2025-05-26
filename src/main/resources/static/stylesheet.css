@@ -536,6 +536,8 @@ body {
     transition: background-color 0.3s ease;
     text-decoration: none;
     margin: 0 8px 0 0;
+    display: inline-block;
+    font-family: "Plus Jakarta Sans", sans-serif;
 }
 
 .btn-detaljer:hover {

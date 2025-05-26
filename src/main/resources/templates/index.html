@@ -32,16 +32,16 @@
 
         <div class="section-group">
             <h3>Skade Registrering</h3>
+            <a th:href="@{/conditionReport/list}" class="section-card">Tilstandsrapporter</a>
             <a th:href="@{/conditionReport/create}" class="section-card">Opret tilstandsrapport</a>
-            <a th:href="@{/conditionReport/list}" class="section-card">Se tilstandsrapporter</a>
             <a th:href="@{/conditionReport/reparationStatus}" class="section-card">Reparations nøgletal</a>
         </div>
 
         <div class="section-group">
             <h3>Forretnings Data</h3>
-            <a th:href="@{/forretningsdata/fleet}" class="section-card">Fleet Statistik</a>
             <a th:href="@{/forretningsdata/omsætning}" class="section-card">Omsætning</a>
-            <a th:href="@{/forretningsdata/andre}" class="section-card">Andre Nøgletal</a>
+            <a th:href="@{/forretningsdata/fleet}" class="section-card">Fleet</a>
+            <a th:href="@{/forretningsdata/andre}" class="section-card">Nøgletal</a>
         </div>
     </div>
 </div>
