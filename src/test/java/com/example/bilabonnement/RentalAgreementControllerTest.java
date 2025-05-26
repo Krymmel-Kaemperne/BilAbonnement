@@ -72,7 +72,5 @@ public class RentalAgreementControllerTest {
         assertEquals("redirect:/dataRegistration/rental-agreements", viewName);
 
         System.out.println("✅ Testen lykkedes: Bilen kunne ikke udlejes, da den ikke er tilgængelig");
-
     }
-
 }

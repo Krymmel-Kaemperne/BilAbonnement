@@ -30,4 +30,10 @@ public class PrivateCustomer extends Customer {
     public void setCprNumber(String cprNumber) {
         this.cprNumber = cprNumber;
     }
+
+    @Override
+    public String getDisplayName() {
+        String fullName = (getFname() + " " + getLname()).trim();
+        return fullName.isEmpty() ? "Ukendt Privatkunde (ID: " + getCustomerId() + ")" : fullName;
+    }
 }
