@@ -1,8 +1,5 @@
 package com.example.bilabonnement.Controller;
-import com.example.bilabonnement.Model.Car;
-import com.example.bilabonnement.Model.Brand;
-import com.example.bilabonnement.Model.CarStatus;
-import com.example.bilabonnement.Model.FuelType;
+import com.example.bilabonnement.Model.*;
 import org.springframework.ui.Model;
 import com.example.bilabonnement.Service.BrandService;
 import com.example.bilabonnement.Service.CarService;
@@ -41,9 +38,9 @@ public class CarController {
         model.addAttribute("allBrands", allBrands);
         List<FuelType> allFuelTypes = fuelTypeService.findAllFuelTypes();
         model.addAttribute("allFuelTypes", allFuelTypes);
-        List<com.example.bilabonnement.Model.CarStatus> allCarStatuses = carStatusService.findAllStatuses();
+        List<CarStatus> allCarStatuses = carStatusService.findAllStatuses();
         model.addAttribute("allCarStatuses", allCarStatuses);
-        List<com.example.bilabonnement.Model.TransmissionType> allTransmissionTypes = transmissionTypeService.findAllTransmissionTypes();
+        List<TransmissionType> allTransmissionTypes = transmissionTypeService.findAllTransmissionTypes();
         model.addAttribute("allTransmissionTypes", allTransmissionTypes);
         return "dataRegistration/createCar";
     }
