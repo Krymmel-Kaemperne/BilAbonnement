@@ -46,13 +46,26 @@ public class CarController {
     }
 
     @PostMapping("/createCar")
-    public String createCar(@ModelAttribute Car car) {
-        com.example.bilabonnement.Model.Model carModelEntity = modelService.findByBrandIdAndModelName(car.getBrandId(), car.getModelName());
-        if (carModelEntity == null) {
-            carModelEntity = modelService.create(new com.example.bilabonnement.Model.Model(car.getModelName(), car.getBrandId()));
+    public String createCar(@ModelAttribute Car car, RedirectAttributes redirectAttributes) {
+        try {
+            com.example.bilabonnement.Model.Model carModelEntity = modelService.findByBrandIdAndModelName(car.getBrandId(), car.getModelName());
+            if (carModelEntity == null) {
+                carModelEntity = modelService.create(new com.example.bilabonnement.Model.Model(car.getModelName(), car.getBrandId()));
+            }
+            car.setModelId(carModelEntity.getModelId());
+            Car createdCar = carService.create(car);
+            if (createdCar != null && createdCar.getCarId() > 0) {
+                redirectAttributes.addFlashAttribute("successMessage", "Bil '" + createdCar.getRegistrationNumber() + "' oprettet succesfuldt!");
+            } else {
+                redirectAttributes.addFlashAttribute("errorMessage", "Fejl ved oprettelse af bil.");
+            }
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Fejl ved oprettelse af bil: " + e.getMessage());
+            return "redirect:/dataRegistration/createCar"; // Redirect back to form with error
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Uventet fejl ved oprettelse af bil.");
+            // Log exception e
         }
-        car.setModelId(carModelEntity.getModelId());
-        carService.create(car);
         return "redirect:/fleet/overview"; // OPDATERET REDIRECT
     }
 

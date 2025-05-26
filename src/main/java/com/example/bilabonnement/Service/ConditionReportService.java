@@ -257,7 +257,17 @@ public class ConditionReportService {
      * Henter afsluttede lejeaftaler til rapportoprettelse.
      */
     public List<RentalAgreement> getFinishedRentalAgreementsForReportCreation() {
-        return rentalAgreementService.findFinishedRentalAgreements();
+        List<RentalAgreement> finishedAgreements = rentalAgreementService.findFinishedRentalAgreements();
+        if (finishedAgreements == null) {
+            return new ArrayList<>();
+        }
+        // Filtrer aftaler fra, der allerede har en tilstandsrapport
+        return finishedAgreements.stream()
+                .filter(agreement -> {
+                    List<ConditionReport> reports = conditionReportRepository.findByRentalAgreementId(agreement.getRentalAgreementId());
+                    return reports == null || reports.isEmpty();
+                })
+                .collect(Collectors.toList());
     }
 
     private ConditionReport enrichConditionReport(ConditionReport report) {
