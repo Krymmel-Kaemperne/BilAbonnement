@@ -59,7 +59,7 @@
                 </a>
                 <!-- Knap til at slette skade -->
                 <form th:action="@{/conditionReport/damage/delete/{id}(id=${damage.damageId})}" method="post" style="display:inline;">
-                    <a type="submit" class="btn-detaljer" onclick="return confirm('Er du sikker på, at du vil slette denne skade?');">Slet</a>
+                    <button type="submit" class="btn-detaljer" onclick="return confirm('Er du sikker på, at du vil slette denne skade?');">Slet</button>
                 </form>
             </td>
         </tr>
