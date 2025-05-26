@@ -163,11 +163,11 @@ public class RentalAgreementRepository {
         List<RentalAgreement> results = jdbcTemplate.query(sql, rentalAgreementRowMapper, carId);
 
         // Debug print statements
-        System.out.println("📊 SQL executed: " + sql + " with carId=" + carId);
-        System.out.println("📊 Found " + results.size() + " agreements");
+        System.out.println("SQL executed: " + sql + " with carId=" + carId);
+        System.out.println("Found " + results.size() + " agreements");
 
         for (RentalAgreement ag : results) {
-            System.out.println("📝 " + ag);
+            System.out.println(ag);
         }
 
         return results;
