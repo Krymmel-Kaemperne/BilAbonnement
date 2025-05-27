@@ -86,7 +86,7 @@ public class RentalAgreementController {
                         Car::getCarId,
 
                         car -> car.getBrandName() + " " + car.getModelName()
-                        ));
+                ));
 
 
 

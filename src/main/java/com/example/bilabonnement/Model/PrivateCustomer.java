@@ -1,7 +1,6 @@
 package com.example.bilabonnement.Model;
 
 public class PrivateCustomer extends Customer {
-
     private String cprNumber;
 
     public PrivateCustomer() {
