@@ -5,6 +5,7 @@ import com.example.bilabonnement.Repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,40 +34,47 @@ public class CustomerService {
         return customerRepository.update(customer);
     }
 
+    // Finder kunder baseret på filtre som ID, type, by og aktiv lejeaftale.
     public List<Customer> findFilteredCustomers(String searchCustomerId, String customerType, Integer cityId, Boolean hasActiveRental) {
         List<Customer> customers = findAllCustomers();
+        List<Customer> filteredCustomers = new ArrayList<>();
 
-        // Filter by ID if provided
         if (searchCustomerId != null && !searchCustomerId.trim().isEmpty()) {
             try {
                 int id = Integer.parseInt(searchCustomerId);
                 Customer customer = findById(id);
                 return customer != null ? List.of(customer) : List.of();
             } catch (NumberFormatException e) {
-                return List.of(); // Invalid ID format, return empty list
+                return List.of();
             }
         }
 
-        // Apply remaining filters if no ID search or if ID search returned no results
-        if (customerType != null && !customerType.isEmpty()) {
-            customers = customers.stream()
-                    .filter(c -> c.getCustomerType().name().equals(customerType))
-                    .collect(Collectors.toList());
+        for (Customer customer : customers) {
+            boolean matches = true;
+
+            if (customerType != null && !customerType.isEmpty()) {
+                if (customer.getCustomerType() == null || !customer.getCustomerType().name().equals(customerType)) {
+                    matches = false;
+                }
+            }
+
+            if (matches && cityId != null) {
+                if (customer.getZipcodeId() != cityId) {
+                    matches = false;
+                }
+            }
+
+            if (matches && hasActiveRental != null) {
+                if (hasActiveRental != rentalAgreementService.hasActiveRental(customer.getCustomerId())) {
+                    matches = false;
+                }
+            }
+
+            if (matches) {
+                filteredCustomers.add(customer);
+            }
         }
 
-        if (cityId != null) {
-            customers = customers.stream()
-                    .filter(c -> c.getZipcodeId() == cityId)
-                    .collect(Collectors.toList());
-        }
-
-        // Filter by active rental status if provided
-        if (hasActiveRental != null) {
-            customers = customers.stream()
-                    .filter(c -> hasActiveRental == rentalAgreementService.hasActiveRental(c.getCustomerId()))
-                    .collect(Collectors.toList());
-        }
-
-        return customers;
+        return filteredCustomers;
     }
 }
