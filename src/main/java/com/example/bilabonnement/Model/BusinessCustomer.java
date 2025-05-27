@@ -2,7 +2,6 @@ package com.example.bilabonnement.Model;
 
 
 public class BusinessCustomer extends Customer {
-
         private String cvrNumber;
         private String companyName;
         // private int businessCustomerId; // Ikke nødvendig hvis customerId fra superklassen bruges som PK/FK

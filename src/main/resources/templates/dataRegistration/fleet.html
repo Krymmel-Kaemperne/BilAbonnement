@@ -124,6 +124,7 @@
             <td colspan="7" style="text-align: center;">Ingen biler fundet.</td>
         </tr>
         <tr th:unless="${#lists.isEmpty(cars)}" th:each="car : ${cars}">
+            <!-- bil data -->
             <td th:text="${car.carId}">0</td>
             <td th:text="${car.brandName}">N/A</td>
             <td th:text="${car.modelName}">N/A</td>

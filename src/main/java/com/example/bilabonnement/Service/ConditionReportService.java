@@ -112,11 +112,17 @@ public class ConditionReportService {
         if (damages == null || damages.isEmpty()) {
             return BigDecimal.ZERO;
         }
-        // Bruger Stream til at beregne totalen.
-        return damages.stream()
-                .filter(damage -> damage != null && damage.getDamagePrice() != null)
-                .map(Damage::getDamagePrice)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        BigDecimal totalDamagePrice = BigDecimal.ZERO;
+
+        // Bruger for loop til at beregne total pris.
+        for (Damage damage : damages) {
+            if (damage != null && damage.getDamagePrice() != null) {
+                totalDamagePrice = totalDamagePrice.add(damage.getDamagePrice());
+            }
+        }
+
+        return totalDamagePrice;
     }
 
     /**
@@ -133,7 +139,7 @@ public class ConditionReportService {
 
     /**
      * Beregner gennemsnitligt antal skader pr. lejeaftale.
-     */
+
     public double getAverageDamagesPerRental() {
         int totalDamages = damageService.countAllDamages();
         int totalRentals = rentalAgreementService.countAllRentalAgreements();
@@ -143,14 +149,14 @@ public class ConditionReportService {
 
     /**
      * Henter det totale antal skader.
-     */
+
     public int getTotalDamages() {
         return damageService.countAllDamages();
     }
 
     /**
      * Henter det totale antal lejeaftaler.
-     */
+
     public int getTotalRentals() {
         return rentalAgreementService.countAllRentalAgreements();
     }
@@ -160,22 +166,36 @@ public class ConditionReportService {
      */
     public double getAverageDamagePrice() {
         List<Damage> damages = damageService.findAll();
-        if (damages == null || damages.isEmpty()) return 0.0;
+        if (damages == null || damages.isEmpty()) {
+            return 0.0;
+        }
 
-        // Bruger Java Streams til at filtrere null priser og beregne gennemsnit.
-        List<BigDecimal> validPrices = damages.stream()
-                .filter(d -> d != null && d.getDamagePrice() != null)
-                .map(Damage::getDamagePrice)
-                .collect(Collectors.toList());
+        BigDecimal totalDamagePrice = BigDecimal.ZERO;
+        int validDamageCount = 0;
 
-        if (validPrices.isEmpty()) return 0.0;
+        // Løber igennem skader, summerer priser og tæller gyldige.
+        for (Damage damage : damages) {
+            // Tjekker om skade og pris er gyldige.
+            if (damage != null && damage.getDamagePrice() != null) {
+                totalDamagePrice = totalDamagePrice.add(damage.getDamagePrice());
+                validDamageCount++;
+            }
+        }
 
-        BigDecimal total = validPrices.stream().reduce(BigDecimal.ZERO, BigDecimal::add);
-        return total.doubleValue() / validPrices.size();
+        // Returnerer 0.0 hvis der ikke var gyldige skader.
+        if (validDamageCount == 0) {
+            return 0.0;
+        }
+
+        // Beregner gennemsnittet af gyldige skade-priser.
+        return totalDamagePrice.doubleValue() / validDamageCount;
     }
 
     /**
      * Finder og filtrerer tilstandsrapporter. Mindre effektivt for mange rapporter.
+     */
+    /**
+     * Finder og filtrerer tilstandsrapporter baseret på forskellige kriterier.
      */
     public List<ConditionReport> findByFilters(String searchReportId, Integer customerId,
                                                Integer rentalAgreementId, LocalDate startDate,
@@ -185,44 +205,59 @@ public class ConditionReportService {
             return new ArrayList<>();
         }
 
-        List<ConditionReport> detailedReports = allReports.stream()
-                .map(report -> enrichConditionReport(report))
-                .filter(report -> report != null)
-                .collect(Collectors.toList());
+        List<ConditionReport> detailedReports = new ArrayList<>();
+        for (ConditionReport report : allReports) {
+            ConditionReport enrichedReport = enrichConditionReport(report);
+            if (enrichedReport != null) {
+                detailedReports.add(enrichedReport);
+            }
+        }
 
-        // Filtrer de berigede rapporter ved hjælp af Streams.
-        return detailedReports.stream()
-                .filter(report -> {
-                    boolean matches = true;
+        List<ConditionReport> filteredReports = new ArrayList<>();
+        for (ConditionReport report : detailedReports) {
+            boolean matches = true;
 
-                    // Filtrer efter rapport ID.
-                    if (searchReportId != null && !searchReportId.isEmpty()) {
-                        matches = String.valueOf(report.getConditionReportId()).equals(searchReportId);
-                    }
+            if (searchReportId != null && !searchReportId.isEmpty()) {
+                if (!String.valueOf(report.getConditionReportId()).equals(searchReportId)) {
+                    matches = false;
+                }
 
-                    // Filtrer efter kunde ID.
-                    if (matches && customerId != null) {
-                        matches = report.getCustomer() != null && report.getCustomer().getCustomerId() == customerId;
-                    }
+            }
 
-                    // Filtrer efter lejeaftale ID.
-                    if (matches && rentalAgreementId != null) {
-                        matches = report.getRentalAgreementId() != null &&
-                                report.getRentalAgreementId().equals(rentalAgreementId);
-                    }
+            if (matches && customerId != null) {
+                if (report.getCustomer() == null || report.getCustomer().getCustomerId() != customerId.intValue()) {
+                    matches = false;
+                }
 
-                    // Filtrer efter datointerval.
-                    if (matches && startDate != null) {
-                        matches = report.getReportDate() != null && !report.getReportDate().isBefore(startDate);
-                    }
-                    if (matches && endDate != null) {
-                        matches = report.getReportDate() != null && !report.getReportDate().isAfter(endDate);
-                    }
 
-                    return matches;
-                })
-                .collect(Collectors.toList());
+            }
+
+            if (matches && rentalAgreementId != null) {
+                if (report.getRentalAgreementId() == null || !report.getRentalAgreementId().equals(rentalAgreementId)) {
+                    matches = false;
+                }
+            }
+
+            if (matches && startDate != null) {
+                if (report.getReportDate() == null || report.getReportDate().isBefore(startDate)) {
+                    matches = false;
+                }
+            }
+            if (matches && endDate != null) {
+                if (report.getReportDate() == null || report.getReportDate().isAfter(endDate)) {
+                    matches = false;
+                }
+            }
+
+            if (matches) {
+                filteredReports.add(report);
+            }
+        }
+
+        return filteredReports;
     }
+
+
 
     /**
      * Formaterer rapportdatoen til en streng.

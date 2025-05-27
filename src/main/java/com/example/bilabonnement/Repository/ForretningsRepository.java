@@ -71,7 +71,10 @@ public class ForretningsRepository {
 
     public BigDecimal avgRevenuePerCustomer() {
         // Beregner den gennemsnitlige totale omsætning pr. kunde.
-        String sql = "SELECT IFNULL(AVG(total),0) FROM (SELECT SUM(monthly_price * TIMESTAMPDIFF(MONTH, start_date, end_date)) AS total FROM rental_agreement GROUP BY customer_id) t";
+        String sql = "SELECT IFNULL(AVG(total),0) FROM (SELECT SUM(monthly_price " +
+                "* TIMESTAMPDIFF(MONTH, start_date, end_date)) " +
+                "AS total FROM rental_agreement GROUP BY customer_id) t";
+
         BigDecimal result = jdbcTemplate.queryForObject(sql, BigDecimal.class);
         if (result != null) {
             return result;

@@ -95,7 +95,7 @@ public class CarService {
     /**
      * Tjekker om en bil aktuelt er udlejet.
      * Sammenligner dagens dato med slutdatoen for lejeaftaler tilknyttet bilen.
-     */
+
     public boolean isCarCurrentlyRentedOut(int carId) {
         List<RentalAgreement> agreements = rentalAgreementRepository.findAgreementsByCarId(carId);
         LocalDate today = LocalDate.now();
@@ -115,4 +115,5 @@ public class CarService {
 
         return result;
     }
+     */
 }

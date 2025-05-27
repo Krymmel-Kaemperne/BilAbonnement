@@ -1,7 +1,6 @@
 package com.example.bilabonnement.Model;
 
 public abstract class Customer {
-
     private int customerId;
     private String fName;
     private String lName;
