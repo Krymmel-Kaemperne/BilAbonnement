@@ -320,7 +320,7 @@ public class RentalAgreementController {
         if (conditionReports != null && !conditionReports.isEmpty()) {
             model.addAttribute("conditionReportId", conditionReports.getFirst().getConditionReportId());
         } else {
-            model.addAttribute("conditionReportId", null); // Eller 0, alt efter hvad der giver mest mening i din implementering
+            model.addAttribute("conditionReportId", null);
         }
         return "dataRegistration/rental/view-rental-details";
     }

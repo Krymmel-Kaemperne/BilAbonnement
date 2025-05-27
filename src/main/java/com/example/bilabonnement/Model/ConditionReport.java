@@ -14,7 +14,6 @@ public class ConditionReport {
     private List<Damage> damages;
     private String formattedDate; // For displaying formatted date
 
-    // Transient fields for additional details - not persisted in condition_report table directly
     private transient Car car;
     private transient Customer customer;
     private transient RentalAgreement rentalAgreement;

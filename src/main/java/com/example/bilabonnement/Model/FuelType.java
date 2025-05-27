@@ -8,7 +8,7 @@ public class FuelType {
     public FuelType() {
     }
 
-    // Konstruktør med felter (valgfri)
+    // Konstruktør med felter
     public FuelType(Integer fuelTypeId, String fuelTypeName) {
         this.fuelTypeId = fuelTypeId;
         this.fuelTypeName = fuelTypeName;

@@ -98,7 +98,7 @@ public class CarController {
         String oldStatus = carStatusService.findCarStatusById(existingCar.getCarStatusId()).getStatusName();
         String newStatus = carStatusService.findCarStatusById(car.getCarStatusId()).getStatusName();
 
-        // 🔒 STOP 'Udlejet' from going to 'Tilgængelig' or Solgt
+        // STOP 'Udlejet' from going to 'Tilgængelig' or Solgt
         if ("Udlejet".equalsIgnoreCase(oldStatus)
                 && ("Tilgængelig".equalsIgnoreCase(newStatus) || "Solgt".equalsIgnoreCase(newStatus))) {
 

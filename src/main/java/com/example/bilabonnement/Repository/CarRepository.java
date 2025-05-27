@@ -22,9 +22,9 @@ public class CarRepository {
     // Opretter en RowMapper til automatisk at mappe databasens resultater til Car-objekter.
     private final BeanPropertyRowMapper<Car> carRowMapper = new BeanPropertyRowMapper<>(Car.class);
 
-    /**
-     * Opretter en ny bil i databasen og sætter den genererede ID på Car-objektet.
-     */
+
+    //Opretter en ny bil i databasen og sætter den genererede ID på Car-objektet.
+
     public Car create(Car car) {
         String sqlInsert = "INSERT INTO car (registration_number, chassis_number, steel_price, color, " +
                 "co2_emission, vehicle_number, model_id, car_status_id, fuel_type_id, " +
@@ -58,9 +58,9 @@ public class CarRepository {
         return car;
     }
 
-    /**
-     * Opdaterer en eksisterende bil i databasen.
-     */
+
+     // Opdaterer en eksisterende bil i databasen.
+
     public Car update(Car car) {
         if (car.getCarId() <= 0) {
             throw new IllegalArgumentException("Car ID skal være positivt for at kunne opdatere.");
@@ -91,9 +91,9 @@ public class CarRepository {
         }
     }
 
-    /**
-     * Finder alle biler i databasen med relaterede informationer fra andre tabeller
-     */
+
+     // Finder alle biler i databasen med relaterede informationer fra andre tabeller
+
     public List<Car> findAll() {
         String sql = "SELECT * " +
                 "FROM car c " +
@@ -106,9 +106,9 @@ public class CarRepository {
         return jdbcTemplate.query(sql, carRowMapper);
     }
 
-    /**
-     * Finder en specifik bil baseret på dens ID med relaterede informationer
-     */
+
+     // Finder en specifik bil baseret på dens ID med relaterede informationer
+
     public Car findById(int carId) {
         String sql = "SELECT * " +
                 "FROM car c " +
@@ -126,9 +126,9 @@ public class CarRepository {
         }
     }
 
-    /**
-     * Finder biler baseret på forskellige filterkriterier ved at bruge SELECT *.
-     */
+
+     // Finder biler baseret på forskellige filterkriterier ved at bruge SELECT *.
+
     public List<Car> findByFilters(Integer brand, Integer status, Integer model, Integer fuelType, Integer transmissionType) {
         StringBuilder sql = new StringBuilder(
                 "SELECT * " +
