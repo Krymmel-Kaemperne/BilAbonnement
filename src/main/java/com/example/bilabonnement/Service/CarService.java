@@ -63,6 +63,9 @@ public class CarService {
         if (car.getTransmissionTypeId() == null || car.getTransmissionTypeId() <= 0) {
             throw new IllegalArgumentException("Et gyldigt Transmissionstype ID er påkrævet.");
         }
+        if(StringUtils.hasText(car.getChassisNumber()) && car.getChassisNumber().length() != 17) {
+            throw new IllegalArgumentException("Stelnummer må maksimalt være 17 tegn");
+        }
 
         return carRepository.create(car);
     }
