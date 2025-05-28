@@ -11,8 +11,6 @@ public class HomeController {
         return "index";
     }
 
-    //NAVIGATION Data-Registration
-
     @GetMapping("/dataRegistration")
     public String dataRegistration() {
         return "dataRegistration/dataRegistration";
@@ -21,11 +19,6 @@ public class HomeController {
     @GetMapping("/dataRegistration/fleet")
     public String fleet() {
         return "dataRegistration/fleet";
-    }
-
-    @GetMapping("/dataRegistration/rentalAgreements")
-    public String rentalAgreements() {
-        return "rental-agreements";
     }
 
     //NAVIGATION Damage-Registration
@@ -48,27 +41,5 @@ public class HomeController {
     @GetMapping("/damageRegistration/reparationStatus")
     public String reparationStatus() {
         return "damageRegistration/reparationStatus";
-    }
-
-    // NAVIGATION Business-Data
-
-    @GetMapping("/businessData")
-    public String businessData() {
-        return "businessData/businessData";
-    }
-
-    @GetMapping("/businessData/fleetStatistics")
-    public String fleetStatistics() {
-        return "businessData/fleetStatistics";
-    }
-
-    @GetMapping("/businessData/paymentStatistics")
-    public String paymentStatistics() {
-        return "businessData/paymentStatistics";
-    }
-
-    @GetMapping("/businessData/revenue")
-    public String revenue() {
-        return "businessData/revenue";
     }
 }

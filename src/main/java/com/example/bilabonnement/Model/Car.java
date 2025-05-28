@@ -14,7 +14,7 @@ public class Car {
 
     // ID'er til databaselagring og relationer
     private Integer modelId;
-    private Integer brandId; // Bruges primært til form-binding og model opslag
+    private Integer brandId;
     private Integer carStatusId;
     private Integer fuelTypeId;
     private Integer transmissionTypeId;

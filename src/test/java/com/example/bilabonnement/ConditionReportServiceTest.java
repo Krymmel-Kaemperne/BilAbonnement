@@ -61,7 +61,7 @@ public class ConditionReportServiceTest {
 
         assertEquals(expectedTotal, actualTotal, "Den samlede pris skal være summen af gyldige priser.");
 
-        System.out.println("✅ Test lykkedes: Skadepriser er korrekt - 400.75.");
+        System.out.println("Test lykkedes: Skadepriser er korrekt - 400.75.");
 
     }
 }

@@ -41,7 +41,7 @@ public class FleetController {
     @Autowired
     private TransmissionTypeService transmissionTypeService;
 
-
+    // Vis en liste af bilflåde
     @GetMapping("/overview")
     public String showFleetOverview(
             @RequestParam(required = false) Integer brand,
@@ -94,41 +94,7 @@ public class FleetController {
         return "dataRegistration/fleet";
     }
 
-    @PostMapping("/updateStatus")
-    public String updateCarStatus(
-            @RequestParam("carId") int carId,
-            @RequestParam("newStatusId") int newStatusId, // Dette er ID'et fra <select>
-            RedirectAttributes redirectAttributes
-    ) {
-        Car car = carService.findById(carId);
-        if (car != null) {
-            car.setCarStatusId(newStatusId); // Opdaterer bilens status ID
-            Car updatedCar = carService.update(car); // Gemmer ændringen
-            if (updatedCar != null) {
-                // Forbedret succesmeddelelse med statusnavn
-                com.example.bilabonnement.Model.CarStatus newStatus =
-                        carStatusService.findCarStatusById(newStatusId); // Antager du har en sådan metode
-                String statusName = (newStatus != null)
-                        ? newStatus.getStatusName() : "Ukendt";
-
-                redirectAttributes.addFlashAttribute(
-                        "successMessage", "Status for bil ID " + carId + " (" + updatedCar.getRegistrationNumber() +
-                                ") opdateret til '" + statusName + "'.");
-            } else {
-                redirectAttributes.addFlashAttribute(
-                        "errorMessage",
-                        "Fejl: Kunne ikke opdatere status for bil ID " + carId + "."
-                );
-            }
-        } else {
-            redirectAttributes.addFlashAttribute(
-                    "errorMessage",
-                    "Fejl: Bil med ID " + carId + " blev ikke fundet."
-            );
-        }
-        return "redirect:/fleet/overview";
-    }
-
+    // vis bildetaljer ved hver bil
     @GetMapping("/details/{id}") // URL bliver /fleet/details/{id}
     public String showCarDetails(@PathVariable("id") int carId, org.springframework.ui.Model model) {
         Car car = carService.findById(carId);
@@ -139,6 +105,5 @@ public class FleetController {
 
         // Returner den korrekte template for detaljer.
         return "dataRegistration/view-car-details";
-
     }
 }

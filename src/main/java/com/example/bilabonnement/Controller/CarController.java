@@ -31,6 +31,7 @@ public class CarController {
     private TransmissionTypeService transmissionTypeService;
 
 
+    // GetMapping af opret bil formular
     @GetMapping("/createCar")
     public String showCreateCarForm(Model model) {
         model.addAttribute("car", new Car());
@@ -45,6 +46,7 @@ public class CarController {
         return "dataRegistration/createCar";
     }
 
+    // PostMapping af opret bil formular
     @PostMapping("/createCar")
     public String createCar(@ModelAttribute Car car, RedirectAttributes redirectAttributes) {
         try {
@@ -64,17 +66,17 @@ public class CarController {
             return "redirect:/dataRegistration/createCar"; // Redirect back to form with error
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Uventet fejl ved oprettelse af bil.");
-            // Log exception e
         }
-        return "redirect:/fleet/overview"; // OPDATERET REDIRECT
+        return "redirect:/fleet/overview";
     }
 
+    // GetMapping af redigering af bil
     @GetMapping("/car/edit/{id}")
     public String showEditCarForm(@PathVariable("id") int carId, Model model, RedirectAttributes redirectAttributes) {
         Car car = carService.findById(carId);
         if (car == null) {
             redirectAttributes.addFlashAttribute("errorMessage", "Bil med ID " + carId + " blev ikke fundet.");
-            return "redirect:/fleet/overview"; // OPDATERET REDIRECT
+            return "redirect:/fleet/overview";
         }
         model.addAttribute("car", car);
         List<Brand> allBrands = brandService.findAllBrands();
@@ -88,6 +90,7 @@ public class CarController {
         return "dataRegistration/editCar";
     }
 
+    // Post Mapping af redigering af bil, modtager data fra rediger formularen
     @PostMapping("/car/update")
     public String updateCar(@ModelAttribute Car car, RedirectAttributes redirectAttributes) {
 

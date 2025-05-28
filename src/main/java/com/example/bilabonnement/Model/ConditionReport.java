@@ -12,7 +12,7 @@ public class ConditionReport {
     private LocalDate reportDate;
     private BigDecimal totalPrice;
     private List<Damage> damages;
-    private String formattedDate; // For displaying formatted date
+    private String formattedDate;
 
     private transient Car car;
     private transient Customer customer;
@@ -44,7 +44,6 @@ public class ConditionReport {
         this.formattedDate = formattedDate;
     }
 
-    // Getters and Setters for transient fields
     public Car getCar() { return car; }
     public void setCar(Car car) { this.car = car; }
 

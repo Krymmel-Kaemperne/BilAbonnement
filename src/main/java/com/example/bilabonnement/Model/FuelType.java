@@ -14,7 +14,6 @@ public class FuelType {
         this.fuelTypeName = fuelTypeName;
     }
 
-    // Getters
     public Integer getFuelTypeId() {
         return fuelTypeId;
     }
@@ -23,7 +22,6 @@ public class FuelType {
         return fuelTypeName;
     }
 
-    // Setters
     public void setFuelTypeId(Integer fuelTypeId) {
         this.fuelTypeId = fuelTypeId;
     }
