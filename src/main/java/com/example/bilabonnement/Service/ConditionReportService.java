@@ -112,9 +112,7 @@ public class ConditionReportService {
         if (damages == null || damages.isEmpty()) {
             return BigDecimal.ZERO;
         }
-
         BigDecimal totalDamagePrice = BigDecimal.ZERO;
-
         // Bruger for loop til at beregne total pris.
         for (Damage damage : damages) {
             if (damage != null && damage.getDamagePrice() != null) {

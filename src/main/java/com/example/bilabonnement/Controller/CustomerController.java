@@ -27,6 +27,7 @@ public class CustomerController {
     @Autowired
     private ZipcodeService zipcodeService;
 
+    // Viser en liste af kunder
     @GetMapping("/dataRegistration/customers")
     public String showCustomerOverview(
             @RequestParam(required = false) String searchCustomerId,
@@ -53,6 +54,7 @@ public class CustomerController {
         return "dataRegistration/create-private-customer";
     }
 
+    // PostMapping på Privatkunde oprettelse
     @PostMapping("/customers/create/private")
     public String createPrivateCustomer(@RequestParam String fName,
                                         @RequestParam String lName,
@@ -91,6 +93,7 @@ public class CustomerController {
         }
     }
 
+    // Hvis inputvaliderings fejl, genbefolk allerede indtastet oplysninger på privat kunde.
     private void repopulatePrivateFormForError(Model model, String fName, String lName, String email, String phone, String address, int zipcodeId, String cprNumber) {
         model.addAttribute("fName", fName);
         model.addAttribute("lName", lName);
@@ -178,6 +181,7 @@ public class CustomerController {
         }
     }
 
+    // Rediger privatkunde
     @PostMapping("/customers/edit/private/{id}")
     public String updatePrivateCustomer(@PathVariable("id") int customerId,
                                         @RequestParam String fName,
@@ -216,6 +220,7 @@ public class CustomerController {
         }
     }
 
+    // rediger erhvervskunde
     @PostMapping("/customers/edit/business/{id}")
     public String updateBusinessCustomer(@PathVariable("id") int customerId,
                                          @RequestParam String fName,
@@ -263,6 +268,7 @@ public class CustomerController {
         }
     }
 
+    // Hvis inputvaliderings fejl, genbefolk allerede indtastet oplysninger på erhvervskunde.
     private void repopulateBusinessFormForError(Model model, String fName, String lName, String email, String phone, String address, int zipcodeId, String cvrNumber, String companyName) {
         model.addAttribute("fName", fName);
         model.addAttribute("lName", lName);
@@ -275,6 +281,7 @@ public class CustomerController {
         model.addAttribute("zipcodes", zipcodeService.findAllZipcodes()); // Skal stadig med
     }
 
+    // Genbefolk i rediger privat kunde
     private void repopulateEditPrivateFormForError(Model model, int customerId, String fName, String lName, String email, String phone, String address, int zipcodeId, String cprNumber) {
         // Opret et PrivateCustomer objekt med de indtastede data for at populere formularen
         PrivateCustomer customer = new PrivateCustomer(customerId, fName, lName, email, phone, address, zipcodeId, zipcodeService.findById(zipcodeId), cprNumber);
@@ -282,6 +289,7 @@ public class CustomerController {
         model.addAttribute("zipcodes", zipcodeService.findAllZipcodes());
     }
 
+    // Genbefolk i rediger erhvervskunde
     private void repopulateEditBusinessFormForError(Model model, int customerId, String fName, String lName, String email, String phone, String address, int zipcodeId, String cvrNumber, String companyName) {
         // Opret et BusinessCustomer objekt med de indtastede data for at populere formularen
         BusinessCustomer customer = new BusinessCustomer(customerId, fName, lName, email, phone, address, zipcodeId, zipcodeService.findById(zipcodeId), cvrNumber, companyName);

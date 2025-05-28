@@ -38,6 +38,7 @@ public class ConditionReportController {
     private CarService carService;
 
 
+    // Viser en liste af alle tilstandrapporter
     @GetMapping("/list")
     public String listAll(
             @RequestParam(required = false) String searchReportId,
@@ -75,6 +76,7 @@ public class ConditionReportController {
         return "damageRegistration/rapports";
     }
 
+    // Viser specifik rapport og dens detaljer
     @GetMapping("/view/{id}")
     public String viewReport(@PathVariable int id, Model model) {
         // Hent rapport med tilknyttede skader
@@ -96,7 +98,7 @@ public class ConditionReportController {
         return "damageRegistration/damageRegistration";
     }
 
-    // OPDATERET showCreateForm METODE
+    // Opret tilstandsrapport
     @GetMapping("/create")
     public String showCreateForm(@RequestParam(required = false) Integer rentalAgreementId, Model model) {
         ConditionReport report = new ConditionReport();
@@ -113,6 +115,7 @@ public class ConditionReportController {
         return "damageRegistration/createConditionReport";
     }
 
+    // PostMapping af opret tilstandsrapport
     @PostMapping("/create")
     public String create(@ModelAttribute ConditionReport report, RedirectAttributes redirectAttributes) {
         // Valider at rentalAgreementId ikke er null
@@ -142,6 +145,7 @@ public class ConditionReportController {
         return "redirect:/conditionReport/view/" + created.getConditionReportId();
     }
 
+    // Rediger tilstandsrapport
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable int id, Model model) {
         // Hent rapporten med detaljer for redigering
@@ -156,6 +160,7 @@ public class ConditionReportController {
         return "damageRegistration/editConditionReport";
     }
 
+    // Rediger tilstandsrapport
     @PostMapping("/edit")
     public String edit(@ModelAttribute ConditionReport report, RedirectAttributes redirectAttributes) {
         if (report.getReportDate() == null) {
@@ -177,6 +182,7 @@ public class ConditionReportController {
     }
 
 
+    // Opret en skade på en tilstandsrapport
     @GetMapping("/damage/create")
     public String showCreateDamageForm(@RequestParam int conditionReportId, Model model) {
         Damage damage = new Damage();
@@ -186,6 +192,7 @@ public class ConditionReportController {
         return "damageRegistration/registerDamage";
     }
 
+    // Opret en skade på en tilstandsrapport
     @PostMapping("/damage/create")
     public String createDamage(@ModelAttribute Damage damage, RedirectAttributes redirectAttributes) {
         // Opret skaden i databasen
@@ -194,7 +201,7 @@ public class ConditionReportController {
         return "redirect:/conditionReport/view/" + damage.getConditionReportId();
     }
 
-    @GetMapping("/damage/edit/{id}") // Ændret til {id} for at matche path variable navnet
+    @GetMapping("/damage/edit/{id}")
     public String showEditDamageForm(@PathVariable int id, Model model) { // Ændret parameter til id
         // Hent skaden til redigering
         Damage damage = damageService.findById(id);
@@ -206,6 +213,7 @@ public class ConditionReportController {
         return "damageRegistration/editDamage";
     }
 
+    // Rediger en skade på en tilstandsrapport
     @PostMapping("/damage/edit")
     public String editDamage(@ModelAttribute Damage damage, RedirectAttributes redirectAttributes) {
         // Opdater skaden i databasen
@@ -214,6 +222,7 @@ public class ConditionReportController {
         return "redirect:/conditionReport/view/" + damage.getConditionReportId();
     }
 
+    // Slet en skade
     @PostMapping("/damage/delete/{id}")
     public String deleteDamage(@PathVariable int id, RedirectAttributes redirectAttributes) {
         // Slet skaden fra databasen
@@ -229,9 +238,9 @@ public class ConditionReportController {
         }
     }
 
+    // Hent statistikker for reparationer
     @GetMapping("/reparationStatus")
     public String showReparationStatus(Model model) {
-        // Hent statistikker for reparationer
         double averageDamagesPerReport = conditionReportService.getAverageDamagesPerReport();
         double averageDamagePrice = conditionReportService.getAverageDamagePrice();
         model.addAttribute("averageDamagesPerReport", averageDamagesPerReport);
@@ -240,6 +249,7 @@ public class ConditionReportController {
     }
 
     // Hjælpemetode til formatering af lejeaftaler for dropdown-liste
+    // Viser kunde, bil og lejeaftale og dens id.
     private List<String[]> formatRentalAgreementsForDropdown(List<RentalAgreement> agreements) {
         if (agreements == null) {
             return new ArrayList<>();

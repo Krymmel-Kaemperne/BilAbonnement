@@ -32,7 +32,7 @@ public class RentalAgreementController {
     @Autowired
     private ConditionReportService conditionReportService;
 
-    // OVERVIEW
+    // vis liste af lejafatler
     @GetMapping("/rental-agreements")
     public String showOverview(@RequestParam(value = "searchRentalAgreementId", required = false) Integer searchId,
                                @RequestParam(value = "statusFilter", required = false) String statusFilter,
@@ -109,7 +109,7 @@ public class RentalAgreementController {
 
 
 
-    //SHOW CREATE FORM
+    // Vis en opret lejeaftale formular
     @GetMapping("/rental-agreements/create")
     public String showCreateForm(Model model) {
         List<Car> allCars = carService.findAllCars();
@@ -137,7 +137,7 @@ public class RentalAgreementController {
     }
 
 
-    // CREATE RENTAL AGREEMENT
+    // Opret en rental agreement
     @PostMapping("/rental-agreements/create")
     public String createRentalAgreement(@ModelAttribute RentalAgreement rentalAgreement,
                                         Model model,

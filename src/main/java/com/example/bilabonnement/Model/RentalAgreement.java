@@ -17,11 +17,9 @@ public class RentalAgreement {
     private Integer returnLocationId;
     private String leasingCode;
 
-    // DEFAUlT CONSTUCTOR
     public RentalAgreement() {
     }
 
-    //CONSTRUCTOR WITHOUT ID
     public RentalAgreement(int rentalAgreementId, Integer carId, Integer customerId,
                            LocalDate startDate, LocalDate endDate, BigDecimal monthlyPrice,
                            int kilometersIncluded, int startOdometer, Integer endOdometer,
@@ -40,7 +38,6 @@ public class RentalAgreement {
         this.leasingCode = leasingCode;
     }
 
-    //CONSTRUCTOR WITH ID
     public RentalAgreement(Integer carId, Integer customerId, LocalDate startDate, LocalDate endDate,
                            BigDecimal monthlyPrice, int kilometersIncluded, int startOdometer,
                            Integer endOdometer, Integer pickupLocationId, Integer returnLocationId,
